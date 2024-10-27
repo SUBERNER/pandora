@@ -64,7 +64,7 @@ def sharpness(file: str, factor: float):
 # alters the texture's or image's resolution
 def resolution(file: str, factor: float):
     image = Image.open(file)
-    new_image = image.resize(((int)(image.width * factor), (int)(image.height * factor)), Image.Resampling.NEAREST)
+    new_image = image.resize((int(image.width * factor), int(image.height * factor)), Image.Resampling.NEAREST)
 
     new_image.save(file)
     Settings.result(file, "resolution", factor, 1)
@@ -74,7 +74,7 @@ def resolution(file: str, factor: float):
 def quality(file: str, factor: float):
     image = Image.open(file)
 
-    image.save(file, quality=(int)(factor * 100))
+    image.save(file, quality=int(factor * 100))
     Settings.result(file, "quality", factor, 1)
 
 
