@@ -5,57 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_black.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_brown.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_cyan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_light_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_lime.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_magenta.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_orange.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_black.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_brown.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_cyan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_light_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_lime.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_magenta.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_orange.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_pink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_purple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_silver.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pane_top_yellow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_pink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_purple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_silver.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/glass_yellow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_black.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_brown.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_cyan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_light_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_lime.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_magenta.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_orange.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_pink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_purple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_red.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_silver.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COLOR/wool_colored_yellow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CProgram FilesWindowsAppsMicrosoft..txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gratisography-cool-cat.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Buffle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Buffle.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/File.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/File.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Text.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Text.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Texture.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Texture.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
@@ -138,5 +93,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Buffle/Methods.py</url>
+          <line>102</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

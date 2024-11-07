@@ -1,7 +1,18 @@
 import Buffle
+
 import os
 
-Buffle.File.group(os.getcwd() + "\\Color", ["_black","_brown","_cyan","_gray","_magenta","_orange","_lime","_pink","_purple","_silver","_white","_yellow","_red","_light_blue","_blue", "_green"])
+path = os.getcwd()
 
+print(Buffle.display_all_results())
+print(Buffle.display_text_results())
+print(Buffle.display_texture_results())
+print(Buffle.display_file_results())
+print(Buffle.display_manual_results())
+
+Buffle.display_file_format(1)
+
+
+Buffle.Texture.brightness(path + "\\gratisography-cool-cat.jpg", 3)
 
 
