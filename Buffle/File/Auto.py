@@ -48,7 +48,7 @@ def name(source: str, contains: str, dump=False):
     for temp_path, new_name, original_name in zip(temp_names, random_names, original_names):
         new_path = os.path.join(source, new_name)
         os.rename(temp_path, new_path)
-        Buffle.display_file_results.result(source, "Directory Shuffle", original_name, new_name)
+        Buffle.display_file_results.result(source, "Name Shuffle", original_name, new_name)
 
     if dump:
         Buffle.dump(source)
@@ -56,33 +56,33 @@ def name(source: str, contains: str, dump=False):
 
 # HELL TO EXPLAIN AND CODE (WILL DO LATER)
 def group(source: str, contains: list, dump=False):
-    i = 0  # indexing files
-    os.chdir(source)  # changes directory
+    files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
+    assign_names = contains.copy()
 
-    files = os.scandir()  # stores the actual files
-    names = contains.copy()  # copies for alterations
-
-    # formats files to be altered
+    temp_names = []  # temporary list of all uuid files
     for contain in contains:
-        files = os.scandir()  # refresh files list after each renaming
+        temp_name = f"{uuid.uuid4().hex}"  # used as a placeholder for the contains text
+        temp_names.append(temp_name)
         for file in files:
             if contain in file.name:
-                name = file.name.replace(contain, str(i))  # replaces a part of the string with a number
-                os.rename(file.name, name)
-        i += 1
+                # Replace the substring with the index in the filename
+                new_name = file.name.replace(contain, temp_name)
+                os.rename(file.path, os.path.join(source, new_name))
 
-    i -= 1  # removes last indent
-    files = os.scandir(source)  # updates to files new names
+    # Refresh the file list to include updated names
+    files = [f for f in os.scandir(source) if f.is_file()]
 
     # alters files
-    while i >= 0:
-        files = os.scandir(source)  # updates to files new names
-        random_name = random.choice(names)  # selects a file name
+    random.shuffle(assign_names)  # Randomize order for final names
+    for i in range(len(contains) - 1, -1, -1):  # Process in reverse order
+        target_name = assign_names.pop()  # Select a random name from the list
+        contain_name = contains.pop()
         for file in files:
-            if (file.is_dir() or file.is_file()) and str(i) in file.name:
-                os.rename(file.name, file.name.replace(str(i), random_name))  # renames file
-        names.remove(random_name)
-        i -= 1
+            if temp_names[i] in file.name:
+                # Replace the index in the filename with the random target name
+                final_name = file.name.replace(temp_names[i], target_name)
+                os.rename(file.path, os.path.join(source, final_name))
+                Buffle.display_file_results.result(source, "Group Shuffle", target_name, contain_name)
 
     if dump:
         Buffle.dump(source)
@@ -90,26 +90,24 @@ def group(source: str, contains: list, dump=False):
 
 # reverses all files inside a directory
 def reverse(source: str, dump=False):
-    i = 0  # indexing files
-    os.chdir(source)  # changes directory
+    files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
+    original_names = [f.name for f in files]  # stores the file names
 
-    files = os.scandir()  # stores the actual files
-    
-    names = os.listdir()  # stores the file names
-
-    # formats files to be altered
+    # renames files to avoid conflict
+    temp_names = []  # temporary list of all uuid files
     for file in files:
-        os.rename(file.name, str(i) + os.path.splitext(file)[1])
-        i += 1
-
-    files = os.scandir(source)  # updates to files new names
-    names.reverse()
+        temp_name = f"{uuid.uuid4().hex}{os.path.splitext(file.name)[1]}"  # creates unique name for file
+        temp_path = os.path.join(source, temp_name)  # creates a path for the file
+        os.rename(file.path, temp_path)
+        temp_names.append(temp_path)
 
     # alters files
-    for file in files:
-        if file.is_dir() or file.is_file():
-            os.rename(file.name, names[0])  # renames file
-            names.remove(names[0])
+    reverse_names = original_names.copy()
+    reverse_names.reverse()
+    for temp_path, new_name, original_name in zip(temp_names, reverse_names, original_names):
+        new_path = os.path.join(source, new_name)
+        os.rename(temp_path, new_path)
+        Buffle.display_file_results.result(source, "Reverse Shuffle", original_name, new_name)
 
     if dump:
         Buffle.dump(source)

@@ -4,6 +4,6 @@ import os
 
 path = os.getcwd()
 
-Buffle.File.name(path + "\\COBBLE", "mossy", False)
+Buffle.File.group(path + "\\RAIL", ["normal", "detection", "gold"], False)
 
 
