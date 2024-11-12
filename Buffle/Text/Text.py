@@ -4,6 +4,7 @@ import random
 import re
 
 
+
 # used to collect and randomize text inside a multiple files
 def multiple(directory: str, find: str):
     replace = '<>TEMP<>'  # text used as a placeholder for replacing text

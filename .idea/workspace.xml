@@ -5,15 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gratisography-cool-cat.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Buffle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Buffle.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Buffle/File/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Buffle/Text/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Buffle/Texture/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COBBLE/3d5a471435764cb784b9605cc86d9bd3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COBBLE/cobble0_mossy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COBBLE/cobble1_mossy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COBBLE/d1abfbdb472b4dbe814298cb794fe05b.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Text.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Text.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Texture.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Texture.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/File.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/File/Auto.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Text.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Text/Text.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Texture.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Texture/Single.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gratisography-cool-cat.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +67,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Text" />
+      <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\File" />
+      <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Textures" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle" />
     </key>
   </component>
@@ -93,16 +104,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Buffle/Methods.py</url>
-          <line>102</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

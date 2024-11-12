@@ -1,7 +1,5 @@
-from Buffle import File
-from Buffle import Texture
+from Buffle.Texture import Single
 from Buffle import Settings
-from Buffle import Text
 
 Settings(
     name='Settings',
