@@ -1,1 +1,1 @@
-from .Text import *
+from .Shuffle import *

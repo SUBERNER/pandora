@@ -15,9 +15,11 @@ class DisplayResults:
     # enabled or disabled displaying relevant information
     __display_results = None
 
+
     def __init__(self, file_format: int, display_results: bool):
         self.file_format = file_format
         self.display_results = display_results
+
 
     @classmethod
     def set_format(cls, format: int = None):
@@ -31,6 +33,7 @@ class DisplayResults:
             cls.__file_format = format
         return cls.__file_format
 
+
     @classmethod
     def set_display(cls, display: bool = None):
         """
@@ -41,6 +44,7 @@ class DisplayResults:
         if display is not None:
             cls.__display_results = display
         return cls.__display_results
+
 
     @classmethod
     def result(cls, source: str, method: str, updated_value, original_value):
@@ -66,9 +70,35 @@ class DisplayResults:
                 else:
                     print(f"{source} <|> {method} <|> unaltered <|> [{updated_value}]")
             else:
-                print(f"{source} <|> ERROR <|> not file or folder")
+                print(f"{source} <|> {method}-ERROR <|> not file or folder")
         except:
-            print(f"{source} <|> ERROR <|> displaying alters")
+            print(f"{source} <|> {method}-ERROR <|> displaying alters")
+
+    @classmethod
+    def result_error(cls, source: str, method: str, error: str):
+        """
+        Displays the output and processes of a method altering files
+        :param source: Target file's or folder's directory / location
+        :type source: str
+        :param method: Name of the method / action done
+        :type method: str
+        :param error: Statement of what went wrong
+        :type error: str
+        """
+        try:
+            if os.path.isfile(source) or os.path.isdir(source):
+                if cls.__file_format == 1:  # limited
+                    limited_parts = source.split(os.sep)[-3:]
+                    source = os.path.join(*limited_parts)
+                elif cls.__file_format == 2:  # file
+                    source = source.split("\\")[-1]
+
+                print(f"{source} <|> {method}-ERROR<|> {error}")
+
+            else:
+                print(f"{source} <|> {method}-ERROR <|> not file or folder")
+        except:
+            print(f"{source} <|> {method}-ERROR <|> displaying alters")
 
 
 # all the DisplayResults classes

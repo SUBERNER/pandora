@@ -5,27 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/COBBLE/1d91dfd86d284e50ade7055588e22215.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/COBBLE/9a5f09fd0de84aba8d06fa870675bdc0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EGG/turtle_egg_not_cracked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EGG/turtle_egg_slightly_cracked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EGG/turtle_egg_very_cracked.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RAIL/rail_dd11626254fb423e863fa7df15835a2a.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RAIL/rail_dd11626254fb423e863fa7df15835a2a_powered.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RAIL/rail_detection.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RAIL/rail_detection_powered.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RAIL/rail_gold.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RAIL/rail_gold_powered.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/File/Auto.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/File/Auto.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Text/Text.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Text/Text.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/COBBLE/3d5a471435764cb784b9605cc86d9bd3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/COBBLE/cobble1_mossy.png" beforeDir="false" afterPath="$PROJECT_DIR$/COBBLE/cobble1_mossy.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/COBBLE/d1abfbdb472b4dbe814298cb794fe05b.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Text/Text.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Text/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Text/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
