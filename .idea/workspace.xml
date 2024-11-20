@@ -7,9 +7,7 @@
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Text/Text.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Text/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Text/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Text/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Text/Shuffle.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
