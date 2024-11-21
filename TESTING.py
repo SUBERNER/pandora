@@ -4,6 +4,6 @@ import os
 
 path = os.getcwd()
 
-Buffle.File.group(path + "\\RAIL", ["normal", "detection", "gold"], False)
+Buffle.Text.multiple_group(path + "\\OTHER", ['"identifier": ".*"', '"population_control": ".*"'], 1)
 
 

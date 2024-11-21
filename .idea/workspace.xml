@@ -5,9 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/axolotl.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/bat.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/bee.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/chicken.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/cow.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/creeper.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/donkey.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/drowned.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/enderman.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/fox.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/frog.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/ghast.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/goat.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/guardian.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/hoglin.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/horse.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/husk.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/llama.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/magma_cube.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/mooshroom.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/ocelot.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/panda.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/parrot.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/phantom.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/pig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/piglin.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/pillager_patrol.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/polar_bear.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/rabbit.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/sheep.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/skeleton.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/slime.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/spider.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/stray.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/strider.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/turtle.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/witch.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/wolf.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/zombie.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OTHER/zombie_pigman.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Text/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Text/Shuffle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +69,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -41,20 +82,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.File.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Settings.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TESTING.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Texture.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/tompk/Documents/GitHub/Buffle&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.scopes&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.File.executor": "Run",
+    "Python.Settings.executor": "Run",
+    "Python.Shuffle.executor": "Run",
+    "Python.TESTING.executor": "Run",
+    "Python.Texture.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/tompk/Documents/GitHub/Buffle",
+    "settings.editor.selected.configurable": "project.scopes"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Text" />
