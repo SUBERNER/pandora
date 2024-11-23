@@ -5,7 +5,14 @@ import uuid
 
 
 # shuffles all file names inside a directory
-def directory(source: str, dump=False):
+def directory(source: str, dump: bool = False):
+    """
+    Shuffles and randomizes the names of all files from the same directory.
+    :param source: Target folder's directory
+    :param dump: Moves all files from the folder's directory to its parent's directory
+    :type source: str
+    :type dump: bool
+    """
     files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
     original_names = [f.name for f in files]  # stores the file names
 
@@ -30,7 +37,16 @@ def directory(source: str, dump=False):
 
 
 # shuffles all files that have the string in their name
-def name(source: str, contains: str, dump=False):
+def name(source: str, contains: str, dump: bool = False):
+    """
+    Shuffles and randomizes the names of all files from a directory that have 'contains' in their name.
+    :param source: Target folder's directory
+    :param contains: Substring searched for inside file names
+    :param dump: Moves all files from the folder's directory to its parent's directory
+    :type source: str
+    :type contains: str
+    :type dump: bool
+    """
     files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
     original_names = [f.name for f in files if contains in f.name]  # stores the file names with contain in it
 
@@ -56,6 +72,12 @@ def name(source: str, contains: str, dump=False):
 
 # HELL TO EXPLAIN AND CODE (WILL DO LATER)
 def group(source: str, contains: list, dump=False):
+    """
+    Shuffles and randomizes the 'contains' substrings by groups within file names files in a directory.
+    :param source: Target folder's directory
+    :param contains: Substrings searched for inside file names
+    :param dump: Moves all files from the folder's directory to its parent's directory
+    """
     files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
     assign_names = contains.copy()
 
@@ -90,6 +112,13 @@ def group(source: str, contains: list, dump=False):
 
 # reverses all files inside a directory
 def reverse(source: str, dump=False):
+    """
+    Reverses the order of names of all files from a directory.
+    :param source: Target folder's directory
+    :param dump: Moves all files from the folder's directory to its parent's directory
+    :type source: str
+    :type dump: bool
+    """
     files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
     original_names = [f.name for f in files]  # stores the file names
 
