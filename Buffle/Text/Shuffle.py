@@ -44,29 +44,23 @@ def multiple_group(source: str, contains: list[str], limit: int=None):
     placeholder = '<>TEMP<>'  # text used as a placeholder for replacing text
     original_matches = []
     files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
-    print(files)
-    print("------------------------------")
+
     # gets data and alters file to prepare for shuffling text
     for entry in files:
-        print(entry.name)
         group_matches = [[] for index in contains]  # groups text together to me shuffled together
         valid_group = True  # checks if file should be ignored
 
         with open(entry, 'r') as file:  # opens file
             text = file.read()  # stores all the data in a variable
             for index, contain in enumerate(contains):
-                print(re.findall(contain, text))
                 if len(re.findall(contain, text)) != 0:  # make sure something was found
-                    print(len(re.findall(contain, text)))
                     group_matches[index].extend(re.findall(contain, text))  # dumps all finds in an existing group inside the list
-                    print(group_matches[index])
                 else:
                     valid_group = False
                     break
             if not valid_group:  # if a section in the group is empty, it ignores the rest of the folder
                 continue
-            print("------------------------------")
-            print(group_matches)
+
             # only takes full groups, not those with information missing
             # determines the limit of the amount of groups is made
             group_limit = len(min(group_matches, key=len))  # Find the smallest list length
@@ -74,9 +68,6 @@ def multiple_group(source: str, contains: list[str], limit: int=None):
                 group_limit = limit
             # trimes all group sections to the length of the smallest section in the group
             group_matches = [group[:group_limit] for group in group_matches]  # Slice each list
-            print(group_matches)
-            print("APPENDING CHANGES")
-            print("------------------------------")
 
             # formats the groups to be shuffled later
             group_format = []

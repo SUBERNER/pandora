@@ -1,15 +1,22 @@
-from PIL import Image, ImageEnhance # Pillow
+from PIL import Image, ImageEnhance  # Pillow
 import Buffle
-# Used for altering single / non atlas textures or images
+# Used for altering single or non atlas textures
 
 
 def rotate(file: str, degree: int, expand: bool = False, dump: bool = False):
     """
-    Rotates the texture or image either
-    :param file: Target file's directory
-    :param degree: Degrees of rotation anti-clockwise
-    :param expand: Expands image to entire fit the rotated texture or image
-    :param dump: Moves files from the folder's directory to its parent's directory
+    Rotates the texture either clockwise or anti-clockwise.
+    :param file: Target file's directory or location.
+    :param degree: Degrees of rotation,
+                values of 0 will not cause rotation,
+                values less than 0 will cause clockwise rotation,
+                and values higher than 0 will cause anti-clockwise rotation.
+    :param expand: Expands resolution to fit entire image after rotation.
+    :param dump: Moves files from the folder's directory to its parent's directory.
+    :type file: str
+    :type degree: int
+    :type expand: bool
+    :type dump: bool
     """
     image = Image.open(file)
     new_image = image.rotate(degree, expand=expand)
@@ -21,14 +28,17 @@ def rotate(file: str, degree: int, expand: bool = False, dump: bool = False):
     Buffle.display_texture_results.result(file, "rotate", degree, 0)
 
 
-#  flips the texture or image
-def flip(file, horizontal: bool, vertical: bool, dump: bool = False):
+def flip(file: str, horizontal: bool, vertical: bool, dump: bool = False):
     """
-    Mirrors the texture or image
-    :param file: Target file's directory
-    :param horizontal: Mirrors the texture or image horizontally
-    :param vertical: Flips / mirrors texture or image vertically
-    :param dump: Moves files from the folder's directory to its parent's directory
+    Flips the texture either vertically or horizontally.
+    :param file: Target file's directory or location.
+    :param horizontal: Mirrors or flips the texture horizontally.
+    :param vertical: Mirrors or flips texture vertically.
+    :param dump: Moves files from the folder's directory to its parent's directory.
+    :type file: str
+    :type horizontal: bool
+    :type vertical: bool
+    :type dump: bool
     """
     image = Image.open(file)
     new_image = Image.open(file)
@@ -45,15 +55,45 @@ def flip(file, horizontal: bool, vertical: bool, dump: bool = False):
     Buffle.display_texture_results.result(file, "flip", [horizontal, vertical], [False, False])
 
 
+def tint(file: str, color: tuple[int, int, int], alpha: float = 0.5, dump: bool = False):
+    """
+    Alters the texture's saturation or color intensity.
+    :param file: Target file's directory or location.
+    :param color: Strength of the alteration,
+                values of 1.0 will not affect the saturation,
+                values less than 1.0 will decrease saturation,
+                and values higher than 1.0 will increase saturation.
+    :param dump: Moves files from the folder's directory to its parent's directory.
+    :type file: str
+    :type color: tuple[int, int, int]
+    :type alpha: float
+    :type dump: bool
+    """
+    image = Image.open(file).convert('RGBA')
+    overlay_image = Image.new('RGBA', image.size, color)
+
+    new_image = Image.blend(image, overlay_image, alpha)  # adds a tint overlay to the image
+
+    if "A" in image.getbands():  # checks for alpha channel
+        # Composite over a solid background color
+        background_image = Image.new("RGBA", image.size, (255, 255, 255) + (255,))
+        new_image = Image.alpha_composite(background_image, new_image)
+
+    new_image.convert('RGB').save(file)  # converts and saves new image
+
+    if dump:  # dumps file to parent folder
+        file = Buffle.dump(file)
+    Buffle.display_texture_results.result(file, "saturation", (color, alpha), ((0, 0, 0), 0))
+
+
 def saturation(file: str, factor: float, dump: bool = False):
     """
-    Alters the texture's or image's saturation or color intensity.
+    Alters the texture's saturation or color intensity.
     :param file: Target file's directory or location.
     :param factor: Strength of the alteration,
                 values of 1.0 will not affect the saturation,
                 values less than 1.0 will decrease saturation,
                 and values higher than 1.0 will increase saturation.
-    :type factor: float
     :param dump: Moves files from the folder's directory to its parent's directory.
     :type file: str
     :type factor: float
@@ -70,7 +110,7 @@ def saturation(file: str, factor: float, dump: bool = False):
 
 def contrast(file: str, factor: float, dump: bool = False):
     """
-    Alters the texture's or image's contrast or range of brightness.
+    Alters the texture's contrast or range of brightness.
     :param file: Target file's directory or location.
     :param factor: Strength of the alteration,
                 values of 1.0 will not affect the contrast,
@@ -92,7 +132,7 @@ def contrast(file: str, factor: float, dump: bool = False):
 
 def brightness(file: str, factor: float, dump: bool = False):
     """
-    Alters the texture's or image's brightness or lightness.
+    Alters the texture's brightness or lightness.
     :param file: Target file's directory or location.
     :param factor: Strength of the alteration,
                 values of 1.0 will not affect the brightness,
@@ -115,7 +155,7 @@ def brightness(file: str, factor: float, dump: bool = False):
 
 def sharpness(file: str, factor: float, dump: bool = False):
     """
-    Alters the texture's or image's sharpness or clarity of detail.
+    Alters the texture's sharpness or clarity of detail.
     :param file: Target file's directory or location.
     :param factor: Strength of the alteration,
                 values of 1.0 will not affect the sharpness,
@@ -137,7 +177,7 @@ def sharpness(file: str, factor: float, dump: bool = False):
 
 def resolution(file: str, factor: float, dump: bool = False):
     """
-    Alters the texture's or image's resolution or level of detail with pixels.
+    Alters the texture's resolution or level of detail with pixels.
     :param file: Target file's directory or location.
     :param factor: Strength of the alteration,
                 values of 1.0 will not affect the resolution,
@@ -149,7 +189,7 @@ def resolution(file: str, factor: float, dump: bool = False):
     :type dump: bool
     """
     image = Image.open(file)
-    new_image = image.resize((int(image.width * factor), int(image.height * factor)), Image.Resampling.NEAREST)
+    new_image = image.resize((int(image.width * factor), int(image.height * factor)), Image.Resampling.BILINEAR)
     new_image.save(file)
 
     if dump:
@@ -159,7 +199,7 @@ def resolution(file: str, factor: float, dump: bool = False):
 
 def quality(file: str, factor: float, dump: bool = False):
     """
-    Alters the texture's or image's quality or detail.
+    Alters the texture's quality or detail.
     :param file: Target file's directory or location.
     :param factor: Strength of the alteration,
                 values of 1.0 will not affect the quality,
@@ -176,7 +216,5 @@ def quality(file: str, factor: float, dump: bool = False):
     if dump:
         file = Buffle.dump(file)
     Buffle.display_texture_results.result(file, "quality", factor, 1)
-
-
 
 

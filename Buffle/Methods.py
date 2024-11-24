@@ -5,7 +5,7 @@ import shutil
 # Methods will not be accessed from this file but from Buffle itself
 # These are to be used from the player from the parent folder Buffle and to be use dy other .py files
 
-# region DISPLAY_RESULTS
+# region RESULT
 class DisplayResults:
     # formats for how the file location is displayed
     # 0 = full: full file directory
@@ -105,7 +105,7 @@ display_manual_results = DisplayResults(1, True)
 # endregion
 
 
-# region DIRECTORY
+# region MOVE
 def dump(source: str, delete: bool = False):
     """
     Moves files from the folder's directory to its parent's directory
@@ -129,7 +129,7 @@ def move(source: str, destination: str, delete: bool = False):
     :type delete: bool
     :return destination
     """
-    if source is os.path.isdir():  # multiple files in a folder
+    if source is os.path.isdir(source):  # multiple files in a folder
         for file in os.scandir(source):
             shutil.move(file, destination)
 
@@ -137,8 +137,58 @@ def move(source: str, destination: str, delete: bool = False):
         if delete:
             os.remove(source)
 
-    if source is os.path.isfile():  # single file in a folder
+    if source is os.path.isfile(source):  # single file in a folder
         shutil.move(source, destination)
 
     return destination
 # endregion
+
+
+# region SEARCH
+def full(source: str, deep_search: bool, inverse_search: bool):
+    files = []  # will store all files found in this search
+
+    files.extend([f for f in os.scandir(source) if f.is_file()])  # gets all files inside source directory
+
+    if deep_search:  # if enabled, will also go through all subfolders inside source
+        folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
+        for folder in folders: # goes through each folder
+            files.extend([f for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
+
+    return files  # returns all files in a list
+
+
+def name(source: str, contains: str, deep_search: bool, inverse_search: bool):
+    files = []  # will store all files found in this search
+
+    files.extend([f for f in os.scandir(source) if f.is_file() and contains in f.name])  # gets all files with the substring inside source directory
+
+    if deep_search:  # if enabled, will also go through all subfolders inside source
+        folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
+        for folder in folders:  # goes through each folder
+            files.extend([f for f in os.scandir(folder) if f.is_file() and contains in f.name])  # gets all files with the substring inside source directory
+
+    return files  # returns all files in a list
+
+
+def content(source: str, contains: str, deep_search: bool, inverse_search: bool):
+    original_files = []  # will store all files found in this search
+    formatted_files = []  # will store all the files after determining their content
+
+    original_files.extend([f for f in os.scandir(source) if f.is_file()])  # gets all files inside source directory
+
+    if deep_search:  # if enabled, will also go through all subfolders inside source
+        folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
+        for folder in folders:  # goes through each folder
+            original_files.extend([f for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
+
+    # determines if substring is inside file
+    for entry in original_files:
+        with open(entry, 'r') as file:
+            if contains in file.read():  # determines if contains is inside the file text
+                formatted_files.append(entry)
+
+    return original_files  # returns all files in a list
+
+# endregion
+
