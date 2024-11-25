@@ -1,1 +1,1 @@
-from Search import *
+from .Search import *
