@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 
 
 # Methods will not be accessed from this file but from Buffle itself
@@ -89,12 +90,12 @@ class DisplayResults:
                 elif cls.__file_format == 2:  # file
                     source = source.split("\\")[-1]
 
-                print(f"{source} <|> {method}-ERROR<|> {error}")
+                print(f"{source} <|> {method}-ERROR<|> {error}", file=sys.stderr)
 
             else:
-                print(f"{source} <|> {method}-ERROR <|> not file or folder")
+                print(f"{source} <|> {method}-ERROR <|> not file or folder", file=sys.stderr)
         except:
-            print(f"{source} <|> {method}-ERROR <|> displaying alters")
+            print(f"{source} <|> {method}-ERROR <|> displaying alters", file=sys.stderr)
 
 
 # all the DisplayResults classes
