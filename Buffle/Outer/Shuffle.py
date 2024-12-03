@@ -32,39 +32,44 @@ def normal(files: str | list[str]):
 
 
 # HELL TO EXPLAIN AND CODE (WILL DO LATER)
-def group(source: str, contains: list):
+def group(files: str | list[str], contains: list[str]):
     """
     Shuffles and randomizes the 'contains' substrings by groups within file names files in a directory.
-    :param source: Target folder's directory
+    :param files: Target folder's directory
     :param contains: Substrings searched for inside file names
     """
-    files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
+    # makes contains always a list
+    if isinstance(files, str):
+        files = [files]
+
     assign_names = contains.copy()
 
     temp_names = []  # temporary list of all uuid files
     for contain in contains:
         temp_name = f"{uuid.uuid4().hex}"  # used as a placeholder for the contains text
         temp_names.append(temp_name)
-        for file in files:
-            if contain in file.name:
+        for index ,file in enumerate(files):
+            if contain in os.path.basename(file):
                 # Replace the substring with the index in the filename
-                new_name = file.name.replace(contain, temp_name)
-                os.rename(file.path, os.path.join(source, new_name))
+                new_name = os.path.basename(file).replace(contain, temp_name)
+                files[index].inser = os.rename(os.path.abspath(file), os.path.join(os.path.dirname(file), new_name))
 
-    # Refresh the file list to include updated names
-    files = [f for f in os.scandir(source) if f.is_file()]
+    print(files)
 
     # alters files
     random.shuffle(assign_names)  # Randomize order for final names
     for i in range(len(contains) - 1, -1, -1):  # Process in reverse order
+        print("RANGE")
         target_name = assign_names.pop()  # Select a random name from the list
         contain_name = contains.pop()
         for file in files:
-            if temp_names[i] in file.name:
+            print("FILES")
+            if temp_names[i] in os.path.basename(file):
+                print("REPLACE")
                 # Replace the index in the filename with the random target name
-                final_name = file.name.replace(temp_names[i], target_name)
-                os.rename(file.path, os.path.join(source, final_name))
-                Buffle.display_file_results.result(source, "Group Name Shuffle", target_name, contain_name)
+                final_name = os.path.basename(file).replace(temp_names[i], target_name)
+                os.rename(os.path.abspath(file), os.path.join(os.path.dirname(file), final_name))
+                Buffle.display_file_results.result(os.path.dirname(file), "Group Name Shuffle", target_name, contain_name)
 
 
 # reverses all files inside a directory

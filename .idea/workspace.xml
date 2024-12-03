@@ -5,17 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Buffle/Inner/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Buffle/Outer/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST - Copy/1block_ red.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST - Copy/1triangle_red.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST - Copy/2block_blue.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST - Copy/2triangle_blue.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST - Copy/3block_green.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST - Copy/3triangle_green.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST/1block_ 556363f1dee741239eebce1333820ccd.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST/1triangle_556363f1dee741239eebce1333820ccd.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST/2block_03be953292624feda59a4a1c509bdcb1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST/2triangle_03be953292624feda59a4a1c509bdcb1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST/3block_70f55f6b00e7490aa6ae14099ca1b6c1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST/3triangle_70f55f6b00e7490aa6ae14099ca1b6c1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/File/Auto.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/File/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Search/Search.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Search/Search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Text/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Text/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGG/turtle_egg_not_cracked.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGG/turtle_egg_slightly_cracked.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EGG/turtle_egg_very_cracked.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
