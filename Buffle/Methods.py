@@ -1,6 +1,5 @@
 import os
 import shutil
-import sys
 
 
 # Methods will not be accessed from this file but from Buffle itself
@@ -8,6 +7,11 @@ import sys
 
 # region RESULT
 class DisplayResults:
+
+    # Colors results for better readability
+    END = '\033[0m'  # removes color
+    RED = '\033[31m'  # unaltered value
+    GREEN = '\033[32m'  # altered value
     # formats for how the file location is displayed
     # 0 = full: full file directory
     # 1 = limited: 2 directories deep
@@ -15,6 +19,8 @@ class DisplayResults:
     __file_format = None
     # enabled or disabled displaying relevant information
     __display_results = None
+    # the minimum amount of space given to the file section of a result
+    __file_length = 0
 
     def __init__(self, file_format: int, display_results: bool):
         self.file_format = file_format
@@ -31,6 +37,25 @@ class DisplayResults:
         if format is not None:
             cls.__file_format = format
         return cls.__file_format
+
+    @classmethod
+    def set_length(cls, file: str):
+        """
+        Formats the minimum width of the source section of a result, improving result readability
+        :param file: Longest file path.
+        :type file: str
+        """
+
+        if cls.__file_format == 1:  # limited
+            limited_parts = file.split(os.sep)[-3:]
+            cls.__file_length = len(os.path.join(*limited_parts))
+        elif cls.__file_format == 2:  # file
+            cls.__file_length = len(file.split("\\")[-1])
+        else:  # full
+            cls.__file_length = len(file)
+
+        return cls.__file_length
+
 
     @classmethod
     def set_display(cls, display: bool = None):
@@ -63,13 +88,13 @@ class DisplayResults:
                     source = source.split("\\")[-1]
 
                 if original_value != updated_value:
-                    print(f"{source} <|> {method} <|>   altered <|> [{original_value}] --> [{updated_value}]")
+                    print(f"{source:>{cls.__file_length}} <|> {method} <|>   altered <|> [{cls.RED}{original_value}{cls.END}] --> [{cls.GREEN}{updated_value}{cls.END}]")
                 else:
-                    print(f"{source} <|> {method} <|> unaltered <|> [{updated_value}]")
+                    print(f"{source:>{cls.__file_length}} <|> {method} <|> {cls.RED}unaltered{cls.END} <|> [{cls.GREEN}{updated_value}{cls.END}]")
             else:
-                print(f"{source} <|> {method}-ERROR <|> not file or folder")
+                print(f"{cls.RED}{source:>{cls.__file_length}} <|> {method}-ERROR <|> not file or folder{cls.END}")
         except:
-            print(f"{source} <|> {method}-ERROR <|> displaying alters")
+            print(f"{cls.RED}{source:>{cls.__file_length}} <|> {method}-ERROR <|> displaying alters{cls.END}")
 
     @classmethod
     def result_error(cls, source: str, method: str, error: str):
@@ -90,12 +115,12 @@ class DisplayResults:
                 elif cls.__file_format == 2:  # file
                     source = source.split("\\")[-1]
 
-                print(f"{source} <|> {method}-ERROR<|> {error}", file=sys.stderr)
+                print(f"{cls.RED}{source:>{cls.__file_length}} <|> {method}-ERROR<|> {error}{cls.END}")
 
             else:
-                print(f"{source} <|> {method}-ERROR <|> not file or folder", file=sys.stderr)
+                print(f"{cls.RED}{source:>{cls.__file_length}} <|> {method}-ERROR <|> not file or folder{cls.END}")
         except:
-            print(f"{source} <|> {method}-ERROR <|> displaying alters", file=sys.stderr)
+            print(f"{cls.RED}{source:>{cls.__file_length}} <|> {method}-ERROR <|> displaying alters{cls.END}")
 
 
 # all the DisplayResults classes

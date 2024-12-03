@@ -42,7 +42,6 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
             elif type_search == "any":
                 files.extend([f.path for f in os.scandir(folder) if f.is_file() and ((any(contain in f.name for contain in contains) and not inverse_search) or (all(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
 
-
     return files  # returns all files in a list
 # endregion
 

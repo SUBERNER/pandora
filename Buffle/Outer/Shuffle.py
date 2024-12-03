@@ -1,7 +1,8 @@
 import os
 import random
-import Buffle
 import uuid
+
+import Buffle
 
 
 # shuffles all file names inside a directory
@@ -11,9 +12,13 @@ def normal(files: str | list[str]):
     :param files: Target file's paths
     :type files: str | list[str]
     """
-    # makes contains always a list
+
+    # makes files always a list
     if isinstance(files, str):
         files = [files]
+
+    # gets size of largest path for better result formatting
+    Buffle.display_text_results.set_length(max(files, key=len))
 
     # renames files to avoid conflict
     temp_files = []  # temporary list of all uuid files
@@ -28,7 +33,7 @@ def normal(files: str | list[str]):
     random.shuffle(random_files)
     for temp_file, new_file, original_file in zip(temp_files, random_files, files):
         os.rename(os.path.abspath(temp_file), os.path.abspath(new_file))
-        Buffle.display_file_results.result(os.path.dirname(original_file), "Normal Name Shuffle", os.path.basename(original_file), os.path.basename(new_file))
+        Buffle.display_file_results.result(os.path.dirname(original_file), "\033[36mNormal Name Shuffle\033[0m", os.path.basename(original_file), os.path.basename(new_file))
 
 
 # HELL TO EXPLAIN AND CODE (WILL DO LATER)
@@ -38,9 +43,12 @@ def group(files: str | list[str], contains: list[str]):
     :param files: Target folder's directory
     :param contains: Substrings searched for inside file names
     """
-    # makes contains always a list
+    # makes files always a list
     if isinstance(files, str):
         files = [files]
+
+    # gets size of largest path for better result formatting
+    Buffle.display_text_results.set_length(max(files, key=len))
 
     assign_names = contains.copy()
 
@@ -48,28 +56,25 @@ def group(files: str | list[str], contains: list[str]):
     for contain in contains:
         temp_name = f"{uuid.uuid4().hex}"  # used as a placeholder for the contains text
         temp_names.append(temp_name)
-        for index ,file in enumerate(files):
+        for index, file in enumerate(files):
             if contain in os.path.basename(file):
                 # Replace the substring with the index in the filename
                 new_name = os.path.basename(file).replace(contain, temp_name)
-                files[index].inser = os.rename(os.path.abspath(file), os.path.join(os.path.dirname(file), new_name))
-
-    print(files)
+                new_path = os.path.join(os.path.dirname(file), new_name)
+                os.rename(file, new_path)
+                files[index] = new_path
 
     # alters files
     random.shuffle(assign_names)  # Randomize order for final names
     for i in range(len(contains) - 1, -1, -1):  # Process in reverse order
-        print("RANGE")
         target_name = assign_names.pop()  # Select a random name from the list
         contain_name = contains.pop()
         for file in files:
-            print("FILES")
             if temp_names[i] in os.path.basename(file):
-                print("REPLACE")
                 # Replace the index in the filename with the random target name
                 final_name = os.path.basename(file).replace(temp_names[i], target_name)
                 os.rename(os.path.abspath(file), os.path.join(os.path.dirname(file), final_name))
-                Buffle.display_file_results.result(os.path.dirname(file), "Group Name Shuffle", target_name, contain_name)
+                Buffle.display_file_results.result(os.path.dirname(file), "\033[34mGroup Name Shuffle\033[0m", target_name, contain_name)
 
 
 # reverses all files inside a directory
@@ -79,9 +84,12 @@ def reverse(files: str | list[str]):
     :param files: Target folder's directory
     :type files: str | list[str]
     """
-    # makes contains always a list
+    # makes files always a list
     if isinstance(files, str):
         files = [files]
+
+    # gets size of largest path for better result formatting
+    Buffle.display_text_results.set_length(max(files, key=len))
 
     # renames files to avoid conflict
     temp_files = []  # temporary list of all uuid files
@@ -97,4 +105,4 @@ def reverse(files: str | list[str]):
     for temp_file, new_file, original_file in zip(temp_files, reverse_files, files):
         new_file = os.path.join(os.path.dirname(original_file), new_file)
         os.rename(temp_file, new_file)
-        Buffle.display_file_results.result(os.path.dirname(original_file), "Reverse Name Shuffle", os.path.basename(original_file), os.path.basename(new_file))
+        Buffle.display_file_results.result(os.path.dirname(original_file), "\033[33mReverse Name Shuffle\033[0m", os.path.basename(original_file), os.path.basename(new_file))
