@@ -5,37 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL - Copy/1block_blue.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL - Copy/1triangle_blue.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL - Copy/2block_red.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL - Copy/2triangle_red.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL - Copy/3block_green.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL - Copy/3triangle_green.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL/1block_blue.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL/1triangle_blue.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL/2block_red.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL/2triangle_red.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL/3block_green.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ANVIL/3triangle_green.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Buffle/Display/Color.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Buffle/Display/Results.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Buffle/Display/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Search/Search.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Search/Search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST - Copy/1block_ red.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST - Copy/1triangle_red.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST - Copy/2block_blue.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST - Copy/2triangle_blue.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST - Copy/3block_green.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST - Copy/3triangle_green.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST/1block_ 556363f1dee741239eebce1333820ccd.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST/1triangle_556363f1dee741239eebce1333820ccd.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST/2block_03be953292624feda59a4a1c509bdcb1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST/2triangle_03be953292624feda59a4a1c509bdcb1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST/3block_70f55f6b00e7490aa6ae14099ca1b6c1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TEST/3triangle_70f55f6b00e7490aa6ae14099ca1b6c1.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,11 +65,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Inner" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Outer" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Text" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\File" />
-      <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Textures" />
     </key>
   </component>
   <component name="SharedIndexes">
