@@ -4,6 +4,7 @@ The purpose of this is to help keep color consistency between programs using thi
 reading no matter what game is using this import to randomize files
 """
 # Used to better communicate how the methods effected files
+RED_BACKGROUND = '\033[41m'  # Used to make Errors displayed with result easier to find and more noticeable
 RED = '\033[31m'  # Marks the original value or trait after change or shuffle
 GREEN = '\033[32m'  # Mark the new value or trait after change or shuffle
 YELLOW = '\033[33m'  # Mark if value or trait is unchanged
@@ -17,6 +18,5 @@ BRIGHT_BLUE = '\033[94m'
 BRIGHT_MAGENTA = '\033[95m'
 BRIGHT_CYAN = '\033[96m'
 
-RED_BACKGROUND = ['\033[41m'] # Used to make Errors displayed with result easier to find and more noticeable
 RESET = '\033[0m'  # removes all effects
 

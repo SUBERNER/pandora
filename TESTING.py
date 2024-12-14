@@ -1,14 +1,11 @@
+import random
+
 import Buffle
 
 import os
 
+path = os.getcwd() + "\\IMAGES - Copy"
 
-
-path = os.getcwd()
-
-print(Buffle.Search.full(path + "\\ANVIL", False, False))
-print(len(Buffle.Search.full(path + "\\ANVIL", False, False)))
-
-files = Buffle.Search.full(path + "\\ANVIL", False, False)
-Buffle.Outer.group(files,["_blue", "_red", "_green"])
+files = Buffle.Search.full(path, False, False)
+Buffle.Texture.noise(files, 10, -100)
 
