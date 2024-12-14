@@ -1,7 +1,6 @@
 import os
 import shutil
-
-import Buffle.Display.Result
+import Buffle
 # Methods will not be accessed from this file but from Buffle itself
 # These are to be used from the player from the parent folder Buffle and to be use dy other .py files
 
@@ -41,4 +40,33 @@ def move(source: str, destination: str, delete: bool = False):
         shutil.move(source, destination)
 
     return destination
+
+
+# STILL NEEDS TO BE WORKED ON
+def zip(source: str, name: str, extension: str = None, delete: bool = False):
+    """
+    Creates Zip files and renames extension, formatting the mod / addon
+    :param source: File's old directory / location
+    :type source: str
+    :param name: Name of the zipped file
+    :type name: str
+    :param extension:
+    :type extension: str
+    :param delete:
+    :type delete: bool
+    :return:
+    """
+    try:
+        zip_source = shutil.make_archive(name, "zip", os.path.dirname(source))
+
+        if extension is not None:  # replaces the zip extension with a custom one
+            sor, ext = os.path.splitext(zip_source)
+            os.rename(source, sor + extension)
+
+        if delete:
+            os.remove(source)
+
+    except Exception as e:
+        Buffle.Display.methods.error_result(source, "zip", e.__str__())
+
 
