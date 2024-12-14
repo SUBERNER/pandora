@@ -80,7 +80,7 @@ class Result:
             else:
                 self.error_result(f"{source:>{self._file_length}}", method, "not file or folder")
         except Exception as e:
-            self.error_result(f"{source:>{self._file_length}}", method, e.__str__())
+            self.error_result(f"{source:>{self._file_length}}", method, str(e.args))
 
     def error_result(self, source: str, method: str, error: str):
         """
@@ -100,4 +100,4 @@ class Result:
                 source = source.split("\\")[-1]
             print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>     ERROR <|> {error}{Color.RESET}")
         except Exception as e:
-            print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>     ERROR <|> {e.__str__()}{Color.RESET}")
+            print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>     ERROR <|> {e.args}{Color.RESET}")

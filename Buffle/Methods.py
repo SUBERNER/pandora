@@ -43,13 +43,11 @@ def move(source: str, destination: str, delete: bool = False):
 
 
 # STILL NEEDS TO BE WORKED ON
-def zip(source: str, name: str, extension: str = None, delete: bool = False):
+def zip(source: str, extension: str = "zip", delete: bool = False):
     """
     Creates Zip files and renames extension, formatting the mod / addon
     :param source: File's old directory / location
     :type source: str
-    :param name: Name of the zipped file
-    :type name: str
     :param extension:
     :type extension: str
     :param delete:
@@ -57,16 +55,19 @@ def zip(source: str, name: str, extension: str = None, delete: bool = False):
     :return:
     """
     try:
-        zip_source = shutil.make_archive(name, "zip", os.path.dirname(source))
+        zip_source = shutil.make_archive(os.path.basename(source), "zip", source)
 
-        if extension is not None:  # replaces the zip extension with a custom one
-            sor, ext = os.path.splitext(zip_source)
-            os.rename(source, sor + extension)
+        # Adds the correct extension
+        sor, ext = os.path.splitext(zip_source)
+        new_source = sor + extension  # updated extension
+        os.rename(zip_source, new_source)
+
+        Buffle.Display.methods.result(source, "zip", os.path.basename(new_source), os.path.basename(source))
 
         if delete:
             os.remove(source)
 
     except Exception as e:
-        Buffle.Display.methods.error_result(source, "zip", e.__str__())
+        Buffle.Display.methods.error_result(source, "zip", str(e.args))
 
 
