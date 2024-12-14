@@ -101,7 +101,7 @@ def invert(files: str | list[str]):
         Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}invert{Buffle.Display.Color.RESET}", new_image.size, image.size)
 
 
-def noise(files: str | list[str], factor: float, average: float):
+def noise(files: str | list[str], factor: float):
     """
     Alters the texture's pixels with random variation.
     :param files: Target files' directory or location.
@@ -109,10 +109,6 @@ def noise(files: str | list[str], factor: float, average: float):
                 values of 0.0 will not affect the noise,
                 values less than 0.0 will decrease noise,
                 and values higher than 0.0 will increase noise.
-    :param average: Average value of the noise,
-                values of 0.0 will have no bias,
-                values less than 0.0 will have bias to darker pixels,
-                and values higher than 0.0 will have bias to lighter pixels.
     :type files: files: str | list[str]
     :type factor: float
     :type factor: average
@@ -125,12 +121,17 @@ def noise(files: str | list[str], factor: float, average: float):
         image = Image.open(file)
         image_array = np.array(image)  # converts to array
 
-        # generates the noise and adds noice to image
-        noise_array = image_array + np.random.normal(average, factor, image_array.shape).astype(np.uint8)
-        noise_array = np.clip(noise_array, 0, 255)  # keeps values between 0 and 255
+        # generates noice for the brightness of the image
+        noise_array = np.random.normal(0, factor, image_array.shape[:2])  # Only one channel for brightness
+        if len(image_array.shape) == 3:  # If the image is RGB
+            noise_array = noise_array[:, :, np.newaxis]  # Add channel dimension for broadcasting
+
+        # adds the noise to the image
+        adjusted_array = image_array + noise_array
+        adjusted_array = np.clip(adjusted_array, 0, 255)  # Keeps values between 0 and 255
 
         # converts back into an image
-        new_image = Image.fromarray(noise_array)
+        new_image = Image.fromarray(adjusted_array.astype(np.uint8))
         new_image.save(file)
 
         Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}noise{Buffle.Display.Color.RESET}", factor, 0)

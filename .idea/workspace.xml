@@ -11,16 +11,8 @@
       <change afterPath="$PROJECT_DIR$/IMAGES/cat.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/IMAGES/dog.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/IMAGES/fox.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Display/Color.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/Color.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Display/Results.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/Result.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Display/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Texture/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Texture/Single.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
