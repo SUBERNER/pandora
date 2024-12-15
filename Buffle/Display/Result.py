@@ -66,21 +66,18 @@ class Result:
         :param original_value: value before alteration
         """
         try:
-            if os.path.isfile(source) or os.path.isdir(source):
-                if self._file_format == 1:  # limited
-                    limited_parts = source.split(os.sep)[-3:]
-                    source = os.path.join(*limited_parts)
-                elif self._file_format == 2:  # file
-                    source = source.split("\\")[-1]
+            if self._file_format == 1:  # limited
+                limited_parts = source.split(os.sep)[-3:]
+                source = os.path.join(*limited_parts)
+            elif self._file_format == 2:  # file
+                source = source.split("\\")[-1]
 
-                if original_value != updated_value:
-                    print(f"{source:>{self._file_length}} <|> {method} <|>   altered <|> [{Color.RED}{original_value}{Color.RESET}] --> [{Color.GREEN}{updated_value}{Color.RESET}]")
-                else:
-                    print(f"{source:>{self._file_length}} <|> {method} <|> unaltered <|> [{Color.YELLOW}{updated_value}{Color.RESET}]")
+            if original_value != updated_value:
+                print(f"{source:>{self._file_length}} <|> {method} <|>   altered <|> [{Color.RED}{original_value}{Color.RESET}] --> [{Color.GREEN}{updated_value}{Color.RESET}]")
             else:
-                self.error_result(f"{source:>{self._file_length}}", method, "not file or folder")
+                print(f"{source:>{self._file_length}} <|> {method} <|> unaltered <|> [{Color.YELLOW}{updated_value}{Color.RESET}]")
         except Exception as e:
-            self.error_result(f"{source:>{self._file_length}}", method, str(e.args))
+            self.error_result(f"{source:>{self._file_length}}", method, str(e))
 
     def error_result(self, source: str, method: str, error: str):
         """
@@ -100,4 +97,4 @@ class Result:
                 source = source.split("\\")[-1]
             print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>     ERROR <|> {error}{Color.RESET}")
         except Exception as e:
-            print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>     ERROR <|> {e.args}{Color.RESET}")
+            print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>     ERROR <|> {e}{Color.RESET}")

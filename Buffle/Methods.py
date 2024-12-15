@@ -42,15 +42,13 @@ def move(source: str, destination: str):
         Buffle.Display.methods.error_result(source, "move", str(e.args))
 
 
-def zip(source: str, extension: str = "zip", delete: bool = False):
+def zip(source: str, extension: str = "zip"):
     """
     Creates Zip files and renames extension, formatting the mod / addon
     :param source: File's old directory / location
     :type source: str
     :param extension:
     :type extension: str
-    :param delete:
-    :type delete: bool
     """
     try:
         zip_source = shutil.make_archive(os.path.basename(source), "zip", source)
@@ -66,27 +64,38 @@ def zip(source: str, extension: str = "zip", delete: bool = False):
         Buffle.Display.methods.error_result(source, "zip", str(e.args))
 
 
-def zip(source: str, extension: str = "zip", delete: bool = False):
+def delete(source: str):
     """
-    Creates Zip files and renames extension, formatting the mod / addon
-    :param source: File's old directory / location
+    Deletes a file or folder
+    :param source: File's directory / location
     :type source: str
-    :param extension: The end extension of the compiled file or folder.
-    :type extension: str
-    :param delete:
-    :type delete: bool
     """
     try:
-        zip_source = shutil.make_archive(os.path.basename(source), "zip", source)
+        os.remove(source)
+        if os.path.exists(source):  # used for better results
+            new_source = os.path.basename(source)
+        else:
+            new_source = None
 
-        # Adds the correct extension
-        sor, ext = os.path.splitext(zip_source)
-        new_source = sor + extension  # updated extension
-        os.rename(zip_source, new_source)
-
-        Buffle.Display.methods.result(source, "zip", os.path.basename(new_source), os.path.basename(source))
+        Buffle.Display.methods.result(source, "delete", new_source, os.path.basename(source))
 
     except Exception as e:
-        Buffle.Display.methods.error_result(source, "zip", str(e.args))
+        Buffle.Display.methods.error_result(source, "delete", str(e))
+
+
+def rename(source: str, name: str):
+    """
+    Renames a file or folder
+    :param source: File's directory / location
+    :type source: str
+    :param name: New name for the file or folder
+    :type name: str
+    """
+    try:
+        os.rename(source, os.path.dirname(source) + name)
+        Buffle.Display.methods.result(source, "rename", os.path.basename(source), os.path.basename(source))
+
+    except Exception as e:
+        Buffle.Display.methods.error_result(source, "rename", str(e))
 
 

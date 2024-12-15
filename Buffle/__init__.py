@@ -6,6 +6,8 @@ from . import Display
 
 from .Methods import dump
 from .Methods import move
+from .Methods import delete
+from .Methods import rename
 from .Methods import zip
 
 # What can all be accessed from Buffle directly
@@ -17,5 +19,7 @@ __all__ = [
     'Display',
     'dump',
     'move',
-    'zip'
+    'zip',
+    'delete',
+    'rename'
 ]
