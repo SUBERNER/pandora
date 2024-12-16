@@ -7,8 +7,12 @@ from . import Display
 from .Methods import dump
 from .Methods import move
 from .Methods import delete
+from .Methods import create
 from .Methods import rename
+from .Methods import reextension
 from .Methods import zip
+from .Methods import unzip
+
 
 # What can all be accessed from Buffle directly
 __all__ = [
@@ -21,5 +25,7 @@ __all__ = [
     'move',
     'zip',
     'delete',
-    'rename'
+    'rename',
+    'reextension',
+    'create'
 ]

@@ -1,4 +1,5 @@
 import os
+import time
 from . import Color
 
 
@@ -12,10 +13,26 @@ class Result:
     _display_results = True
     # the minimum amount of space given to the file section of a result
     _file_length = 0
+    # delay between each error
+    _error_delay = 0
 
     def __init__(self, file_format: int, display_results: bool):
         self._file_format = file_format
         self._display_results = display_results
+
+    def set_delay(self, length: float = None):
+        """
+        sets the delay until another method can be executed after a Buffle error
+        :param length: Duration of the delay in seconds
+        :type length: float
+        :return Format of displayed file's directory / location
+        """
+        if length is not None:
+            if length < 0:  # makes sure it is positive
+                length = 0
+
+            self._error_delay = length
+        return self._error_delay
 
     def set_format(self, format: int = None):
         """
@@ -31,7 +48,7 @@ class Result:
     def set_length(self, file: str):
         """
         Formats the minimum width of the source section of a result, improving result readability
-        :param file: Longest file path.
+        :param file: Determines length of source display based on the length of a file path, should be the longest path.
         :type file: str
         """
 
@@ -77,7 +94,7 @@ class Result:
             else:
                 print(f"{source:>{self._file_length}} <|> {method} <|> unaltered <|> [{Color.YELLOW}{updated_value}{Color.RESET}]")
         except Exception as e:
-            self.error_result(f"{source:>{self._file_length}}", method, str(e))
+            self.error_result(f"{source:>{self._file_length}}", method, str(e.args))
 
     def error_result(self, source: str, method: str, error: str):
         """
@@ -96,5 +113,9 @@ class Result:
             elif self._file_format == 2:  # file
                 source = source.split("\\")[-1]
             print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>     ERROR <|> {error}{Color.RESET}")
+
         except Exception as e:
-            print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>     ERROR <|> {e}{Color.RESET}")
+            print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method}<|>     ERROR <|> {e.args}{Color.RESET}")
+
+        # the delay after an error until processes can run again
+        time.sleep(self._error_delay)

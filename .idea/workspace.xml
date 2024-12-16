@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/testing.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RANDOMIZED.mcpack" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Display/Result.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/Result.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testing.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,8 +68,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Display" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle" />
+      <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Display" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Inner" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Outer" />
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle\Text" />
