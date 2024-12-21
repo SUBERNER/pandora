@@ -119,3 +119,27 @@ class Result:
 
         # the delay after an error until processes can run again
         time.sleep(self._error_delay)
+
+    def warning_result(self, source: str, method: str, warning: str):
+        """
+        Displays the output and processes of a method altering files
+        :param source: Target file's or folder's directory / location
+        :type source: str
+        :param method: Name of the method / action done
+        :type method: str
+        :param warning: Statement of what went wrong
+        :type warning: str
+        """
+        try:
+            if self._file_format == 1:  # limited
+                limited_parts = source.split(os.sep)[-3:]
+                source = os.path.join(*limited_parts)
+            elif self._file_format == 2:  # file
+                source = source.split("\\")[-1]
+            print(f"{Color.YELLOW_BACKGROUND}{source:>{self._file_length}} <|> {method} <|>   WARNING <|> {warning}{Color.RESET}")
+
+        except Exception as e:
+            print(f"{Color.RED_BACKGROUND}{source:>{self._file_length}} <|> {method}<|>   WARNING <|> {e.args}{Color.RESET}")
+
+        # the delay after an error until processes can run again
+        time.sleep(self._error_delay)
