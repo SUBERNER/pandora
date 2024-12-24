@@ -3,10 +3,9 @@ import Buffle
 import os
 
 base = os.getcwd()
-path1 = base + "\\SAM\\test.txt"
-path2 = base + "\\MAS\\"
+path = base + "\\TEST\\frogger-music.wav"
 
-Buffle.move(path1, path2)
+Buffle.Sound.quality(path, 0.5)
 
 
 

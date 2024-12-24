@@ -1,8 +1,9 @@
 from . import Outer
 from . import Inner
 from . import Search
-from . import Texture
+from . import Image
 from . import Display
+from . import Sound
 
 from .Methods import move
 from .Methods import delete
@@ -19,7 +20,7 @@ __all__ = [
     'Outer',
     'Inner',
     'Search',
-    'Texture',
+    'Image',
     'Display',
     'move',
     'zip',

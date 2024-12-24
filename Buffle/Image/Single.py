@@ -27,7 +27,7 @@ def rotate(files: str | list[str], degree: int, expand: bool = False):
 
         new_image.save(file)
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}rotate{Buffle.Display.Color.RESET}", degree, 0)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}rotate{Buffle.Display.Color.RESET}", degree, 0)
 
 
 def flip(files: str | list[str], horizontal: bool, vertical: bool):
@@ -54,7 +54,7 @@ def flip(files: str | list[str], horizontal: bool, vertical: bool):
             new_image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
 
         new_image.save(file)
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}flip{Buffle.Display.Color.RESET}", [horizontal, vertical], [False, False])
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}flip{Buffle.Display.Color.RESET}", [horizontal, vertical], [False, False])
 
 
 def resize(files: str | list[str], width: int, height: int):
@@ -78,7 +78,7 @@ def resize(files: str | list[str], width: int, height: int):
         new_image.save(file)
 
         new_image.save(file)
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}resize{Buffle.Display.Color.RESET}", new_image.size, image.size)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}resize{Buffle.Display.Color.RESET}", new_image.size, image.size)
 
 
 def invert(files: str | list[str]):
@@ -98,7 +98,7 @@ def invert(files: str | list[str]):
         new_image.save(file)
 
         new_image.save(file)
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}invert{Buffle.Display.Color.RESET}", new_image.size, image.size)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}invert{Buffle.Display.Color.RESET}", new_image.size, image.size)
 
 
 def noise(files: str | list[str], factor: float):
@@ -134,7 +134,7 @@ def noise(files: str | list[str], factor: float):
         new_image = Image.fromarray(adjusted_array.astype(np.uint8))
         new_image.save(file)
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}noise{Buffle.Display.Color.RESET}", factor, 0)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}noise{Buffle.Display.Color.RESET}", factor, 0)
 
 
 def blur(files: str | list[str], factor: float):
@@ -158,7 +158,7 @@ def blur(files: str | list[str], factor: float):
         new_image = image.filter(ImageFilter.GaussianBlur(radius=factor))
         new_image.save(file)
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}blur{Buffle.Display.Color.RESET}", factor, 0)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}blur{Buffle.Display.Color.RESET}", factor, 0)
 
 
 def saturation(files: str | list[str], factor: float):
@@ -181,7 +181,7 @@ def saturation(files: str | list[str], factor: float):
         new_image = ImageEnhance.Color(image).enhance(factor)  # alters image or texture
         new_image.save(file)
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}saturation{Buffle.Display.Color.RESET}", factor, 1)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}saturation{Buffle.Display.Color.RESET}", factor, 1)
 
 
 def contrast(files: str | list[str], factor: float):
@@ -204,7 +204,7 @@ def contrast(files: str | list[str], factor: float):
         new_image = ImageEnhance.Contrast(image).enhance(factor)
         new_image.save(file)
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}contrast{Buffle.Display.Color.RESET}", factor, 1)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}contrast{Buffle.Display.Color.RESET}", factor, 1)
 
 
 def brightness(files: str | list[str], factor: float):
@@ -227,7 +227,7 @@ def brightness(files: str | list[str], factor: float):
         new_image = ImageEnhance.Brightness(image).enhance(factor)
         new_image.save(file)
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}brightness{Buffle.Display.Color.RESET}", factor, 1)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}brightness{Buffle.Display.Color.RESET}", factor, 1)
 
 
 def sharpness(files: str | list[str], factor: float):
@@ -250,7 +250,7 @@ def sharpness(files: str | list[str], factor: float):
         new_image = ImageEnhance.Sharpness(image).enhance(factor)
         new_image.save(file)
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}sharpness{Buffle.Display.Color.RESET}", factor, 1)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}sharpness{Buffle.Display.Color.RESET}", factor, 1)
 
 
 def resolution(files: str | list[str], factor: float):
@@ -273,7 +273,7 @@ def resolution(files: str | list[str], factor: float):
         new_image = image.resize((int(image.width * factor), int(image.height * factor)), Image.Resampling.BILINEAR)
         new_image.save(file)
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}resolution{Buffle.Display.Color.RESET}", factor, 1)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}resolution{Buffle.Display.Color.RESET}", factor, 1)
 
 
 def quality(files: str | list[str], factor: float):
@@ -295,6 +295,6 @@ def quality(files: str | list[str], factor: float):
         image = Image.open(file)
         image.save(file, quality=int(factor * 100))
 
-        Buffle.Display.texture.result(file, f"{Buffle.Display.Color.MAGENTA}quality{Buffle.Display.Color.RESET}", factor, 1)
+        Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}quality{Buffle.Display.Color.RESET}", factor, 1)
 
 

@@ -5,7 +5,8 @@ from .Result import Result
 # If needed, add new ones here
 outer = Result(1, True)
 inner = Result(1, True)
-texture = Result(1, True)
+image = Result(1, True)
 methods = Result(1, True)
+sound = Result(1, True)
 
 
