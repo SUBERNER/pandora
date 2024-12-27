@@ -1,3 +1,4 @@
+import Buffle
 import os
 from typing import Literal
 
@@ -5,7 +6,6 @@ from typing import Literal
 _TYPE_SEARCH = Literal["any", "all"]
 
 
-# region FULL
 def full(source: str, deep_search: bool, inverse_search: bool):
     files = []  # will store all files found in this search
 
@@ -17,11 +17,10 @@ def full(source: str, deep_search: bool, inverse_search: bool):
         for folder in folders:  # goes through each folder
             files.extend([f.path for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
 
+    Buffle.Display.search.result(source, "full search", len(files), 0)
     return files  # returns all files in a list
-# endregion
 
 
-# region NAME
 def name(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, type_search: _TYPE_SEARCH = "all"):
     files = []  # will store all files found in this search
 
@@ -42,11 +41,10 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
             elif type_search == "any":
                 files.extend([f.path for f in os.scandir(folder) if f.is_file() and ((any(contain in f.name for contain in contains) and not inverse_search) or (all(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
 
+    Buffle.Display.search.result(source, "name search", len(files), 0)
     return files  # returns all files in a list
-# endregion
 
 
-# region CONTENT
 def content(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, type_search: _TYPE_SEARCH = "all"):
     original_files = []  # will store all files found in this search
     formatted_files = []  # will store all the files after determining their content
@@ -75,5 +73,5 @@ def content(source: str, contains: str | list[str], deep_search: bool, inverse_s
                     if ((any(contain in text for contain in contains) and not inverse_search) or (all(contain not in text for contain in contains) and inverse_search)):  # determines if contains is not inside the file text
                         formatted_files.append(entry.path)
 
+    Buffle.Display.search.result(source, "content search", len(formatted_files), 0)
     return formatted_files  # returns all files in a list
-# endregion

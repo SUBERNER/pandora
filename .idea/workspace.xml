@@ -5,17 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Buffle/Sound/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TEST/frogger-music.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StaticBugdroidcore.original.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TEST/StaticBugdroidcore.original.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/frogger-music.wav" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Display/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Texture/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Image/Single.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Texture/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Image/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAS/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Sound/Single.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Image/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Image/Single.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Search/Search.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Search/Search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Sound/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Sound/Single.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/regmovies.com_order-success_id=1346-WQSMNG5.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,26 +47,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python.File.executor": "Run",
-    "Python.Methods.executor": "Run",
-    "Python.Result.executor": "Run",
-    "Python.Search.executor": "Run",
-    "Python.Settings.executor": "Run",
-    "Python.Shuffle.executor": "Run",
-    "Python.Single.executor": "Run",
-    "Python.TESTING.executor": "Run",
-    "Python.Texture.executor": "Run",
-    "Python.__init__.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/tompk/Documents/GitHub/Buffle",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.File.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Methods.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Result.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Search.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Settings.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Shuffle.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Single.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TESTING.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Texture.executor&quot;: &quot;Run&quot;,
+    &quot;Python.__init__.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/tompk/Documents/GitHub/Buffle&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle" />

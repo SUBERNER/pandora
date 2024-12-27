@@ -1,11 +1,10 @@
-import random
 import Buffle
 import os
 
 base = os.getcwd()
-path = base + "\\TEST\\frogger-music.wav"
-
-Buffle.Sound.quality(path, 0.5)
+path = base + "\\TEST"
+path = Buffle.Search.full(path, True, False)
+Buffle.Image.rotate(path, -30)
 
 
 
