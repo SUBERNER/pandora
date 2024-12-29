@@ -26,11 +26,11 @@ def rotate(files: str | list[str], degree: int, expand: bool = False):
         for file in files:
             try:
                 image = Image.open(file)
-                new_image = image.rotate(degree, expand=expand)
+                new_image = image.rotate(-degree, expand=expand)
 
                 new_image.save(file)
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}rotate{Buffle.Display.Color.RESET}", degree, 0)
+                Buffle.Display.image.result(file, "rotate", degree, 0)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "rotate", str(e.args))
     except Exception as e:
@@ -63,7 +63,7 @@ def flip(files: str | list[str], horizontal: bool, vertical: bool):
                     new_image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
 
                 new_image.save(file)
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}flip{Buffle.Display.Color.RESET}", [horizontal, vertical], [False, False])
+                Buffle.Display.image.result(file, "flip", [horizontal, vertical], [False, False])
             except Exception as e:
                 Buffle.Display.image.error_result(file, "flip", str(e.args))
     except Exception as e:
@@ -93,7 +93,7 @@ def resize(files: str | list[str], width: int, height: int):
                 new_image.save(file)
 
                 new_image.save(file)
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}resize{Buffle.Display.Color.RESET}", new_image.size, image.size)
+                Buffle.Display.image.result(file, f"resize", new_image.size, image.size)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "resize", str(e.args))
     except Exception as e:
@@ -119,7 +119,7 @@ def invert(files: str | list[str]):
                 new_image.save(file)
 
                 new_image.save(file)
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}invert{Buffle.Display.Color.RESET}", True, False)
+                Buffle.Display.image.result(file, "invert", True, False)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "invert", str(e.args))
     except Exception as e:
@@ -164,7 +164,7 @@ def noise(files: str | list[str], factor: float):
                 # determines the changes made by method to display
                 image_change = np.sum(np.abs(adjusted_array - image_array) > 1) / image_array.size * 100
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}noise{Buffle.Display.Color.RESET}", image_change, 0)
+                Buffle.Display.image.result(file, "noise", image_change, 0)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "noise", str(e.args))
     except Exception as e:
@@ -196,7 +196,7 @@ def blur(files: str | list[str], factor: float):
 
 
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}blur{Buffle.Display.Color.RESET}", factor, 0)
+                Buffle.Display.image.result(file, "blur", factor, 0)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "blur", str(e.args))
     except Exception as e:
@@ -232,7 +232,7 @@ def saturation(files: str | list[str], factor: float):
                 new_image_mean = np.mean(np.array(hsv_new_image)[:, :, 1])
 
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}saturation{Buffle.Display.Color.RESET}", new_image_mean, image_mean)
+                Buffle.Display.image.result(file, "saturation", new_image_mean, image_mean)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "saturation", str(e.args))
     except Exception as e:
@@ -267,7 +267,7 @@ def contrast(files: str | list[str], factor: float):
                 image_mean = np.std(np.array(grayscale_image))
                 new_image_mean = np.std(np.array(grayscale_new_image))
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}contrast{Buffle.Display.Color.RESET}", new_image_mean, image_mean)
+                Buffle.Display.image.result(file, "contrast", new_image_mean, image_mean)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "contrast", str(e.args))
     except Exception as e:
@@ -302,7 +302,7 @@ def brightness(files: str | list[str], factor: float):
                 image_mean = np.mean(np.array(grayscale_image))
                 new_image_mean = np.mean(np.array(grayscale_new_image))
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}brightness{Buffle.Display.Color.RESET}", new_image_mean, image_mean)
+                Buffle.Display.image.result(file, "brightness", new_image_mean, image_mean)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "brightness", str(e.args))
     except Exception as e:
@@ -331,7 +331,7 @@ def sharpness(files: str | list[str], factor: float):
                 new_image = ImageEnhance.Sharpness(image).enhance(factor)
                 new_image.save(file)
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}sharpness{Buffle.Display.Color.RESET}", factor, 1)
+                Buffle.Display.image.result(file, "sharpness", factor, 1)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "sharpness", str(e.args))
     except Exception as e:
@@ -360,7 +360,7 @@ def resolution(files: str | list[str], factor: float):
                 new_image = image.resize((int(image.width * factor), int(image.height * factor)), Image.Resampling.BILINEAR)
                 new_image.save(file)
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}resolution{Buffle.Display.Color.RESET}", new_image.size, image.size)
+                Buffle.Display.image.result(file, "resolution", new_image.size, image.size)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "resolution", str(e.args))
     except Exception as e:
@@ -408,7 +408,7 @@ def quality(files: str | list[str], factor: float):
                 new_image = Image.composite(new_image, image, alpha_image)
                 new_image.save(file, format=image.format.upper(), quality=100)
 
-                Buffle.Display.image.result(file, f"{Buffle.Display.Color.MAGENTA}quality{Buffle.Display.Color.RESET}", os.path.getsize(file), original_size)
+                Buffle.Display.image.result(file, "quality", os.path.getsize(file), original_size)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "quality", str(e.args))
     except Exception as e:

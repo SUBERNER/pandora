@@ -1,77 +1,145 @@
 import Buffle
 import os
-from typing import Literal
-
-# used to determine how the search finds files
-_TYPE_SEARCH = Literal["any", "all"]
 
 
-def full(source: str, deep_search: bool, inverse_search: bool):
-    files = []  # will store all files found in this search
+def full(source: str, deep_search: bool, inverse_search: bool) -> list[str] | None:
+    """
+    Searches for files in a directory.
+    parameters:
+        source (str): Directory being searched.
 
-    if not inverse_search:  # ignores everything but the source in an inverse_search
-        files.extend([f.path for f in os.scandir(source) if f.is_file()])  # gets all files inside source directory
+        deep_search (bool): Includes files from all subdirectories inside the directory.
 
-    if deep_search:  # if enabled, will also go through all subfolders inside source
-        folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
-        for folder in folders:  # goes through each folder
-            files.extend([f.path for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
+        inverse_search (bool): Searches for files that do NOT match the specified criteria.
 
-    Buffle.Display.search.result(source, "full search", len(files), 0)
-    return files  # returns all files in a list
+    returns:
+        (list[str]): List of file paths found during the search.
 
+        (None): None if an error occurs.
+    """
+    try:
+        files = []  # will store all files found in this search
 
-def name(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, type_search: _TYPE_SEARCH = "all"):
-    files = []  # will store all files found in this search
+        if not inverse_search:  # ignores everything but the source in an inverse_search
+            files.extend([f.path for f in os.scandir(source) if f.is_file()])  # gets all files inside source directory
 
-    # makes contains always a list
-    if isinstance(contains, str):
-        contains = [contains]
+        if deep_search:  # if enabled, will also go through all subfolders inside source
+            folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
+            for folder in folders:  # goes through each folder
+                if folder == source:  # skips source folder, as it is already scanned in the first if
+                    continue
+                files.extend([f.path for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
 
-    if type_search == "all":
-        files.extend([f.path for f in os.scandir(source) if f.is_file() and ((all(contain in f.name for contain in contains) and not inverse_search) or (any(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
-    elif type_search == "any":
-        files.extend([f.path for f in os.scandir(source) if f.is_file() and ((any(contain in f.name for contain in contains) and not inverse_search) or (all(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
-
-    if deep_search:  # if enabled, will also go through all subfolders inside source
-        folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
-        for folder in folders:  # goes through each folder
-            if type_search == "all":
-                files.extend([f.path for f in os.scandir(folder) if f.is_file() and ((all(contain in f.name for contain in contains) and not inverse_search) or (any(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
-            elif type_search == "any":
-                files.extend([f.path for f in os.scandir(folder) if f.is_file() and ((any(contain in f.name for contain in contains) and not inverse_search) or (all(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
-
-    Buffle.Display.search.result(source, "name search", len(files), 0)
-    return files  # returns all files in a list
+        Buffle.Display.search.result(source, "full search", len(files), 0)
+        return files  # returns all files in a list
+    except Exception as e:
+        Buffle.Display.sound.error_result(source, "full search", str(e.args))
+        return None
 
 
-def content(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, type_search: _TYPE_SEARCH = "all"):
-    original_files = []  # will store all files found in this search
-    formatted_files = []  # will store all the files after determining their content
+def name(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, *, type_search="all") -> list[str] | None:
+    """
+    Searches for files in a directory whose names match a specific substring.
 
-    # makes contains always a list
-    if isinstance(contains, str):
-        contains = [contains]
-    print(contains)
+    parameters:
+        source (str): Directory being searched.
 
-    original_files.extend([f for f in os.scandir(source) if f.is_file()])  # gets all files inside source directory
+        contains (str | list[str]): Substring(s) to look for in file names.
 
-    if deep_search:  # if enabled, will also go through all subfolders inside source
-        folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
-        for folder in folders:  # goes through each folder
-            original_files.extend([f for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
+        deep_search (bool): Includes files from all subdirectories inside the directory.
 
-    # determines if substring is or is not inside file
-    for entry in original_files:
-        if entry.is_file():
-            with open(entry, 'r') as file:
-                text = file.read()
+        inverse_search (bool): Searches for files that do NOT match the specified criteria.
+
+    keyword parameters:
+        type_search (str): Determines matching criteria, defaults to "all".
+            - "all": File(s) must contain all specified substrings.
+            - "any": File(s) must contain at least one of the specified substrings.
+
+    returns:
+        (list[str]): List of file paths found during the search.
+
+        (None): None if an error occurs.
+    """
+    try:
+        files = []  # will store all files found in this search
+
+        # makes contains always a list
+        if isinstance(contains, str):
+            contains = [contains]
+
+        if type_search == "all":
+            files.extend([f.path for f in os.scandir(source) if f.is_file() and ((all(contain in f.name for contain in contains) and not inverse_search) or (any(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
+        elif type_search == "any":
+            files.extend([f.path for f in os.scandir(source) if f.is_file() and ((any(contain in f.name for contain in contains) and not inverse_search) or (all(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
+
+        if deep_search:  # if enabled, will also go through all subfolders inside source
+            folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
+            for folder in folders:  # goes through each folder
                 if type_search == "all":
-                    if ((all(contain in text for contain in contains) and not inverse_search) or (any(contain not in text for contain in contains) and inverse_search)):  # determines if contains is inside the file text
-                        formatted_files.append(entry.path)
+                    files.extend([f.path for f in os.scandir(folder) if f.is_file() and ((all(contain in f.name for contain in contains) and not inverse_search) or (any(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
                 elif type_search == "any":
-                    if ((any(contain in text for contain in contains) and not inverse_search) or (all(contain not in text for contain in contains) and inverse_search)):  # determines if contains is not inside the file text
-                        formatted_files.append(entry.path)
+                    files.extend([f.path for f in os.scandir(folder) if f.is_file() and ((any(contain in f.name for contain in contains) and not inverse_search) or (all(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
 
-    Buffle.Display.search.result(source, "content search", len(formatted_files), 0)
-    return formatted_files  # returns all files in a list
+        Buffle.Display.search.result(source, "name search", len(files), 0)
+        return files  # returns all files in a list
+    except Exception as e:
+        Buffle.Display.sound.error_result(source, "name search", str(e.args))
+        return None
+
+
+def content(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, *, type_search="all") -> list[str] | None:
+    """
+    Searches for files in a directory whose contents match a specific substring.
+
+    parameters:
+        source (str): Directory being searched.
+
+        contains (str | list[str]): Substring(s) to look for in file names.
+
+        deep_search (bool): Includes files from all subdirectories inside the directory.
+
+        inverse_search (bool): Searches for files that do NOT match the specified criteria.
+
+    keyword parameters:
+        type_search (str): Determines matching criteria, defaults to "all".
+            - "all": File(s) must contain all specified substrings.
+            - "any": File(s) must contain at least one of the specified substrings.
+
+    returns:
+        (list[str]): List of file paths found during the search.
+
+        (None): None if an error occurs.
+    """
+    try:
+        original_files = []  # will store all files found in this search
+        formatted_files = []  # will store all the files after determining their content
+
+        # makes contains always a list
+        if isinstance(contains, str):
+            contains = [contains]
+        print(contains)
+
+        original_files.extend([f for f in os.scandir(source) if f.is_file()])  # gets all files inside source directory
+
+        if deep_search:  # if enabled, will also go through all subfolders inside source
+            folders = [f[0] for f in os.walk(source)]  # get all subfolders inside source
+            for folder in folders:  # goes through each folder
+                original_files.extend([f for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
+
+        # determines if substring is or is not inside file
+        for entry in original_files:
+            if entry.is_file():
+                with open(entry, 'r') as file:
+                    text = file.read()
+                    if type_search == "all":
+                        if ((all(contain in text for contain in contains) and not inverse_search) or (any(contain not in text for contain in contains) and inverse_search)):  # determines if contains is inside the file text
+                            formatted_files.append(entry.path)
+                    elif type_search == "any":
+                        if ((any(contain in text for contain in contains) and not inverse_search) or (all(contain not in text for contain in contains) and inverse_search)):  # determines if contains is not inside the file text
+                            formatted_files.append(entry.path)
+
+        Buffle.Display.search.result(source, "content search", len(formatted_files), 0)
+        return formatted_files  # returns all files in a list
+    except Exception as e:
+        Buffle.Display.sound.error_result(source, "content search", str(e.args))
+        return None

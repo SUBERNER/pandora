@@ -33,7 +33,7 @@ def normal(files: str | list[str]):
     random.shuffle(random_files)
     for temp_file, new_file, original_file in zip(temp_files, random_files, files):
         os.rename(os.path.abspath(temp_file), os.path.abspath(new_file))
-        Buffle.Display.outer.result(os.path.abspath(original_file), "\033[36mNormal Name Shuffle\033[0m", os.path.basename(new_file), os.path.basename(original_file))
+        Buffle.Display.outer.result(os.path.abspath(original_file), "Normal Name Shuffle", os.path.basename(new_file), os.path.basename(original_file))
 
 
 # HELL TO EXPLAIN AND CODE (WILL DO LATER)
@@ -74,7 +74,7 @@ def group(files: str | list[str], contains: list[str]):
                 # Replace the index in the filename with the random target name
                 final_name = os.path.basename(file).replace(temp_names[i], target_name)
                 os.rename(os.path.abspath(file), os.path.join(os.path.dirname(file), final_name))
-                Buffle.Display.outer.result(os.path.abspath(file), f"{Buffle.Display.Color.CYAN}Group Name Shuffle{Buffle.Display.Color.RESET}", contain_name, target_name)
+                Buffle.Display.outer.result(os.path.abspath(file), f"Group Name Shuffle", contain_name, target_name)
 
 
 # reverses all files inside a directory
@@ -105,4 +105,4 @@ def reverse(files: str | list[str]):
     for temp_file, new_file, original_file in zip(temp_files, reverse_files, files):
         new_file = os.path.join(os.path.dirname(original_file), new_file)
         os.rename(temp_file, new_file)
-        Buffle.Display.outer.result(os.path.abspath(original_file), f"{Buffle.Display.Color.CYAN}Reverse Name Shuffle{Buffle.Display.Color.RESET}", os.path.basename(new_file), os.path.basename(original_file))
+        Buffle.Display.outer.result(os.path.abspath(original_file), "Reverse Name Shuffle", os.path.basename(new_file), os.path.basename(original_file))

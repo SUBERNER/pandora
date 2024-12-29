@@ -41,7 +41,7 @@ def normal(files: str | list[str], contains: str | list[str]):
             text = file.read()  # stores all the data in a variable
         while text.count(placeholder) > 0:
             text = text.replace(placeholder, random_matches[0], 1)
-            Buffle.Display.inner.result(files[index], f"{Buffle.Display.Color.BLUE}Normal Text Shuffle{Buffle.Display.Color.RESET}", random_matches.pop(0), original_matches.pop(0))
+            Buffle.Display.inner.result(files[index], "Normal Text Shuffle", random_matches.pop(0), original_matches.pop(0))
 
         with open(entry, 'w') as file:
             file.write(text)
@@ -104,7 +104,7 @@ def group(source: str, contains: list[str], limit: int=None):
             while placeholder in text:
                 for index in range(len(contains)):
                     text = text.replace(placeholder + f"<{index}>", random_matches[0][0][index], 1)
-                    Buffle.Display.inner.result(source, f"{Buffle.Display.Color.BLUE}mGroup Text Shuffle{Buffle.Display.Color.RESET}", random_matches[0][0][index], original_matches[0][0][index])
+                    Buffle.Display.inner.result(source, "Group Text Shuffle", random_matches[0][0][index], original_matches[0][0][index])
 
                 random_matches.pop(0)
                 original_matches.pop(0)

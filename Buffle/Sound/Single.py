@@ -20,7 +20,7 @@ def volume(files: str | list[str], factor: float):
                 new_sound = sound + factor  # increases volume
                 new_sound.export(file, format=ext)
 
-                Buffle.Display.sound.result(file, f"{Buffle.Display.Color.MAGENTA}volume{Buffle.Display.Color.RESET}", factor, 0)
+                Buffle.Display.sound.result(file, "volume", factor, 0)
             except Exception as e:
                 Buffle.Display.sound.error_result(file, "volume", str(e.args))
     except Exception as e:
@@ -45,7 +45,7 @@ def pitch(files: str | list[str], factor: float):
                 new_sound = sound._spawn(sound.raw_data, overrides={'frame_rate': int(sound.frame_rate * (2.0 ** factor))})
                 new_sound.export(file, format=ext)
 
-                Buffle.Display.sound.result(file, f"{Buffle.Display.Color.MAGENTA}pitch{Buffle.Display.Color.RESET}", factor, 0)
+                Buffle.Display.sound.result(file, "pitch", factor, 0)
             except Exception as e:
                 Buffle.Display.sound.error_result(file, "pitch", str(e.args))
     except Exception as e:
@@ -69,7 +69,7 @@ def reverse(files: str | list[str]):
                 new_sound = sound.reverse()
                 new_sound.export(file, format=ext)
 
-                Buffle.Display.sound.result(file, f"{Buffle.Display.Color.MAGENTA}reverse{Buffle.Display.Color.RESET}", True, False)
+                Buffle.Display.sound.result(file, "reverse", True, False)
             except Exception as e:
                 Buffle.Display.sound.error_result(file, "reverse", str(e.args))
     except Exception as e:
@@ -97,7 +97,7 @@ def trim(files: str | list[str], start: float, end: float):
                 new_sound = sound[start:end]  # trims audio
                 new_sound.export(file, format=ext)
 
-                Buffle.Display.sound.result(file, f"{Buffle.Display.Color.MAGENTA}trim{Buffle.Display.Color.RESET}", [start, end], [0, len(sound)])
+                Buffle.Display.sound.result(file, "trim", [start, end], [0, len(sound)])
             except Exception as e:
                 Buffle.Display.sound.error_result(file, "trim", str(e.args))
     except Exception as e:
@@ -122,7 +122,7 @@ def normalize(files: str | list[str], factor: float):
                 new_sound = sound.apply_gain(new_dBFS)
                 new_sound.export(file, format=ext)
 
-                Buffle.Display.sound.result(file, f"{Buffle.Display.Color.MAGENTA}normalize{Buffle.Display.Color.RESET}", new_dBFS, sound.dBFS)
+                Buffle.Display.sound.result(file, "normalize", new_dBFS, sound.dBFS)
             except Exception as e:
                 Buffle.Display.sound.error_result(file, "normalize", str(e.args))
     except Exception as e:
@@ -146,7 +146,7 @@ def low_pass(files: str | list[str], factor: float):
                 new_sound = sound.low_pass_filter(factor)
                 new_sound.export(file, format=ext)
 
-                Buffle.Display.sound.result(file, f"{Buffle.Display.Color.MAGENTA}low_pass{Buffle.Display.Color.RESET}", factor, 0)
+                Buffle.Display.sound.result(file, "low_pass", factor, 0)
             except Exception as e:
                 Buffle.Display.sound.error_result(file, "low_pass", str(e.args))
     except Exception as e:
@@ -170,7 +170,7 @@ def high_pass(files: str | list[str], factor: float):
                 new_sound = sound.high_pass_filter(factor)
                 new_sound.export(file, format=ext)
 
-                Buffle.Display.sound.result(file, f"{Buffle.Display.Color.MAGENTA}high_pass{Buffle.Display.Color.RESET}", factor, 0)
+                Buffle.Display.sound.result(file, "high_pass", factor, 0)
             except Exception as e:
                 Buffle.Display.sound.error_result(file, "high_pass", str(e.args))
     except Exception as e:
