@@ -3,4 +3,4 @@ import os
 
 base = os.getcwd()
 path = base + "\\TEST"
-Buffle.Search.full(path, True, True)
+Buffle.move(base + "\\TEST.txt", base + "\\TEST\\TEST.txt")

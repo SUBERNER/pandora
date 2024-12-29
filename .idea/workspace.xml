@@ -5,20 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TEST/New Text Document.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TEST/TEST2/file.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Display/Color.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/Color.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Display/Result.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/Result.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Display/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Image/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Image/Single.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Search/Search.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Search/Search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Sound/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Sound/Single.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TEST/New Text Document.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TEST/TEST2/file.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frogger-music.wav" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

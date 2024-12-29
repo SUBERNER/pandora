@@ -5,17 +5,16 @@ import os
 def full(source: str, deep_search: bool, inverse_search: bool) -> list[str] | None:
     """
     Searches for files in a directory.
-    parameters:
+
+    parameter:
         source (str): Directory being searched.
 
         deep_search (bool): Includes files from all subdirectories inside the directory.
 
         inverse_search (bool): Searches for files that do NOT match the specified criteria.
 
-    returns:
-        (list[str]): List of file paths found during the search.
-
-        (None): None if an error occurs.
+    return:
+        (list[str]) | None: List of file paths found during the search, or None if an error occurs.
     """
     try:
         files = []  # will store all files found in this search
@@ -41,7 +40,7 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
     """
     Searches for files in a directory whose names match a specific substring.
 
-    parameters:
+    parameter:
         source (str): Directory being searched.
 
         contains (str | list[str]): Substring(s) to look for in file names.
@@ -50,15 +49,13 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
 
         inverse_search (bool): Searches for files that do NOT match the specified criteria.
 
-    keyword parameters:
+    keyword parameter:
         type_search (str): Determines matching criteria, defaults to "all".
             - "all": File(s) must contain all specified substrings.
             - "any": File(s) must contain at least one of the specified substrings.
 
-    returns:
-        (list[str]): List of file paths found during the search.
-
-        (None): None if an error occurs.
+    return:
+        (list[str]) | None: List of file paths found during the search, or None if an error occurs.
     """
     try:
         files = []  # will store all files found in this search
@@ -91,7 +88,7 @@ def content(source: str, contains: str | list[str], deep_search: bool, inverse_s
     """
     Searches for files in a directory whose contents match a specific substring.
 
-    parameters:
+    parameter:
         source (str): Directory being searched.
 
         contains (str | list[str]): Substring(s) to look for in file names.
@@ -100,15 +97,13 @@ def content(source: str, contains: str | list[str], deep_search: bool, inverse_s
 
         inverse_search (bool): Searches for files that do NOT match the specified criteria.
 
-    keyword parameters:
+    keyword parameter:
         type_search (str): Determines matching criteria, defaults to "all".
             - "all": File(s) must contain all specified substrings.
             - "any": File(s) must contain at least one of the specified substrings.
 
-    returns:
-        (list[str]): List of file paths found during the search.
-
-        (None): None if an error occurs.
+    return:
+        (list[str]) | None: List of file paths found during the search, or None if an error occurs.
     """
     try:
         original_files = []  # will store all files found in this search
