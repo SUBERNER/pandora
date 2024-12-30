@@ -2,5 +2,6 @@ import Buffle
 import os
 
 base = os.getcwd()
-path = base + "\\TEST"
-Buffle.move(base + "\\TEST.txt", base + "\\TEST\\TEST.txt")
+path = base + "\\FOOD.png"
+
+Buffle.Image.rotate(path, 50, fillcolor=(255, 255, 255), expand=True)

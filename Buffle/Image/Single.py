@@ -2,21 +2,33 @@ from PIL import Image, ImageEnhance, ImageFilter, ImageOps  # Pillow
 import numpy as np
 import os
 import Buffle
-# Used for altering single or non atlas textures
+# Used for altering single or non atlas images
 
 
-def rotate(files: str | list[str], degree: int, expand: bool = False):
+def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcolor: tuple[int, int, int] | None = None, resampling: int = 2):
     """
-    Rotates the texture either clockwise or anti-clockwise.
-    :param files: Target files' directory or location.
-    :param degree: Degrees of rotation,
-                values of 0 will not cause rotation,
-                values less than 0 will cause clockwise rotation,
-                and values higher than 0 will cause anti-clockwise rotation.
-    :param expand: Expands resolution to fit entire image after rotation.
-    :type files: str | list[str]
-    :type degree: int
-    :type expand: bool
+    Rotates the image clockwise or counterclockwise.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to rotate.
+
+        degree (int): Degrees of rotation.
+            - 0: No rotation.
+            - > 0: Rotate clockwise.
+            - < 0: Rotate counterclockwise.
+
+    keyword parameter:
+        expand (bool): Whether to expand the resolution to fit the entire image after rotation. Defaults to False.
+
+        fillcolor (tuple[int, int, int] | None): Background color for revealed areas. Only used if expand=True. Defaults to None.
+
+        resampling (int): Resampling filter to use during rotating. Defaults to 2 (BILINEAR).
+            - 0: NEAREST
+            - 1: LANCZOS
+            - 2: BILINEAR
+            - 3: BICUBIC
+            - 4: BOX
+            - 5: HAMMING
     """
     try:
         # makes files always a list
@@ -26,7 +38,7 @@ def rotate(files: str | list[str], degree: int, expand: bool = False):
         for file in files:
             try:
                 image = Image.open(file)
-                new_image = image.rotate(-degree, expand=expand)
+                new_image = image.rotate(-degree, expand=expand, fillcolor=fillcolor, resample=resampling)
 
                 new_image.save(file)
 
@@ -39,13 +51,14 @@ def rotate(files: str | list[str], degree: int, expand: bool = False):
 
 def flip(files: str | list[str], horizontal: bool, vertical: bool):
     """
-    Flips the texture vertically and horizontally.
-    :param files: Target files' directory or location.
-    :param horizontal: Mirrors or flips the texture horizontally.
-    :param vertical: Mirrors or flips texture vertically.
-    :type files: str | list[str]
-    :type horizontal: bool
-    :type vertical: bool
+    Flips the image vertically and/or horizontally.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to flip.
+
+        horizontal (bool): Whether to flip the image horizontally (mirror image).
+
+        vertical (bool): Whether to flip the image vertically (upside down).
     """
     try:
         # makes files always a list
@@ -70,15 +83,26 @@ def flip(files: str | list[str], horizontal: bool, vertical: bool):
         Buffle.Display.image.error_result(files, "flip", str(e.args))
 
 
-def resize(files: str | list[str], width: int, height: int):
+def resize(files: str | list[str], width: int, height: int, *, resampling: int = 2):
     """
-    Resizes the texture's width and height
-    :param files: Target files' directory or location.
-    :param width: Stretches or squeezes the texture width(x).
-    :param height: Stretches or squeezes the texture height(y).
-    :type files: str | list[str]
-    :type width: int
-    :type height: int
+    Resizes the image's dimensions.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to resize.
+
+        width (int): New width of the image.
+
+        height (int): New height of the image.
+
+    keyword parameter:
+        resampling (int): Resampling filter to use during resizing. Defaults to 2 (BILINEAR).
+            - 0: NEAREST
+            - 1: LANCZOS
+            - 2: BILINEAR
+            - 3: BICUBIC
+            - 4: BOX
+            - 5: HAMMING
+
     """
     try:
         # makes files always a list
@@ -89,7 +113,7 @@ def resize(files: str | list[str], width: int, height: int):
             try:
                 image = Image.open(file)
 
-                new_image = image.resize((width, height), Image.Resampling.BILINEAR)
+                new_image = image.resize((width, height), resampling)
                 new_image.save(file)
 
                 new_image.save(file)
@@ -102,9 +126,10 @@ def resize(files: str | list[str], width: int, height: int):
 
 def invert(files: str | list[str]):
     """
-    Inverts the texture's colors to the opposite hue
-    :param files: Target files' directory or location.
-    :type files: str | list[str]
+    Inverts the image's colors.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to invert.
     """
     try:
         # makes files always a list
@@ -126,22 +151,33 @@ def invert(files: str | list[str]):
         Buffle.Display.image.error_result(files, "invert", str(e.args))
 
 
-def noise(files: str | list[str], factor: float):
+def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tuple[int, int] = (0, 255)):
     """
-    Alters the texture's pixels with random variation.
-    :param files: Target files' directory or location.
-    :param factor: Strength of the alteration,
-                values of 0.0 will not affect the noise,
-                values less than 0.0 will decrease noise,
-                and values higher than 0.0 will increase noise.
-    :type files: files: str | list[str]
-    :type factor: float
-    :type factor: average
+    Adds random variation (noise) to the image's pixels.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to apply noise to.
+
+        factor (float): Strength of the noise.
+            - 0.0: No noise.
+            - Negative values: Decrease noise.
+            - < 1.0: Increase noise.
+
+    Keyword Parameter:
+        mean (float): Mean value of the noise distribution. Defaults to 0.
+            - 0.0: Noise is centered (equal positive and negative variation).
+            - < 0.0: Noise skews negative.
+            - > 0.0: Noise skews positive.
+
+        range (tuple[int, int]): Minimum and maximum bounds for pixel values. Defaults to (0, 255).
     """
     try:
         # makes files always a list
         if isinstance(files, str):
             files = [files]
+
+        # gets the type of resampling
+
 
         for file in files:
             try:
@@ -149,13 +185,13 @@ def noise(files: str | list[str], factor: float):
                 image_array = np.array(image)  # converts to array
 
                 # generates noice for the brightness of the image
-                noise_array = np.random.normal(0, factor, image_array.shape[:2])  # Only one channel for brightness
+                noise_array = np.random.normal(mean, factor, image_array.shape[:2])  # Only one channel for brightness
                 if len(image_array.shape) == 3:  # If the image is RGB
                     noise_array = noise_array[:, :, np.newaxis]  # Add channel dimension for broadcasting
 
                 # adds the noise to the image
                 adjusted_array = image_array + noise_array
-                adjusted_array = np.clip(adjusted_array, 0, 255)  # Keeps values between 0 and 255
+                adjusted_array = np.clip(adjusted_array, range[0], range[1])  # Keeps values between 0 and 255
 
                 # converts back into an image
                 new_image = Image.fromarray(adjusted_array.astype(np.uint8))
@@ -173,13 +209,14 @@ def noise(files: str | list[str], factor: float):
 
 def blur(files: str | list[str], factor: float):
     """
-    Alters the texture's contrast and visibility.
-    :param files: Target files' directory or location.
-    :param factor: Strength of the alteration,
-                values of 0.0 will not cause blurring
-                and values less than or higher than 0.0 will increase blurring
-    :type files: files: str | list[str]
-    :type factor: float
+    Applies a Gaussian blur to the image.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to blur.
+
+        factor (float): Radius of the blur.
+            - 0.0: No blur.
+            - < 0.0: Increase blur radius.
     """
     try:
         # makes files always a list
@@ -205,14 +242,15 @@ def blur(files: str | list[str], factor: float):
 
 def saturation(files: str | list[str], factor: float):
     """
-    Alters the texture's saturation or color intensity.
-    :param files: Target files' directory or location.
-    :param factor: Strength of the alteration,
-                values of 1.0 will not affect the saturation,
-                values less than 1.0 will decrease saturation,
-                and values higher than 1.0 will increase saturation.
-    :type files: files: str | list[str]
-    :type factor: float
+    Adjusts the image's saturation (color intensity).
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to adjust saturation for.
+
+        factor (float): Saturation adjustment factor.
+            - 1.0: No change.
+            - < 1.0: Decrease saturation.
+            - > 1.0: Increase saturation.
     """
     try:
         # makes files always a list
@@ -222,7 +260,7 @@ def saturation(files: str | list[str], factor: float):
         for file in files:
             try:
                 image = Image.open(file)
-                new_image = ImageEnhance.Color(image).enhance(factor)  # alters image or texture
+                new_image = ImageEnhance.Color(image).enhance(factor)  # alters image
                 new_image.save(file)
 
                 # determines the changes made by method to display
@@ -241,14 +279,15 @@ def saturation(files: str | list[str], factor: float):
 
 def contrast(files: str | list[str], factor: float):
     """
-    Alters the texture's contrast or range of brightness.
-    :param files: Target files' directory or location.
-    :param factor: Strength of the alteration,
-                values of 1.0 will not affect the contrast,
-                values less than 1.0 will decrease contrast,
-                and values higher than 1.0 will increase contrast.
-    :type files: files: str | list[str]
-    :type factor: float
+    Adjusts the image's contrast (range of brightness).
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to adjust contrast for.
+
+        factor (float): Contrast adjustment factor.
+            - 1.0: No change.
+            - < 1.0: Decrease contrast.
+            - > 1.0: Increase contrast.
     """
     try:
         # makes files always a list
@@ -276,15 +315,16 @@ def contrast(files: str | list[str], factor: float):
 
 def brightness(files: str | list[str], factor: float):
     """
-    Alters the texture's brightness or lightness.
-    :param files: Target files' directory or location.
-    :param factor: Strength of the alteration,
-                values of 1.0 will not affect the brightness,
-                values less than 1.0 will decrease brightness,
-                and values higher than 1.0 will increase brightness.
-    :type files: str | list[str]
-    :type factor: float
-    """
+    Adjusts the image's brightness.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to adjust brightness for.
+
+        factor (float): Brightness adjustment factor.
+            - 1.0: No change.
+            - < 1.0: Decrease brightness.
+            - > 1.0: Increase brightness.
+        """
     try:
         # makes files always a list
         if isinstance(files, str):
@@ -311,14 +351,15 @@ def brightness(files: str | list[str], factor: float):
 
 def sharpness(files: str | list[str], factor: float):
     """
-    Alters the texture's sharpness or clarity of detail.
-    :param files: Target files' directory or location.
-    :param factor: Strength of the alteration,
-                values of 1.0 will not affect the sharpness,
-                values less than 1.0 will decrease sharpness,
-                and values higher than 1.0 will increase sharpness.
-    :type files: str | list[str]
-    :type factor: float
+    Adjusts the image's sharpness (clarity of detail).
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to adjust sharpness for.
+
+        factor (float): Sharpness adjustment factor.
+            - 1.0: No change.
+            - < 1.0: Decrease sharpness.
+            - > 1.0: Increase sharpness.
     """
     try:
         # makes files always a list
@@ -338,16 +379,25 @@ def sharpness(files: str | list[str], factor: float):
         Buffle.Display.image.error_result(files, "sharpness", str(e.args))
 
 
-def resolution(files: str | list[str], factor: float):
+def resolution(files: str | list[str], factor: float, *, resampling: int = 2):
     """
-    Alters the texture's resolution or level of detail with pixels.
-    :param files: Target files' directory or location.
-    :param factor: Strength of the alteration,
-                values of 1.0 will not affect the resolution,
-                values less than 1.0 will decrease resolution,
-                and values higher than 1.0 will increase resolution.
-    :type files: str | list[str]
-    :type factor: float
+    Adjusts the image's resolution by scaling its dimensions.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to adjust resolution for.
+        factor (float): Scaling factor for resolution.
+            - 1.0: No change.
+            - < 1.0: Decrease resolution.
+            - > 1.0: Increase resolution.
+
+    Keyword Parameter:
+        resampling (int): Resampling filter to use during scaling. Defaults to 2 (BILINEAR).
+            - 0: NEAREST
+            - 1: LANCZOS
+            - 2: BILINEAR
+            - 3: BICUBIC
+            - 4: BOX
+            - 5: HAMMING
     """
     try:
         # makes files always a list
@@ -357,7 +407,7 @@ def resolution(files: str | list[str], factor: float):
         for file in files:
             try:
                 image = Image.open(file)
-                new_image = image.resize((int(image.width * factor), int(image.height * factor)), Image.Resampling.BILINEAR)
+                new_image = image.resize((int(image.width * factor), int(image.height * factor)), resampling)
                 new_image.save(file)
 
                 Buffle.Display.image.result(file, "resolution", new_image.size, image.size)
@@ -367,16 +417,19 @@ def resolution(files: str | list[str], factor: float):
         Buffle.Display.image.error_result(files, "resolution", str(e.args))
 
 
-def quality(files: str | list[str], factor: float):
+def quality(files: str | list[str], factor: float, optimize: bool = False):
     """
-    Alters the texture's quality or detail.
-    :param files: Target files' directory or location.
-    :param factor: Strength of the alteration,
-                values of 1.0 will not affect the quality,
-                values less than 1.0 will decrease quality,
-                and values higher than 1.0 will increase quality.
-    :type files: str | list[str]
-    :type factor: float
+    Adjusts the image's quality and detail.
+
+    Parameter:
+        files (str | list[str]): Path(s) of the file(s) to adjust quality for.
+
+        factor (float): Quality adjustment factor.
+            - 1.0: No change.
+            - < 1.0: Decrease quality.
+            - > 1.0: Increase quality.
+    Keyword Parameter:
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -388,6 +441,7 @@ def quality(files: str | list[str], factor: float):
                 image = Image.open(file)
                 original_size = os.path.getsize(file)  # used for displaying changes from method
                 original_format = image.format  # gets original format after conversion
+                original_mode = image.mode  # gets the original mode of the image such as "RGBA" or "RGB"
 
                 # converts to include the alpha channel
                 if image.mode != "RGBA":
@@ -396,17 +450,15 @@ def quality(files: str | list[str], factor: float):
 
                 # gets images alpha channel
                 alpha_image = image.split()[-1]  # Get the alpha channel
-
                 # converts image to lossy and changes quality
                 image.convert("RGB").save(file, format="JPEG", quality=int(factor * 100))
 
                 # adds back alpha channel if one exists
                 new_image = Image.open(file)
-                if new_image.mode != "RGBA":
-                    new_image = new_image.convert("RGBA")
-
-                new_image = Image.composite(new_image, image, alpha_image)
-                new_image.save(file, format=image.format.upper(), quality=100)
+                new_image = new_image.convert(original_mode)
+                if original_mode == "RGBA":
+                    new_image = Image.composite(new_image, image, alpha_image)
+                new_image.save(file, format=image.format.upper(), quality=100, optimize=optimize)
 
                 Buffle.Display.image.result(file, "quality", os.path.getsize(file), original_size)
             except Exception as e:
