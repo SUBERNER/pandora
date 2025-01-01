@@ -245,4 +245,3 @@ def redo_extension(source: str, extension: str) -> str | None:
     except Exception as e:
         Buffle.Display.methods.error_result(original_source, "redo extension", str(e.args))
         return None
-

@@ -100,6 +100,8 @@ class Result:
                 print(f"{source:>{self._source_length}} <|> {self._method_color}{method}{Color.RESET} <|> unaltered <|> [{Color.YELLOW}{updated_value}{Color.RESET}]")
         except Exception as e:
             self.error_result(f"{source:>{self._source_length}}", method, str(e.args))
+            if self._error_quit:
+                quit()  # ends running code
 
     def error_result(self, source: str, method: str, error: str):
         """

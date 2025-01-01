@@ -5,7 +5,7 @@ import Buffle
 # Used for altering single or non atlas images
 
 
-def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcolor: tuple[int, int, int] | None = None, resampling: int = 2):
+def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcolor: tuple[int, int, int] | None = None, resampling: int = 2, optimize: bool = False):
     """
     Rotates the image clockwise or counterclockwise.
 
@@ -29,6 +29,8 @@ def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcol
             - 3: BICUBIC
             - 4: BOX
             - 5: HAMMING
+
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -40,7 +42,7 @@ def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcol
                 image = Image.open(file)
                 new_image = image.rotate(-degree, expand=expand, fillcolor=fillcolor, resample=resampling)
 
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 Buffle.Display.image.result(file, "rotate", degree, 0)
             except Exception as e:
@@ -49,7 +51,7 @@ def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcol
         Buffle.Display.image.error_result(files, "rotate", str(e.args))
 
 
-def flip(files: str | list[str], horizontal: bool, vertical: bool):
+def flip(files: str | list[str], horizontal: bool, vertical: bool, *, optimize: bool = False):
     """
     Flips the image vertically and/or horizontally.
 
@@ -59,6 +61,9 @@ def flip(files: str | list[str], horizontal: bool, vertical: bool):
         horizontal (bool): Whether to flip the image horizontally (mirror image).
 
         vertical (bool): Whether to flip the image vertically (upside down).
+
+    Keyword Parameter:
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -75,7 +80,7 @@ def flip(files: str | list[str], horizontal: bool, vertical: bool):
                 if vertical:
                     new_image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
 
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
                 Buffle.Display.image.result(file, "flip", [horizontal, vertical], [False, False])
             except Exception as e:
                 Buffle.Display.image.error_result(file, "flip", str(e.args))
@@ -83,7 +88,7 @@ def flip(files: str | list[str], horizontal: bool, vertical: bool):
         Buffle.Display.image.error_result(files, "flip", str(e.args))
 
 
-def resize(files: str | list[str], width: int, height: int, *, resampling: int = 2):
+def resize(files: str | list[str], width: int, height: int, *, resampling: int = 2, optimize: bool = False):
     """
     Resizes the image's dimensions.
 
@@ -103,6 +108,7 @@ def resize(files: str | list[str], width: int, height: int, *, resampling: int =
             - 4: BOX
             - 5: HAMMING
 
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -114,7 +120,7 @@ def resize(files: str | list[str], width: int, height: int, *, resampling: int =
                 image = Image.open(file)
 
                 new_image = image.resize((width, height), resampling)
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 new_image.save(file)
                 Buffle.Display.image.result(file, f"resize", new_image.size, image.size)
@@ -124,12 +130,15 @@ def resize(files: str | list[str], width: int, height: int, *, resampling: int =
         Buffle.Display.image.error_result(files, "resize", str(e.args))
 
 
-def invert(files: str | list[str]):
+def invert(files: str | list[str], *, optimize: bool = False):
     """
     Inverts the image's colors.
 
     Parameter:
         files (str | list[str]): Path(s) of the file(s) to invert.
+
+    Keyword Parameter:
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -141,7 +150,7 @@ def invert(files: str | list[str]):
                 image = Image.open(file)
 
                 new_image = ImageOps.invert(image)
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 new_image.save(file)
                 Buffle.Display.image.result(file, "invert", True, False)
@@ -151,7 +160,7 @@ def invert(files: str | list[str]):
         Buffle.Display.image.error_result(files, "invert", str(e.args))
 
 
-def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tuple[int, int] = (0, 255)):
+def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tuple[int, int] = (0, 255), optimize: bool = False):
     """
     Adds random variation (noise) to the image's pixels.
 
@@ -170,6 +179,8 @@ def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tupl
             - > 0.0: Noise skews positive.
 
         range (tuple[int, int]): Minimum and maximum bounds for pixel values. Defaults to (0, 255).
+
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -195,7 +206,7 @@ def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tupl
 
                 # converts back into an image
                 new_image = Image.fromarray(adjusted_array.astype(np.uint8))
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 # determines the changes made by method to display
                 image_change = np.sum(np.abs(adjusted_array - image_array) > 1) / image_array.size * 100
@@ -207,7 +218,7 @@ def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tupl
         Buffle.Display.image.error_result(files, "noise", str(e.args))
 
 
-def blur(files: str | list[str], factor: float):
+def blur(files: str | list[str], factor: float, *, optimize: bool = False):
     """
     Applies a Gaussian blur to the image.
 
@@ -217,6 +228,9 @@ def blur(files: str | list[str], factor: float):
         factor (float): Radius of the blur.
             - 0.0: No blur.
             - < 0.0: Increase blur radius.
+
+    Keyword Parameter:
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -229,9 +243,7 @@ def blur(files: str | list[str], factor: float):
 
                 # adds blur to image
                 new_image = image.filter(ImageFilter.GaussianBlur(radius=factor))
-                new_image.save(file)
-
-
+                new_image.save(file, optimize=optimize)
 
                 Buffle.Display.image.result(file, "blur", factor, 0)
             except Exception as e:
@@ -240,7 +252,7 @@ def blur(files: str | list[str], factor: float):
         Buffle.Display.image.error_result(files, "blur", str(e.args))
 
 
-def saturation(files: str | list[str], factor: float):
+def saturation(files: str | list[str], factor: float, *, optimize: bool = False):
     """
     Adjusts the image's saturation (color intensity).
 
@@ -251,6 +263,9 @@ def saturation(files: str | list[str], factor: float):
             - 1.0: No change.
             - < 1.0: Decrease saturation.
             - > 1.0: Increase saturation.
+
+    Keyword Parameter:
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -261,7 +276,7 @@ def saturation(files: str | list[str], factor: float):
             try:
                 image = Image.open(file)
                 new_image = ImageEnhance.Color(image).enhance(factor)  # alters image
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 # determines the changes made by method to display
                 hsv_image = image.convert("HSV")
@@ -277,7 +292,7 @@ def saturation(files: str | list[str], factor: float):
         Buffle.Display.image.error_result(files, "saturation", str(e.args))
 
 
-def contrast(files: str | list[str], factor: float):
+def contrast(files: str | list[str], factor: float, optimize: bool = False):
     """
     Adjusts the image's contrast (range of brightness).
 
@@ -288,6 +303,9 @@ def contrast(files: str | list[str], factor: float):
             - 1.0: No change.
             - < 1.0: Decrease contrast.
             - > 1.0: Increase contrast.
+
+    Keyword Parameter:
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -298,7 +316,7 @@ def contrast(files: str | list[str], factor: float):
             try:
                 image = Image.open(file)
                 new_image = ImageEnhance.Contrast(image).enhance(factor)
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 # determines the changes made by method to display
                 grayscale_image = image.convert("L")
@@ -313,7 +331,7 @@ def contrast(files: str | list[str], factor: float):
         Buffle.Display.image.error_result(files, "contrast", str(e.args))
 
 
-def brightness(files: str | list[str], factor: float):
+def brightness(files: str | list[str], factor: float, *, optimize: bool = False):
     """
     Adjusts the image's brightness.
 
@@ -324,7 +342,10 @@ def brightness(files: str | list[str], factor: float):
             - 1.0: No change.
             - < 1.0: Decrease brightness.
             - > 1.0: Increase brightness.
-        """
+
+    Keyword Parameter:
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
+    """
     try:
         # makes files always a list
         if isinstance(files, str):
@@ -334,7 +355,7 @@ def brightness(files: str | list[str], factor: float):
             try:
                 image = Image.open(file)
                 new_image = ImageEnhance.Brightness(image).enhance(factor)
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 # determines the changes made by method to display
                 grayscale_image = image.convert("L")
@@ -349,7 +370,7 @@ def brightness(files: str | list[str], factor: float):
         Buffle.Display.image.error_result(files, "brightness", str(e.args))
 
 
-def sharpness(files: str | list[str], factor: float):
+def sharpness(files: str | list[str], factor: float, *, optimize: bool = False):
     """
     Adjusts the image's sharpness (clarity of detail).
 
@@ -360,6 +381,9 @@ def sharpness(files: str | list[str], factor: float):
             - 1.0: No change.
             - < 1.0: Decrease sharpness.
             - > 1.0: Increase sharpness.
+
+    Keyword Parameter:
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -370,7 +394,7 @@ def sharpness(files: str | list[str], factor: float):
             try:
                 image = Image.open(file)
                 new_image = ImageEnhance.Sharpness(image).enhance(factor)
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 Buffle.Display.image.result(file, "sharpness", factor, 1)
             except Exception as e:
@@ -379,7 +403,7 @@ def sharpness(files: str | list[str], factor: float):
         Buffle.Display.image.error_result(files, "sharpness", str(e.args))
 
 
-def resolution(files: str | list[str], factor: float, *, resampling: int = 2):
+def resolution(files: str | list[str], factor: float, *, resampling: int = 2, optimize: bool = False):
     """
     Adjusts the image's resolution by scaling its dimensions.
 
@@ -398,6 +422,8 @@ def resolution(files: str | list[str], factor: float, *, resampling: int = 2):
             - 3: BICUBIC
             - 4: BOX
             - 5: HAMMING
+
+        optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
     """
     try:
         # makes files always a list
@@ -408,7 +434,7 @@ def resolution(files: str | list[str], factor: float, *, resampling: int = 2):
             try:
                 image = Image.open(file)
                 new_image = image.resize((int(image.width * factor), int(image.height * factor)), resampling)
-                new_image.save(file)
+                new_image.save(file, optimize=optimize)
 
                 Buffle.Display.image.result(file, "resolution", new_image.size, image.size)
             except Exception as e:
@@ -417,7 +443,7 @@ def resolution(files: str | list[str], factor: float, *, resampling: int = 2):
         Buffle.Display.image.error_result(files, "resolution", str(e.args))
 
 
-def quality(files: str | list[str], factor: float, optimize: bool = False):
+def quality(files: str | list[str], factor: float, *, optimize: bool = False):
     """
     Adjusts the image's quality and detail.
 

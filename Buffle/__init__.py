@@ -3,7 +3,7 @@ from . import Inner
 from . import Search
 from . import Image
 from . import Display
-from . import Sound
+from . import Audio
 
 from .Methods import move
 from .Methods import delete

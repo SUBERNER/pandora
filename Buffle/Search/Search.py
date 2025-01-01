@@ -32,7 +32,7 @@ def full(source: str, deep_search: bool, inverse_search: bool) -> list[str] | No
         Buffle.Display.search.result(source, "full search", len(files), 0)
         return files  # returns all files in a list
     except Exception as e:
-        Buffle.Display.sound.error_result(source, "full search", str(e.args))
+        Buffle.Display.audio.error_result(source, "full search", str(e.args))
         return None
 
 
@@ -80,7 +80,7 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
         Buffle.Display.search.result(source, "name search", len(files), 0)
         return files  # returns all files in a list
     except Exception as e:
-        Buffle.Display.sound.error_result(source, "name search", str(e.args))
+        Buffle.Display.audio.error_result(source, "name search", str(e.args))
         return None
 
 
@@ -136,5 +136,5 @@ def content(source: str, contains: str | list[str], deep_search: bool, inverse_s
         Buffle.Display.search.result(source, "content search", len(formatted_files), 0)
         return formatted_files  # returns all files in a list
     except Exception as e:
-        Buffle.Display.sound.error_result(source, "content search", str(e.args))
+        Buffle.Display.audio.error_result(source, "content search", str(e.args))
         return None
