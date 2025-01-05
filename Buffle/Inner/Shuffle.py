@@ -1,13 +1,12 @@
 import os
 import random
 import re
-
 import uuid
 import Buffle
 
 
 # used to collect and randomize text inside a multiple files
-def normal(files: str | list[str], contains: str | list[str]):
+def normal(files: str | list[str], contains: str | list[str], *, weight: int | list[int] | None = None, chance: float = 1, duplicates: bool = False):
     # makes files and contains always a list
     if isinstance(files, str):
         files = [files]
@@ -19,21 +18,37 @@ def normal(files: str | list[str], contains: str | list[str]):
 
     placeholder = f"{uuid.uuid4().hex}"  # text used as a placeholder for replacing text
 
+    chance_matches = []  # temporary location of all text matching the contains
+    chance_weight = []  # temporary list of all text weights
     # gets data from the fills to be shuffled later
-    original_matches = []
     for entry in files:
         with open(entry, 'r') as file:
             text = file.read()  # stores all the data in a variable
 
         for contain in contains:
-            original_matches.extend(re.findall(contain, text))  # dumps all finds in an existing list
-            text = re.sub(contain, placeholder, text)  # replaces contains with placeholder in text
+            matches = re.findall(contain, text)  # Find all matches
+            for match in matches:
+                if chance >= random.random():
+                    chance_matches.append(match)
+                    if weight is not None:
+                        chance_weight.append(weight[0])  # gets the first value from weight
+                    text = text.replace(match, placeholder, 1)  # Replace first occurrence of match with placeholder
+                else:  # displays file as unaltered as it was ignored do to chance
+                    Buffle.Display.inner.result(os.path.abspath(entry), "Normal Text Shuffle", os.path.basename(match), os.path.basename(match))
+                if weight is not None:
+                    weight.pop(0)  # removes first value for next value to get stored in chance_weight
 
         with open(entry, 'w') as file:  # saves changes to file temporarily
             file.write(text)
 
-    random_matches = original_matches.copy()
-    random.shuffle(random_matches)
+    print(chance_matches)
+    print(chance_weight)
+    # randomly shuffles data
+    if duplicates:  # options can be selected multiple times
+        random_matches = random.choices(chance_matches, weights=chance_weight, k=len(chance_matches))
+    else:  # normal randomizing of data
+        random_matches = chance_matches.copy()
+        random.shuffle(random_matches)
 
     # changes the file data and shuffles text
     for index, entry in enumerate(files):
@@ -41,14 +56,14 @@ def normal(files: str | list[str], contains: str | list[str]):
             text = file.read()  # stores all the data in a variable
         while text.count(placeholder) > 0:
             text = text.replace(placeholder, random_matches[0], 1)
-            Buffle.Display.inner.result(files[index], "Normal Text Shuffle", random_matches.pop(0), original_matches.pop(0))
+            Buffle.Display.inner.result(files[index], "Normal Text Shuffle", random_matches.pop(0), chance_matches.pop(0))
 
         with open(entry, 'w') as file:
             file.write(text)
 
 
 # used to collect and randomize text in groups inside a multiple files
-def group(source: str, contains: list[str], limit: int=None):
+def group(source: str, contains: str | list[str], limit: int=None):
     placeholder = '<>TEMP<>'  # text used as a placeholder for replacing text
     original_matches = []
     files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
@@ -82,7 +97,6 @@ def group(source: str, contains: list[str], limit: int=None):
             for group in range(group_limit):
                 for contain in range(len(contains)):
                     group_format.append([group_matches[contain][group] for contain in range(len(contains))])
-                    print(group_format)
             original_matches.append(group_format)
 
             for index, contain in enumerate(contains):

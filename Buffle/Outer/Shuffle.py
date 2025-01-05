@@ -5,7 +5,7 @@ import uuid
 import Buffle
 
 
-def normal(files: str | list[str], *, weight: int | list[int] | None=None, chance: float=1, duplicates: bool=False):
+def normal(files: str | list[str], *, weight: int | list[int] | None = None, chance: float = 1, duplicates: bool = False):
     """
     Shuffles and randomizes the names of all files.
 
@@ -92,7 +92,7 @@ def group(files: str | list[str], contains: str | list[str], *, weight: int | li
     temp_names = []  # temporary list of all uuid files
     display_names = files.copy()  # temporary list of all original files
     chance_contains = []  # temporary list of all groups that will be altered
-    chance_weight = []  # temporary list of all groups that will be altered
+    chance_weight = []  # temporary list of all groups weights that will be altered
     for index, contain in enumerate(contains):
         if chance >= random.random():
             temp_name = f"{uuid.uuid4().hex}"  # used as a placeholder for the contains text

@@ -1,8 +1,9 @@
 import Buffle
+import random
 import os
 
 
-def full(source: str, deep_search: bool, inverse_search: bool) -> list[str] | None:
+def full(source: str, deep_search: bool, inverse_search: bool, *, chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory.
 
@@ -29,6 +30,11 @@ def full(source: str, deep_search: bool, inverse_search: bool) -> list[str] | No
                     continue
                 files.extend([f.path for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
 
+        # test chances to see if files will stay in list
+        for file in files:
+            if chance <= random.random():
+                files.remove(file)
+
         Buffle.Display.search.result(source, "full search", len(files), 0)
         return files  # returns all files in a list
     except Exception as e:
@@ -36,7 +42,7 @@ def full(source: str, deep_search: bool, inverse_search: bool) -> list[str] | No
         return None
 
 
-def name(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, *, type_search="all") -> list[str] | None:
+def name(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, *, type_search="all", chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory whose names match a specific substring.
 
@@ -77,6 +83,11 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
                 elif type_search == "any":
                     files.extend([f.path for f in os.scandir(folder) if f.is_file() and ((any(contain in f.name for contain in contains) and not inverse_search) or (all(contain not in f.name for contain in contains) and inverse_search))])  # gets all files with the substring inside source directory
 
+        # test chances to see if files will stay in list
+        for file in files:
+            if chance <= random.random():
+                files.remove(file)
+
         Buffle.Display.search.result(source, "name search", len(files), 0)
         return files  # returns all files in a list
     except Exception as e:
@@ -84,7 +95,7 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
         return None
 
 
-def content(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, *, type_search="all") -> list[str] | None:
+def content(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, *, type_search="all", chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory whose contents match a specific substring.
 
@@ -112,7 +123,6 @@ def content(source: str, contains: str | list[str], deep_search: bool, inverse_s
         # makes contains always a list
         if isinstance(contains, str):
             contains = [contains]
-        print(contains)
 
         original_files.extend([f for f in os.scandir(source) if f.is_file()])  # gets all files inside source directory
 
@@ -132,6 +142,11 @@ def content(source: str, contains: str | list[str], deep_search: bool, inverse_s
                     elif type_search == "any":
                         if ((any(contain in text for contain in contains) and not inverse_search) or (all(contain not in text for contain in contains) and inverse_search)):  # determines if contains is not inside the file text
                             formatted_files.append(entry.path)
+
+        # test chances to see if files will stay in list
+        for file in formatted_files:
+            if chance <= random.random():
+                formatted_files.remove(file)
 
         Buffle.Display.search.result(source, "content search", len(formatted_files), 0)
         return formatted_files  # returns all files in a list
