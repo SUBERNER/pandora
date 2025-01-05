@@ -2,4 +2,6 @@ import Buffle
 import os
 
 base = os.getcwd()
-path = base + "\\file_example_MP3_700KB.mp3"
+path = base + "\\COLOR"
+
+Buffle.Outer.group(Buffle.Search.full(path, True, False), ["_blue", "_brown", "_green", "_pink", "_purple", "_red", "_white", "_yellow"], weight=[1, 1, 1, 1, 1, 1, 1, 1], duplicates=True)

@@ -5,14 +5,57 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/file_example_MP3_700KB.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/BLUE/concrete_blue.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/BLUE/concrete_powder_blue.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/BLUE/wool_colored_blue.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/BROWN/concrete_brown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/BROWN/concrete_powder_brown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/BROWN/wool_colored_brown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/GREEN/concrete_green.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/GREEN/concrete_powder_green.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/GREEN/wool_colored_green.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/PINK/concrete_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/PINK/concrete_powder_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/PINK/wool_colored_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/PURPLE/concrete_powder_purple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/PURPLE/concrete_purple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/PURPLE/wool_colored_purple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/RED/concrete_powder_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/RED/concrete_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/RED/wool_colored_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/WHITE/concrete_powder_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/WHITE/concrete_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/WHITE/wool_colored_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/YELLOW/concrete_powder_yellow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/YELLOW/concrete_yellow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR - Copy - Copy/YELLOW/wool_colored_yellow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/BLUE/concrete_powder_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/BLUE/concrete_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/BLUE/wool_colored_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/BROWN/concrete_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/BROWN/concrete_powder_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/BROWN/wool_colored_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/GREEN/concrete_powder_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/GREEN/concrete_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/GREEN/wool_colored_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/PINK/concrete_brown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/PINK/concrete_powder_brown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/PINK/wool_colored_brown.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/PURPLE/concrete_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/PURPLE/concrete_powder_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/PURPLE/wool_colored_pink.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/RED/concrete_green.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/RED/concrete_powder_green.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/RED/wool_colored_green.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/WHITE/concrete_powder_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/WHITE/concrete_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/WHITE/wool_colored_red.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/YELLOW/concrete_powder_purple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/YELLOW/concrete_purple.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/COLOR/YELLOW/wool_colored_purple.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Display/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Display/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Image/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Image/Single.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Search/Search.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Search/Search.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Sound/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Audio/Single.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Sound/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Audio/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
