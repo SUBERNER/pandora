@@ -1,0 +1,14 @@
+{
+  "low": {
+    "file": "lods/shadow_configuration_1.json"
+  },
+  "medium": {
+    "file": "lods/shadow_configuration_2.json"
+  },
+  "high": {
+    "file": "lods/shadow_configuration_4.json"
+  },
+  "ultra": {
+    "file": "lods/shadow_configuration_5.json"
+  }
+}

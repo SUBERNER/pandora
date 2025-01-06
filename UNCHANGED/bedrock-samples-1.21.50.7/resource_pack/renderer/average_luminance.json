@@ -1,0 +1,19 @@
+{  
+	"min_log_luminance": -1.538,
+	"log_luminance_range": 20.0,
+	"adaptive_time_coefficient": 1.0,
+	"light_adaptation": 5.0,
+	"dark_adaptation": 5.0,
+	"enable_custom_weight": false,
+	"weight_curve_key_values":
+	{
+		"0.0": 0.0,
+		"20.0": 20.0,
+		"42.0": 45.0,
+		"75.0": 85.0,
+		"100.0": 150.0,
+		"155.0": 200.0,
+		"165.0": 235.0,
+		"255.0": 255.0
+	}
+} 

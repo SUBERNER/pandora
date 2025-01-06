@@ -2,7 +2,8 @@ import Buffle
 import os
 
 base = os.getcwd()
-path = base + "\\entities"
+unchanged_base = base + "\\UNCHANGED\\bedrock-samples-1.21.50.7"
+changed_base = base + "\\CHANGED"
 
-
-Buffle.Inner.group(Buffle.Search.full(path, True, False), [r'"identifier": ".*",', r'"width": .*,', r'"height": .*'], duplicates=True)
+changed_base = Buffle.copy(unchanged_base, changed_base)
+changed_base = Buffle.redo_name(changed_base, "RANDOMIZER")
