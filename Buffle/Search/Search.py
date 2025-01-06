@@ -3,16 +3,21 @@ import random
 import os
 
 
-def full(source: str, deep_search: bool, inverse_search: bool, *, chance: float = 1) -> list[str] | None:
+def full(source: str, *, deep_search: bool, inverse_search: bool, chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory.
 
     parameter:
         source (str): Directory being searched.
 
+    keyword parameter:
         deep_search (bool): Includes files from all subdirectories inside the directory.
 
         inverse_search (bool): Searches for files that do NOT match the specified criteria.
+
+        chance (float): Probability of retrieving each file. Defaults to 1.
+            - 0.0: No file(s) are retrieved.
+            - 1.0: All file(s) are retrieved.
 
     return:
         (list[str]) | None: List of file paths found during the search, or None if an error occurs.
@@ -42,7 +47,7 @@ def full(source: str, deep_search: bool, inverse_search: bool, *, chance: float 
         return None
 
 
-def name(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, *, type_search="all", chance: float = 1) -> list[str] | None:
+def name(source: str, contains: str | list[str], *, deep_search: bool, inverse_search: bool, type_search="all", chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory whose names match a specific substring.
 
@@ -51,14 +56,18 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
 
         contains (str | list[str]): Substring(s) to look for in file names.
 
+    keyword parameter:
         deep_search (bool): Includes files from all subdirectories inside the directory.
 
         inverse_search (bool): Searches for files that do NOT match the specified criteria.
 
-    keyword parameter:
         type_search (str): Determines matching criteria, defaults to "all".
             - "all": File(s) must contain all specified substrings.
             - "any": File(s) must contain at least one of the specified substrings.
+
+        chance (float): Probability of retrieving each file. Defaults to 1.
+            - 0.0: No file(s) are retrieved.
+            - 1.0: All file(s) are retrieved.
 
     return:
         (list[str]) | None: List of file paths found during the search, or None if an error occurs.
@@ -95,7 +104,7 @@ def name(source: str, contains: str | list[str], deep_search: bool, inverse_sear
         return None
 
 
-def content(source: str, contains: str | list[str], deep_search: bool, inverse_search: bool, *, type_search="all", chance: float = 1) -> list[str] | None:
+def content(source: str, contains: str | list[str], *, deep_search: bool, inverse_search: bool, type_search="all", chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory whose contents match a specific substring.
 
@@ -104,14 +113,18 @@ def content(source: str, contains: str | list[str], deep_search: bool, inverse_s
 
         contains (str | list[str]): Substring(s) to look for in file names.
 
+    keyword parameter:
         deep_search (bool): Includes files from all subdirectories inside the directory.
 
         inverse_search (bool): Searches for files that do NOT match the specified criteria.
 
-    keyword parameter:
         type_search (str): Determines matching criteria, defaults to "all".
             - "all": File(s) must contain all specified substrings.
             - "any": File(s) must contain at least one of the specified substrings.
+
+        chance (float): Probability of retrieving each file. Defaults to 1.
+            - 0.0: No file(s) are retrieved.
+            - 1.0: All file(s) are retrieved.
 
     return:
         (list[str]) | None: List of file paths found during the search, or None if an error occurs.

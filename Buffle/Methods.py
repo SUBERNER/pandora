@@ -38,6 +38,41 @@ def move(source: str, destination: str) -> str | None:
         return None
 
 
+def copy(source: str, destination: str) -> str | None:
+    """
+    Copies a singular file or folder from one directory to another.
+
+    Parameter:
+        source (str): Path of the file or folder being copied.
+
+        destination (str): Path of the new directory for the file or folder.
+
+    Return:
+        str | None: Path of the copied file or folder, or None if an error occurs.
+    """
+    original_source = source
+    try:
+        # checks if file already exists
+        if os.path.exists(destination):  # checks if file or folder was moved correctly
+            Buffle.Display.methods.warning_result(original_source, "move", 'existing file or folder was overwritten')
+
+        if os.path.isfile(source):  # files
+            destination = shutil.copy2(source, destination)
+        elif os.path.isdir(source):  # folders
+            destination = shutil.copytree(source, destination)
+
+        if not os.path.exists(destination):  # checks if file or folder was moved correctly
+            Buffle.Display.methods.warning_result(original_source, "move", 'destination file or folder could not be found')
+            destination = None
+
+        Buffle.Display.methods.result(original_source, "copy", os.path.abspath(destination), os.path.abspath(source))
+
+        return destination
+    except Exception as e:
+        Buffle.Display.methods.error_result(original_source, "copy", str(e.args))
+        return None
+
+
 def zip(source: str, extension: str = "zip") -> str | None:
     """
     Compresses files or folders into a zip archive.

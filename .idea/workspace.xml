@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Image/Single.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Image/Single.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Inner/Shuffle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer/Shuffle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Search/Search.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Search/Search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TESTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/TESTING.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entities/BOAT/boat.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/BOAT/boat.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entities/BOAT/chest_boat.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/BOAT/chest_boat.json" afterDir="false" />
@@ -48,7 +54,6 @@
       <change beforePath="$PROJECT_DIR$/entities/ENTITY/pillager.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/ENTITY/pillager.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entities/ENTITY/polar_bear.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/ENTITY/polar_bear.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entities/ENTITY/rabbit.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/ENTITY/rabbit.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entities/ENTITY/ravager.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/ENTITY/ravager.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entities/ENTITY/sheep.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/ENTITY/sheep.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entities/ENTITY/silverfish.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/ENTITY/silverfish.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entities/ENTITY/skeleton.json" beforeDir="false" afterPath="$PROJECT_DIR$/entities/ENTITY/skeleton.json" afterDir="false" />

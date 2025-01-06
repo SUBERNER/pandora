@@ -3,9 +3,10 @@ from . import Inner
 from . import Search
 from . import Image
 from . import Display
-from . import Audio
+#from . import Audio
 
 from .Methods import move
+from .Methods import copy
 from .Methods import delete
 from .Methods import create_folder
 from .Methods import create_file
@@ -23,6 +24,7 @@ __all__ = [
     'Image',
     'Display',
     'move',
+    'copy',
     'zip',
     'delete',
     'redo_name',

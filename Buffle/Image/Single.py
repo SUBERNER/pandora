@@ -284,7 +284,6 @@ def saturation(files: str | list[str], factor: float, *, optimize: bool = False)
                 image_mean = np.mean(np.array(hsv_image)[:, :, 1])
                 new_image_mean = np.mean(np.array(hsv_new_image)[:, :, 1])
 
-
                 Buffle.Display.image.result(file, "saturation", new_image_mean, image_mean)
             except Exception as e:
                 Buffle.Display.image.error_result(file, "saturation", str(e.args))
