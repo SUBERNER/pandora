@@ -2,7 +2,7 @@
   "format_version": "1.19.50",
   "minecraft:entity": {
     "description": {
-      "identifier": "minecraft:mooshroom",
+      "identifier": "minecraft:villager_v2",
       "is_spawnable": true,
       "is_summonable": false,
       "is_experimental": false

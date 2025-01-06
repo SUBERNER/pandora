@@ -2,7 +2,7 @@
   "format_version": "1.18.10",
   "minecraft:entity": {
     "description": {
-      "identifier": "minecraft:boat",
+      "identifier": "minecraft:chest_boat",
       "is_spawnable": false,
       "is_summonable": true,
       "is_experimental": false

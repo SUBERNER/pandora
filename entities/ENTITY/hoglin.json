@@ -3,7 +3,7 @@
 	"format_version": "1.18.30",
 	"minecraft:entity": {
 		"description": {
-			"identifier": "minecraft:boat",
+			"identifier": "minecraft:hoglin",
 			"is_spawnable": true,
 			"is_summonable": true,
 			"is_experimental": false

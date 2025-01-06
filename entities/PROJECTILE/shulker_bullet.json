@@ -2,7 +2,7 @@
   "format_version": "1.10.0",
   "minecraft:entity": {
     "description": {
-      "identifier": "minecraft:boat",
+      "identifier": "minecraft:shulker_bullet",
       "is_spawnable": false,
       "is_summonable": false,
       "is_experimental": false

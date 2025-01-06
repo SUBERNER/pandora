@@ -2,7 +2,7 @@
   "format_version": "1.19.0",
   "minecraft:entity": {
     "description": {
-      "identifier": "minecraft:skeleton",
+      "identifier": "minecraft:llama",
       "is_spawnable": true,
       "is_summonable": true,
       "is_experimental": false

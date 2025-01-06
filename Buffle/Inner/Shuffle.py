@@ -17,9 +17,9 @@ def normal(files: str | list[str], contains: str | list[str], *, weight: int | l
     Buffle.Display.inner.set_length(max(files, key=len))
 
     placeholder = f"{uuid.uuid4().hex}"  # text used as a placeholder for replacing text
-
     chance_matches = []  # temporary location of all text matching the contains
     chance_weight = []  # temporary list of all text weights
+
     # gets data from the fills to be shuffled later
     for entry in files:
         with open(entry, 'r') as file:
@@ -41,8 +41,6 @@ def normal(files: str | list[str], contains: str | list[str], *, weight: int | l
         with open(entry, 'w') as file:  # saves changes to file temporarily
             file.write(text)
 
-    print(chance_matches)
-    print(chance_weight)
     # randomly shuffles data
     if duplicates:  # options can be selected multiple times
         random_matches = random.choices(chance_matches, weights=chance_weight, k=len(chance_matches))
@@ -63,10 +61,19 @@ def normal(files: str | list[str], contains: str | list[str], *, weight: int | l
 
 
 # used to collect and randomize text in groups inside a multiple files
-def group(source: str, contains: str | list[str], limit: int=None):
-    placeholder = '<>TEMP<>'  # text used as a placeholder for replacing text
-    original_matches = []
-    files = [f for f in os.scandir(source) if f.is_file()]  # stores the actual files
+def group(files: str | list[str], contains: str | list[str], *, weight: int | list[int] | None=None, chance: float=1, duplicates: bool=False):
+    # Ensure files and contains are lists
+    if isinstance(files, str):
+        files = [files]
+    if isinstance(contains, str):
+        contains = [contains]
+
+    # Set display length for better result formatting
+    Buffle.Display.outer.set_length(max(files, key=len))
+
+    placeholder = f"{uuid.uuid4().hex}"  # Unique placeholder for temporary replacements
+    chance_groups = []  # Stores groups that will be altered
+    chance_weights = []  # Stores weights for randomization
 
     # gets data and alters file to prepare for shuffling text
     for entry in files:
@@ -84,47 +91,27 @@ def group(source: str, contains: str | list[str], limit: int=None):
             if not valid_group:  # if a section in the group is empty, it ignores the rest of the folder
                 continue
 
-            # only takes full groups, not those with information missing
-            # determines the limit of the amount of groups is made
-            group_limit = len(min(group_matches, key=len))  # Find the smallest list length
-            if limit != None and limit <= group_limit:
-                group_limit = limit
-            # trimes all group sections to the length of the smallest section in the group
-            group_matches = [group[:group_limit] for group in group_matches]  # Slice each list
 
-            # formats the groups to be shuffled later
-            group_format = []
-            for group in range(group_limit):
-                for contain in range(len(contains)):
-                    group_format.append([group_matches[contain][group] for contain in range(len(contains))])
-            original_matches.append(group_format)
+        # determines shuffle limits (smallest group size or user-specified limit)
+        group_limit = len(min(group_matches, key=len))
+        if weight:
+            chance_weights.extend(weight[:group_limit])
+            weight = weight[group_limit:]
+        group_matches = [group[:group_limit] for group in group_matches]  # Trim groups to smallest size
 
-            for index, contain in enumerate(contains):
-                # rewrites data to be alterable later
-                text = re.sub(contains[index], placeholder + f"<{index}>", text, group_limit)
-        with open(entry, 'w') as file:
-            file.write(text)
+        # Create placeholder replacements for all groups
+        for i in range(group_limit):
+            for j, match in enumerate(group_matches):
+                if chance >= random.random():
+                    chance_groups.append((placeholder + f"<{j}>", match[i]))
+                    text = text.replace(match[i], placeholder + f"<{j}>", 1)
+                else:
+                    Buffle.Display.inner.result(os.path.abspath(entry), "group shuffle", match[i], match[i])
 
-    files = [f for f in os.scandir(source) if f.is_file()]  # rescans files after changes made to them
-
-    random_matches = original_matches.copy()
-    random.shuffle(random_matches)
-
-    # shuffles the groups back into the files
-    for entry in files:
-        with open(entry, 'r') as file:  # opens file
-            text = file.read()  # stores all the data in a variable
-
-            while placeholder in text:
-                for index in range(len(contains)):
-                    text = text.replace(placeholder + f"<{index}>", random_matches[0][0][index], 1)
-                    Buffle.Display.inner.result(source, "Group Text Shuffle", random_matches[0][0][index], original_matches[0][0][index])
-
-                random_matches.pop(0)
-                original_matches.pop(0)
-
-        with open(entry, 'w') as file:
-            file.write(text)
+        print(chance_groups)
+        # Save modified text back to the file
+        #with open(entry, 'w') as file:
+            #file.write(text)
 
 
 

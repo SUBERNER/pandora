@@ -2,7 +2,7 @@
   "format_version": "1.16.0",
   "minecraft:entity": {
     "description": {
-      "identifier": "minecraft:minecart",
+      "identifier": "minecraft:salmon",
       "is_spawnable": true,
       "is_summonable": true,
       "is_experimental": false

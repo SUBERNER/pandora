@@ -2,7 +2,7 @@
   "format_version": "1.17.20",
   "minecraft:entity": {
     "description": {
-      "identifier": "minecraft:boat",
+      "identifier": "minecraft:zombie_villager_v2",
       "is_spawnable": true,
       "is_summonable": false,
       "is_experimental": false

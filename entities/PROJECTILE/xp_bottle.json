@@ -2,7 +2,7 @@
   "format_version": "1.12.0",
   "minecraft:entity": {
     "description": {
-      "identifier": "minecraft:hoglin",
+      "identifier": "minecraft:xp_bottle",
       "is_spawnable": false,
       "is_summonable": true,
       "is_experimental": false
