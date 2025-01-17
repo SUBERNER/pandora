@@ -9,6 +9,6 @@ image = Result(1, True, Color.METHODS[1])
 methods = Result(1, True, Color.METHODS[12])
 search = Result(1, True, Color.METHODS[8])
 audio = Result(1, True, Color.METHODS[38])
-video = Result(1, True, Color.METHODS[53])
+# video = Result(1, True, Color.METHODS[53])
 
 

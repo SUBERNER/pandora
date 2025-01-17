@@ -1,6 +1,6 @@
+from Buffle import random  # used for seeds
 # used when filtering out and specifying what changes can and cannot be made when shuffling files
 # This allows for MUCH more control over the shuffle, such as making the results of shuffles stable or possible
-
 
 
 class Ignore:

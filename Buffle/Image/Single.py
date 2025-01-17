@@ -1,3 +1,4 @@
+from Buffle import random  # used for seeds
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps  # Pillow
 import numpy as np
 import os
@@ -37,6 +38,9 @@ def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcol
         if isinstance(files, str):
             files = [files]
 
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
         for file in files:
             try:
                 image = Image.open(file)
@@ -69,6 +73,9 @@ def flip(files: str | list[str], horizontal: bool, vertical: bool, *, optimize: 
         # makes files always a list
         if isinstance(files, str):
             files = [files]
+
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -115,6 +122,9 @@ def resize(files: str | list[str], width: int, height: int, *, resampling: int =
         if isinstance(files, str):
             files = [files]
 
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
         for file in files:
             try:
                 image = Image.open(file)
@@ -144,6 +154,9 @@ def invert(files: str | list[str], *, optimize: bool = False):
         # makes files always a list
         if isinstance(files, str):
             files = [files]
+
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -187,8 +200,8 @@ def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tupl
         if isinstance(files, str):
             files = [files]
 
-        # gets the type of resampling
-
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -237,6 +250,9 @@ def blur(files: str | list[str], factor: float, *, optimize: bool = False):
         if isinstance(files, str):
             files = [files]
 
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
         for file in files:
             try:
                 image = Image.open(file)
@@ -271,6 +287,9 @@ def saturation(files: str | list[str], factor: float, *, optimize: bool = False)
         # makes files always a list
         if isinstance(files, str):
             files = [files]
+
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -311,6 +330,9 @@ def contrast(files: str | list[str], factor: float, optimize: bool = False):
         if isinstance(files, str):
             files = [files]
 
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
         for file in files:
             try:
                 image = Image.open(file)
@@ -350,6 +372,9 @@ def brightness(files: str | list[str], factor: float, *, optimize: bool = False)
         if isinstance(files, str):
             files = [files]
 
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
         for file in files:
             try:
                 image = Image.open(file)
@@ -388,6 +413,9 @@ def sharpness(files: str | list[str], factor: float, *, optimize: bool = False):
         # makes files always a list
         if isinstance(files, str):
             files = [files]
+
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -429,6 +457,9 @@ def resolution(files: str | list[str], factor: float, *, resampling: int = 2, op
         if isinstance(files, str):
             files = [files]
 
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
         for file in files:
             try:
                 image = Image.open(file)
@@ -460,6 +491,9 @@ def quality(files: str | list[str], factor: float, *, optimize: bool = False):
         # makes files always a list
         if isinstance(files, str):
             files = [files]
+
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
 
         for file in files:
             try:

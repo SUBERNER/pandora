@@ -1,9 +1,34 @@
+from Buffle import random  # used for seeds
 import os
 import shutil
 import zipfile
 import Buffle
 # Methods will not be accessed from this file but from Buffle itself
 # These are to be used from the player from the parent folder Buffle and to be use dy other .py files
+
+
+def seed(value: int):
+    """
+    Moves a singular file or folder from one directory to another.
+
+    Parameter:
+        source (str): Path of the file or folder being moved.
+
+        destination (str): Path of the new directory for the file or folder.
+
+    Return:
+        str | None: Path of the moved file or folder, or None if an error occurs.
+    """
+    original_value = random.seed
+    try:
+        random.seed(value)
+        value = random.seed
+        Buffle.Display.methods.result(f"None", "seed", value, original_value)
+
+        return value
+    except Exception as e:
+        Buffle.Display.methods.error_result(f"None", "seed", str(e.args))
+        return original_value
 
 
 def move(source: str, destination: str) -> str | None:
@@ -20,10 +45,7 @@ def move(source: str, destination: str) -> str | None:
     """
     original_source = source
     try:
-        # checks if file already exists
-        if os.path.exists(destination):  # checks if file or folder was moved correctly
-            Buffle.Display.methods.warning_result(original_source, "move", 'existing file or folder was overwritten')
-
+        os.chmod(source, 0o755)  # rewrites file permissions
         destination = shutil.move(source, destination)
 
         if not os.path.exists(destination):  # checks if file or folder was moved correctly
@@ -52,10 +74,7 @@ def copy(source: str, destination: str) -> str | None:
     """
     original_source = source
     try:
-        # checks if file already exists
-        if os.path.exists(destination):  # checks if file or folder was moved correctly
-            Buffle.Display.methods.warning_result(original_source, "move", 'existing file or folder was overwritten')
-
+        os.chmod(source, 0o755)  # rewrites file permissions
         if os.path.isfile(source):  # files
             destination = shutil.copy2(source, destination)
         elif os.path.isdir(source):  # folders
@@ -87,15 +106,12 @@ def zip(source: str, extension: str = "zip") -> str | None:
         """
     original_source = source
     try:
+        os.chmod(source, 0o755)  # rewrites file permissions
         extension = extension.replace('.', '')
 
         new_source = shutil.make_archive(source, extension, source)
 
         source = os.path.basename(source)  # formats for Display
-        # if displayed, it means it created a new zip file from nothing
-        if not os.path.exists(source):
-            Buffle.Display.methods.warning_result(original_source, "zip", 'unzipped file or folder could not be found')
-            source = None
 
         # checks if zip file is empty and warns
         with zipfile.ZipFile(new_source, 'r') as zip_ref:
@@ -122,6 +138,7 @@ def unzip(source: str) -> str | None:
     """
     original_source = source
     try:
+        os.chmod(source, 0o755)  # rewrites file permissions
         new_source = os.path.splitext(source)[0]  # removes the extension form the zip file
         shutil.unpack_archive(original_source, new_source)
 
@@ -149,6 +166,7 @@ def delete(source: str) -> str | None:
     """
     original_source = source
     try:
+        os.chmod(source, 0o755)  # rewrites file permissions
         source = os.path.normpath(source)  # Normalizes path
 
         if os.path.exists(source):
@@ -187,6 +205,7 @@ def create_folder(source: str) -> str | None:
     """
     original_source = source
     try:
+        os.chmod(source, 0o755)  # rewrites file permissions
         source = os.path.normpath(source)  # Normalizes path
         os.mkdir(source)  # makes the folder
 
@@ -214,6 +233,7 @@ def create_file(source: str) -> str | None:
     """
     original_source = source
     try:
+        os.chmod(source, 0o755)  # rewrites file permissions
         source = os.path.normpath(source)  # Normalizes path
         with open(source, 'x') as file:
             pass  # creates file
@@ -244,6 +264,7 @@ def redo_name(source: str, name: str) -> str | None:
         """
     original_source = source
     try:
+        os.chmod(source, 0o755)  # rewrites file permissions
         new_source = os.path.join(os.path.dirname(source), name)
         os.rename(source, new_source)
 
@@ -269,6 +290,7 @@ def redo_extension(source: str, extension: str) -> str | None:
         """
     original_source = source
     try:
+        os.chmod(source, 0o755)  # rewrites file permissions
         sor, ext = os.path.splitext(source)
         # removes the extra . added in the extension before used
         new_source = sor + '.' + extension.replace('.', '')  # updated extension

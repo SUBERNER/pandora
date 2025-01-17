@@ -22,7 +22,7 @@ def volume(files: str | list[str], factor: float):
             files = [files]
 
         # gets size of largest path for better result formatting
-        Buffle.Display.outer.set_length(max(files, key=len))
+        Buffle.Display.audio.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -54,7 +54,8 @@ def pitch(files: str | list[str], factor: float):
         if isinstance(files, str):
             files = [files]
 
-        Buffle.Display.outer.set_length(max(files, key=len))
+        # gets size of largest path for better result formatting
+        Buffle.Display.audio.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -85,7 +86,8 @@ def tempo(files: str | list[str], factor: float):
         if isinstance(files, str):
             files = [files]
 
-        Buffle.Display.outer.set_length(max(files, key=len))
+        # gets size of largest path for better result formatting
+        Buffle.Display.audio.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -125,7 +127,7 @@ def reverse(files: str | list[str]):
             except Exception as e:
                 Buffle.Display.audio.error_result(file, "reverse", str(e.args))
     except Exception as e:
-        Buffle.Display.audio.error_result(file, "reverse", str(e.args))
+        Buffle.Display.audio.error_result(files, "reverse", str(e.args))
 
 
 def trim(files: str | list[str], start: float, end: float):
@@ -145,7 +147,7 @@ def trim(files: str | list[str], start: float, end: float):
             files = [files]
 
         # gets size of largest path for better result formatting
-        Buffle.Display.outer.set_length(max(files, key=len))
+        Buffle.Display.audio.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -159,7 +161,7 @@ def trim(files: str | list[str], start: float, end: float):
             except Exception as e:
                 Buffle.Display.audio.error_result(file, "trim", str(e.args))
     except Exception as e:
-        Buffle.Display.audio.error_result(file, "trim", str(e.args))
+        Buffle.Display.audio.error_result(files, "trim", str(e.args))
 
 
 def normalize(files: str | list[str], factor: float):
@@ -189,7 +191,7 @@ def normalize(files: str | list[str], factor: float):
             except Exception as e:
                 Buffle.Display.audio.error_result(file, "normalize", str(e.args))
     except Exception as e:
-        Buffle.Display.audio.error_result(file, "normalize", str(e.args))
+        Buffle.Display.audio.error_result(files, "normalize", str(e.args))
 
 
 def quality(files: str | list[str], factor: float):
@@ -223,7 +225,7 @@ def quality(files: str | list[str], factor: float):
             except Exception as e:
                 Buffle.Display.audio.error_result(file, "quality", str(e.args))
     except Exception as e:
-        Buffle.Display.audio.error_result(file, "quality", str(e.args))
+        Buffle.Display.audio.error_result(files, "quality", str(e.args))
 
 
 def mid(files: str | list[str], gain: float):
@@ -242,7 +244,8 @@ def mid(files: str | list[str], gain: float):
         if isinstance(files, str):
             files = [files]
 
-        Buffle.Display.outer.set_length(max(files, key=len))
+        # gets size of largest path for better result formatting
+        Buffle.Display.audio.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -267,7 +270,6 @@ def mid(files: str | list[str], gain: float):
         Buffle.Display.audio.error_result(files, "mid", str(e))
 
 
-
 def bass(files: str | list[str], gain: float):
     """
     Boosts or reduces the bass frequencies of the audio file(s).
@@ -284,7 +286,8 @@ def bass(files: str | list[str], gain: float):
         if isinstance(files, str):
             files = [files]
 
-        Buffle.Display.outer.set_length(max(files, key=len))
+        # gets size of largest path for better result formatting
+        Buffle.Display.audio.set_length(max(files, key=len))
 
         for file in files:
             try:
@@ -325,7 +328,8 @@ def treble(files: str | list[str], gain: float):
         if isinstance(files, str):
             files = [files]
 
-        Buffle.Display.outer.set_length(max(files, key=len))
+        # gets size of largest path for better result formatting
+        Buffle.Display.audio.set_length(max(files, key=len))
 
         for file in files:
             try:

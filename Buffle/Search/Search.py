@@ -1,9 +1,9 @@
+from Buffle import random  # used for seeds
 import Buffle
-import random
 import os
 
 
-def full(source: str, *, deep_search: bool, inverse_search: bool, chance: float = 1) -> list[str] | None:
+def full(source: str, *, deep_search: bool = False, inverse_search: bool = False, chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory.
 
@@ -47,7 +47,7 @@ def full(source: str, *, deep_search: bool, inverse_search: bool, chance: float 
         return None
 
 
-def name(source: str, contains: str | list[str], *, deep_search: bool, inverse_search: bool, type_search="all", chance: float = 1) -> list[str] | None:
+def name(source: str, contains: str | list[str], *, deep_search: bool = False, inverse_search: bool = False, type_search="all", chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory whose names match a specific substring.
 
@@ -104,7 +104,7 @@ def name(source: str, contains: str | list[str], *, deep_search: bool, inverse_s
         return None
 
 
-def content(source: str, contains: str | list[str], *, deep_search: bool, inverse_search: bool, type_search="all", chance: float = 1) -> list[str] | None:
+def content(source: str, contains: str | list[str], *, deep_search: bool = False, inverse_search: bool = False, type_search="all", chance: float = 1) -> list[str] | None:
     """
     Searches for files in a directory whose contents match a specific substring.
 
