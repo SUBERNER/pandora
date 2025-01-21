@@ -19,16 +19,13 @@ def seed(value: int):
     Return:
         str | None: Path of the moved file or folder, or None if an error occurs.
     """
-    original_value = random.seed
     try:
         random.seed(value)
-        value = random.seed
-        Buffle.Display.methods.result(f"None", "seed", value, original_value)
-
+        Buffle.Display.methods.result(f"None", "seed", value, 0)
         return value
     except Exception as e:
         Buffle.Display.methods.error_result(f"None", "seed", str(e.args))
-        return original_value
+        return None
 
 
 def move(source: str, destination: str) -> str | None:

@@ -1,4 +1,9 @@
+# common imports used by others
 import random
+import os
+import shutil
+import re
+import uuid
 
 from . import Outer
 from . import Inner
@@ -7,6 +12,7 @@ from . import Image
 from . import Display
 from . import Audio
 
+from .Methods import seed
 from .Methods import move
 from .Methods import copy
 from .Methods import delete
@@ -32,5 +38,6 @@ __all__ = [
     'redo_name',
     'redo_extension',
     'create_folder',
-    'create_file'
+    'create_file',
+    'seed',
 ]
