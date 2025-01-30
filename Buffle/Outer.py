@@ -1,11 +1,10 @@
 from Buffle import random  # used for seeds
 import os
 import uuid
-
 import Buffle
 
 
-def normal(files: str | list[str], *, weight: int | list[int] | None = None, chance: float = 1, duplicates: bool = False):
+def normal(files: str | list[str], *, chance: float = 1, duplicates: bool = False):
     """
     Shuffles and randomizes the names of all files.
 
@@ -13,11 +12,6 @@ def normal(files: str | list[str], *, weight: int | list[int] | None = None, cha
         files (str | list[str]): Path(s) of the file(s) to shuffle.
 
     Keyword Parameter:
-        weight (int | list[int] | None): Weight(s) for random selection. Used only if `duplicates` is True.
-            - None: Equal weights for all files.
-            - int: Single weight applied to all files.
-            - list[int]: Individual weights for each file.
-
         chance (float): Probability of altering each file. Defaults to 1.
             - 0.0: No file is altered.
             - 1.0: All files are altered.
@@ -34,10 +28,6 @@ def normal(files: str | list[str], *, weight: int | list[int] | None = None, cha
 
         temp_files = []  # temporary list of all uuid files
         chance_files = []  # temporary list of all files that will be altered
-        if weight:
-            chance_weight = []  # temporary list of all groups weights that will be altered
-        else:
-            chance_weight = None
 
         # renames files to avoid conflict
         for index, file in enumerate(files):
@@ -47,15 +37,13 @@ def normal(files: str | list[str], *, weight: int | list[int] | None = None, cha
                 os.rename(os.path.abspath(file), temp_file)
                 # adds to lists
                 chance_files.append(file)
-                if weight:
-                    chance_weight.append(weight[index])
                 temp_files.append(temp_file)
             else:  # displays file as unaltered as it was ignored do to chance
                 Buffle.Display.outer.result(os.path.abspath(file), "normal shuffle", os.path.basename(file), os.path.basename(file))
 
         # randomly shuffles files
         if duplicates:  # options can be selected multiple times
-            random_files = random.choices(chance_files, weights=chance_weight, k=len(chance_files))
+            random_files = random.choices(chance_files, k=len(chance_files))
         else:  # normal randomizing of files
             random_files = chance_files.copy()
             random.shuffle(random_files)
@@ -68,7 +56,7 @@ def normal(files: str | list[str], *, weight: int | list[int] | None = None, cha
         Buffle.Display.image.error_result(files, "normal shuffle", str(e.args))
 
 
-def group(files: str | list[str], contains: str | list[str], *, weight: int | list[int] | None = None, chance: float = 1, duplicates: bool = False):
+def group(files: str | list[str], contains: str | list[str], *, chance: float = 1, duplicates: bool = False):
     """
     Shuffles and randomizes the specified substrings ('contains') within file names, grouped by similarity.
 
@@ -78,11 +66,6 @@ def group(files: str | list[str], contains: str | list[str], *, weight: int | li
         contains (str | list[str]): Substring(s) to search for and shuffle within the file names.
 
     Keyword Parameter:
-        weight (int | list[int] | None): Weight(s) for random selection. Used only if `duplicates` is True.
-            - None: Equal weights for all groups.
-            - int: Single weight applied to all groups.
-            - list[int]: Individual weights for each group.
-
         chance (float): Probability of altering each group. Defaults to 1.
             - 0.0: No group is altered.
             - 1.0: All groups are altered.
@@ -102,10 +85,6 @@ def group(files: str | list[str], contains: str | list[str], *, weight: int | li
         temp_names = []  # temporary list of all uuid files
         display_names = files.copy()  # temporary list of all original files
         chance_contains = []  # temporary list of all groups that will be altered
-        if weight:
-            chance_weight = []  # temporary list of all groups weights that will be altered
-        else:
-            chance_weight = None
 
         for index, contain in enumerate(contains):
             if chance >= random.random():
@@ -121,8 +100,6 @@ def group(files: str | list[str], contains: str | list[str], *, weight: int | li
 
                 # altered continents and weights after determining chance
                 chance_contains.append(contain)
-                if weight:
-                    chance_weight.append(weight[index])
             else:  # displays file as unaltered as it was ignored do to chance
                 for file in files:
                     if contain in os.path.basename(file):
@@ -130,7 +107,7 @@ def group(files: str | list[str], contains: str | list[str], *, weight: int | li
 
         # randomly shuffles files
         if duplicates:  # options can be selected multiple times
-            assign_names = random.choices(chance_contains, weights=chance_weight, k=len(chance_contains))
+            assign_names = random.choices(chance_contains, k=len(chance_contains))
         else:  # normal randomizing of files
             assign_names = chance_contains.copy()
             random.shuffle(assign_names)  # Randomize order for final names

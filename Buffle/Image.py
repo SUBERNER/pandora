@@ -1,10 +1,9 @@
 from Buffle import random  # used for seeds
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps  # Pillow
-import numpy as np
+import numpy
 import os
 import Buffle
 # Used for altering single or non atlas images
-
 
 def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcolor: tuple[int, int, int] | None = None, resampling: int = 2, optimize: bool = False):
     """
@@ -206,23 +205,23 @@ def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tupl
         for file in files:
             try:
                 image = Image.open(file)
-                image_array = np.array(image)  # converts to array
+                image_array = numpy.array(image)  # converts to array
 
                 # generates noice for the brightness of the image
-                noise_array = np.random.normal(mean, factor, image_array.shape[:2])  # Only one channel for brightness
+                noise_array = numpy.random.normal(mean, factor, image_array.shape[:2])  # Only one channel for brightness
                 if len(image_array.shape) == 3:  # If the image is RGB
-                    noise_array = noise_array[:, :, np.newaxis]  # Add channel dimension for broadcasting
+                    noise_array = noise_array[:, :, numpy.newaxis]  # Add channel dimension for broadcasting
 
                 # adds the noise to the image
                 adjusted_array = image_array + noise_array
-                adjusted_array = np.clip(adjusted_array, range[0], range[1])  # Keeps values between 0 and 255
+                adjusted_array = numpy.clip(adjusted_array, range[0], range[1])  # Keeps values between 0 and 255
 
                 # converts back into an image
-                new_image = Image.fromarray(adjusted_array.astype(np.uint8))
+                new_image = Image.fromarray(adjusted_array.astype(numpy.uint8))
                 new_image.save(file, optimize=optimize)
 
                 # determines the changes made by method to display
-                image_change = np.sum(np.abs(adjusted_array - image_array) > 1) / image_array.size * 100
+                image_change = numpy.sum(numpy.abs(adjusted_array - image_array) > 1) / image_array.size * 100
 
                 Buffle.Display.image.result(file, "noise", image_change, 0)
             except Exception as e:
@@ -300,8 +299,8 @@ def saturation(files: str | list[str], factor: float, *, optimize: bool = False)
                 # determines the changes made by method to display
                 hsv_image = image.convert("HSV")
                 hsv_new_image = new_image.convert("HSV")
-                image_mean = np.mean(np.array(hsv_image)[:, :, 1])
-                new_image_mean = np.mean(np.array(hsv_new_image)[:, :, 1])
+                image_mean = numpy.mean(numpy.array(hsv_image)[:, :, 1])
+                new_image_mean = numpy.mean(numpy.array(hsv_new_image)[:, :, 1])
 
                 Buffle.Display.image.result(file, "saturation", new_image_mean, image_mean)
             except Exception as e:
@@ -342,8 +341,8 @@ def contrast(files: str | list[str], factor: float, optimize: bool = False):
                 # determines the changes made by method to display
                 grayscale_image = image.convert("L")
                 grayscale_new_image = new_image.convert("L")
-                image_mean = np.std(np.array(grayscale_image))
-                new_image_mean = np.std(np.array(grayscale_new_image))
+                image_mean = numpy.std(numpy.array(grayscale_image))
+                new_image_mean = numpy.std(numpy.array(grayscale_new_image))
 
                 Buffle.Display.image.result(file, "contrast", new_image_mean, image_mean)
             except Exception as e:
@@ -384,8 +383,8 @@ def brightness(files: str | list[str], factor: float, *, optimize: bool = False)
                 # determines the changes made by method to display
                 grayscale_image = image.convert("L")
                 grayscale_new_image = new_image.convert("L")
-                image_mean = np.mean(np.array(grayscale_image))
-                new_image_mean = np.mean(np.array(grayscale_new_image))
+                image_mean = numpy.mean(numpy.array(grayscale_image))
+                new_image_mean = numpy.mean(numpy.array(grayscale_new_image))
 
                 Buffle.Display.image.result(file, "brightness", new_image_mean, image_mean)
             except Exception as e:

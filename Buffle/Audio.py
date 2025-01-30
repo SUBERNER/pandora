@@ -1,6 +1,6 @@
 import librosa
-import soundfile as sf
-import numpy as np
+import soundfile
+import numpy
 import Buffle
 
 
@@ -29,7 +29,7 @@ def volume(files: str | list[str], factor: float):
                 audio, sample_rate = librosa.load(file, sr=None)
                 gain = 10 ** (factor / 20)  # Convert dB to a linear scale
                 new_audio = audio * gain  # Apply gain directly
-                sf.write(file, new_audio, sample_rate)
+                soundfile.write(file, new_audio, sample_rate)
 
                 Buffle.Display.audio.result(file, "volume", factor, 0)
             except Exception as e:
@@ -61,7 +61,7 @@ def pitch(files: str | list[str], factor: float):
             try:
                 audio, sample_rate = librosa.load(file, sr=None)
                 new_audio = librosa.effects.pitch_shift(audio, sr=sample_rate, n_steps=factor)
-                sf.write(file, new_audio, sample_rate)
+                soundfile.write(file, new_audio, sample_rate)
 
                 Buffle.Display.audio.result(file, "pitch", factor, 0)
             except Exception as e:
@@ -93,7 +93,7 @@ def tempo(files: str | list[str], factor: float):
             try:
                 audio, sample_rate = librosa.load(file, sr=None)
                 new_audio = librosa.effects.time_stretch(audio, rate=factor)
-                sf.write(file, new_audio, sample_rate)
+                soundfile.write(file, new_audio, sample_rate)
 
                 Buffle.Display.audio.result(file, "tempo", factor, 0)
             except Exception as e:
@@ -121,7 +121,7 @@ def reverse(files: str | list[str]):
             try:
                 audio, sample_rate = librosa.load(file, sr=None)
                 new_audio = audio[::-1]  # reverses audio by flipping array
-                sf.write(file, new_audio, sample_rate)
+                soundfile.write(file, new_audio, sample_rate)
 
                 Buffle.Display.audio.result(file, "reverse", True, False)
             except Exception as e:
@@ -155,7 +155,7 @@ def trim(files: str | list[str], start: float, end: float):
                 start_sample = int(start * sample_rate)
                 end_sample = int(end * sample_rate)
                 new_audio = audio[start_sample:end_sample]
-                sf.write(file, new_audio, sample_rate)
+                soundfile.write(file, new_audio, sample_rate)
 
                 Buffle.Display.audio.result(file, "trim", int(librosa.get_duration(y=new_audio, sr=sample_rate)), int(librosa.get_duration(y=audio, sr=sample_rate)))
             except Exception as e:
@@ -185,9 +185,9 @@ def normalize(files: str | list[str], factor: float):
             try:
                 audio, sample_rate = librosa.load(file, sr=None)
                 new_audio = librosa.util.normalize(audio, axis=0) * factor  # changes the normalization
-                sf.write(file, new_audio, sample_rate)
+                soundfile.write(file, new_audio, sample_rate)
 
-                Buffle.Display.audio.result(file, "normalize", np.sqrt(np.mean(new_audio**2)), np.sqrt(np.mean(audio**2)))
+                Buffle.Display.audio.result(file, "normalize", numpy.sqrt(numpy.mean(new_audio ** 2)), numpy.sqrt(numpy.mean(audio ** 2)))
             except Exception as e:
                 Buffle.Display.audio.error_result(file, "normalize", str(e.args))
     except Exception as e:
@@ -219,7 +219,7 @@ def quality(files: str | list[str], factor: float):
                 audio, sample_rate = librosa.load(file, sr=None)
                 new_sample_rate = int(sample_rate * factor)
                 new_audio = librosa.resample(audio, orig_sr=sample_rate, target_sr=new_sample_rate)
-                sf.write(file, new_audio, new_sample_rate)
+                soundfile.write(file, new_audio, new_sample_rate)
 
                 Buffle.Display.audio.result(file, "quality", new_sample_rate, sample_rate)
             except Exception as e:
@@ -255,13 +255,13 @@ def mid(files: str | list[str], gain: float):
 
                 # Apply gain to mid frequencies (200 Hz - 2000 Hz)
                 gain_factor = 10 ** (gain / 20)
-                mid_filter = np.ones(spectrogram.shape[0])
+                mid_filter = numpy.ones(spectrogram.shape[0])
                 mid_filter[(f_bin >= 200) & (f_bin <= 2000)] = gain_factor
 
                 # Apply filter and reconstruct audio
-                modified_spectrogram = spectrogram * mid_filter[:, np.newaxis]
-                new_audio = np.real(librosa.istft(modified_spectrogram))
-                sf.write(file, new_audio, sample_rate)
+                modified_spectrogram = spectrogram * mid_filter[:, numpy.newaxis]
+                new_audio = numpy.real(librosa.istft(modified_spectrogram))
+                soundfile.write(file, new_audio, sample_rate)
 
                 Buffle.Display.audio.result(file, "mid", gain, 0)
             except Exception as e:
@@ -297,13 +297,13 @@ def bass(files: str | list[str], gain: float):
 
                 # Apply gain to bass frequencies (20-200 Hz)
                 gain_factor = 10 ** (gain / 20)
-                bass_filter = np.ones(spectrogram.shape[0])
+                bass_filter = numpy.ones(spectrogram.shape[0])
                 bass_filter[(f_bin >= 20) & (f_bin <= 200)] = gain_factor
 
                 # Apply filter and reconstruct audio
-                modified_spectrogram = spectrogram * bass_filter[:, np.newaxis]
-                new_audio = np.real(librosa.istft(modified_spectrogram))
-                sf.write(file, new_audio, sample_rate)
+                modified_spectrogram = spectrogram * bass_filter[:, numpy.newaxis]
+                new_audio = numpy.real(librosa.istft(modified_spectrogram))
+                soundfile.write(file, new_audio, sample_rate)
 
                 Buffle.Display.audio.result(file, "bass", gain, 0)
             except Exception as e:
@@ -339,13 +339,13 @@ def treble(files: str | list[str], gain: float):
 
                 # Apply gain to treble frequencies (2000 Hz - Nyquist/2)
                 gain_factor = 10 ** (gain / 20)
-                treble_filter = np.ones(spectrogram.shape[0])
+                treble_filter = numpy.ones(spectrogram.shape[0])
                 treble_filter[(f_bin >= 2000) & (f_bin <= sample_rate // 2)] = gain_factor
 
                 # Apply filter and reconstruct audio
-                modified_spectrogram = spectrogram * treble_filter[:, np.newaxis]
-                new_audio = np.real(librosa.istft(modified_spectrogram))
-                sf.write(file, new_audio, sample_rate)
+                modified_spectrogram = spectrogram * treble_filter[:, numpy.newaxis]
+                new_audio = numpy.real(librosa.istft(modified_spectrogram))
+                soundfile.write(file, new_audio, sample_rate)
 
                 Buffle.Display.audio.result(file, "treble", gain, 0)
             except Exception as e:
