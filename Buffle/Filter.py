@@ -1,4 +1,6 @@
 from Buffle import random  # used for seeds
+import uuid
+import os
 # used when filtering out and specifying what changes can and cannot be made when shuffling files
 # This allows for MUCH more control over the shuffle, such as making the results of shuffles stable or possible
 
@@ -12,6 +14,13 @@ class Ignore:
             self.files = [files]
         else:
             self.files = files
+
+    def __call__(self, file: str):
+        for files in self.files:
+            if file == files:
+                return True
+        return False
+
 
 class Exclude:
     files = [str]  # the files checked in the filter
@@ -32,6 +41,24 @@ class Exclude:
             self.test_files = [test_files]
         else:
             self.test_files = test_files
+
+    def __call__(self, file: str):
+        for files in self.files:
+            if files == file:
+                if self.test_files is None:
+                    with open(file, 'r') as f:  # opens file
+                        text = f.read()  # stores all the data in a variable
+                        for test_string in self.test_string:
+                            if test_string in text:
+                                return True
+                else:
+                    for test_file in self.test_files:
+                        with open(test_file, 'r') as f:  # opens file
+                            text = f.read()  # stores all the data in a variable
+                            for test_string in self.test_string:
+                                if test_string in text:
+                                    return True
+        return False
 
 
 class Alter:
@@ -64,6 +91,36 @@ class Alter:
         else:
             self.replace_files = replace_files
 
+    def __call__(self, file: str):
+        replace = False
+        for files in self.files:
+            if files == file:
+                if self.test_files is None:
+                    with open(file, 'r') as f:  # opens file
+                        text = f.read()  # stores all the data in a variable
+                        for test_string in self.test_string:
+                            if test_string in text:
+                                replace = True
+                else:
+                    for test_file in self.test_files:
+                        with open(test_file, 'r') as f:  # opens file
+                            text = f.read()  # stores all the data in a variable
+                            for test_string in self.test_string:
+                                if test_string in text:
+                                    replace = False
+        if replace:
+            if self.replace_files is None:
+                with open(file, 'w') as f:  # opens file
+                    for replace_string in self.replace_strings:
+                        text.replace(replace_string[0], replace_string[1])
+                    f.write(text)
+            else:
+                for replace_file in self.replace_files:
+                    with open(replace_file, 'w') as f:  # opens file
+                        for replace_string in self.replace_strings:
+                            text.replace(replace_string[0], replace_string[1])
+                        f.write(text)
+
 
 class Swap:
     files = [tuple[str, str]]  # the names of files that will be swapping before and after a method
@@ -75,12 +132,9 @@ class Swap:
         else:
             self.files = files
 
-
-# THIS IS A MESS, FIX LATER
-def ignore_test(ignores: Ignore | list[Ignore], file: str) -> bool:
-    for ignore in ignores:
-        for files in ignore.files:
-            if file == files:
-                return True
-    return False
-
+    def __call__(self):
+        for file in self.files:
+            temp_file = f"{uuid.uuid4().hex}"  # used as a placeholder for file names
+            os.rename(file[0], temp_file)
+            os.rename(file[1], file[0])
+            os.rename(temp_file, file[1])
