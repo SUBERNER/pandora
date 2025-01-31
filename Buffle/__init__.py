@@ -11,6 +11,7 @@ from . import Search
 from . import Image
 from . import Display
 from . import Audio
+from . import Filter
 
 from .Methods import seed
 from .Methods import move

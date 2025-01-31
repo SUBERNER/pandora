@@ -1,140 +1,152 @@
 from Buffle import random  # used for seeds
-import uuid
+from enum import IntEnum
+import re
 import os
-# used when filtering out and specifying what changes can and cannot be made when shuffling files
-# This allows for MUCH more control over the shuffle, such as making the results of shuffles stable or possible
+
+# Used when filtering out and specifying what changes can and cannot be made when shuffling files.
+# This allows for greater control over the shuffle, making results stable or constrained as needed.
 
 
 class Ignore:
-    files = [str]  # the files checked in the filter
+    """
+    Filters out specific files from being processed.
+
+    Parameter:
+        files (str | list[str]): File path(s) to ignore.
+
+    Behavior:
+        - If a file is listed in `files`, the filter will return `True`, indicating it should be ignored.
+        - Otherwise, it returns `False`, allowing the file to be processed.
+    """
 
     def __init__(self, files: str | list[str]):
-        # makes sure parts of filer are always a list if needed
-        if isinstance(files, str):
-            self.files = [files]
-        else:
-            self.files = files
+        self.files = [files] if isinstance(files, str) else files
 
-    def __call__(self, file: str):
+    def __call__(self, file: str) -> bool:
         for files in self.files:
             if file == files:
                 return True
         return False
 
 
-class Exclude:
-    files = [str]  # the files checked in the filter
-    test_string = [str]  # the substrings that are tested in the filter
-    test_files = [str]  # if added, the tests will happen in "test_files" and not "files"
+class Input:
+    def __init__(self, files: str | list[str], test_inputs: str | list[str]):
+        self.files = [files] if isinstance(files, str) else files
+        self.test_inputs = [test_inputs] if isinstance(test_inputs, str) else test_inputs
 
-    def __init__(self, files: str | list[str], test_strings: str | list[str], test_files: str | list[str]):
-        # makes sure parts of filer are always a list if needed
-        if isinstance(files, str):
-            self.files = [files]
-        else:
-            self.files = files
-        if isinstance(test_strings, str):
-            self.test_string = [test_strings]
-        else:
-            self.test_string = test_strings
-        if isinstance(test_files, str):
-            self.test_files = [test_files]
-        else:
-            self.test_files = test_files
-
-    def __call__(self, file: str):
+    def __call__(self, file: str, input: str, *, regex: bool = False) -> bool:
         for files in self.files:
-            if files == file:
-                if self.test_files is None:
-                    with open(file, 'r') as f:  # opens file
-                        text = f.read()  # stores all the data in a variable
-                        for test_string in self.test_string:
-                            if test_string in text:
+            if file == files:
+                for test_input in self.test_inputs:
+                    if (regex and re.search(test_input, input)) or (test_input in input):
+                        return True
+        return False
+
+
+class Exclude:
+    """
+    Filters out files based on their content.
+    If a file contains any of the specified `test_strings`, it is excluded.
+
+    Parameter:
+        files (str | list[str]): Target file(s) to check.
+
+        test_strings (str | list[str]): Strings or patterns to search for in the file(s).
+
+        test_files (str | list[str] | None): If specified, the search will occur in these files instead of `files`.
+
+    Keyword Parameter:
+        regex (bool): Whether `test_strings` should be treated as regular expressions. Defaults to False.
+    """
+
+    def __init__(self, files: str | list[str], test_strings: str | list[str], test_files: str | list[str] | None = None):
+        self.files = [files] if isinstance(files, str) else files
+        self.test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
+        self.test_files = [test_files] if isinstance(test_files, str) else test_files
+
+    def __call__(self, file: str, *, regex: bool = False) -> bool:
+        for target_file in self.files:
+            if target_file == file:
+                search_files = self.test_files if self.test_files else [file]
+                for search_file in search_files:
+                    with open(search_file, 'r') as f:
+                        text = f.read()
+                        for test_string in self.test_strings:
+                            if (regex and re.search(test_string, text)) or (test_string in text):
                                 return True
-                else:
-                    for test_file in self.test_files:
-                        with open(test_file, 'r') as f:  # opens file
-                            text = f.read()  # stores all the data in a variable
-                            for test_string in self.test_string:
-                                if test_string in text:
-                                    return True
         return False
 
 
 class Alter:
-    files = [str]  # the files checked in the filter
-    test_strings = [str]  # the substrings that are tested in the filter
-    test_files = [str]  # if added, the tests will happen in "test_files" and not "file"
-    replace_strings = [tuple[str, str]]  # the substrings that are replacing other substrings
-    replace_files = [str]  # if added, the replacing will happen in "replace_files" and not "replace_strings"
+    """
+    Modifies file contents based on search-and-replace rules.
+    If a file contains any of the specified `test_strings`, the corresponding `replace_strings` value replaces it.
 
-    def __init__(self, files: str | list[str], test_strings: str | list[str], test_files: str | list[str], replace_strings: tuple[str, str] | list[tuple[str, str]], replace_files: str | list[str]):
-        # makes sure parts of filer are always a list if needed
-        if isinstance(files, str):
-            self.files = [files]
-        else:
-            self.files = files
-        if isinstance(test_strings, str):
-            self.test_string = [test_strings]
-        else:
-            self.test_string = test_strings
-        if isinstance(test_files, str):
-            self.test_files = [test_files]
-        else:
-            self.test_files = test_files
-        if isinstance(replace_strings, str):  # FIX THIS PART
-            self.replace_strings = [replace_strings]
-        else:
-            self.replace_strings = replace_strings
-        if isinstance(replace_files, str):
-            self.replace_files = [replace_files]
-        else:
-            self.replace_files = replace_files
+    Parameter:
+        files (str | list[str]): Target file(s) to modify.
 
-    def __call__(self, file: str):
+        test_strings (str | list[str]): Strings or patterns to search for.
+
+        test_files (str | list[str] | None): If specified, the search occurs in these files instead.
+
+        replace_strings (tuple[str, str] | list[tuple[str, str]]): Pairs of (old, new) strings to replace.
+
+        replace_files (str | list[str] | None): If specified, changes are written to these files instead of `files`.
+
+    Keyword Parameter:
+        regex (bool): Whether `test_strings` and `replace_strings` should be treated as regex patterns. Defaults to False.
+    """
+
+    def __init__(self, files: str | list[str], test_strings: str | list[str], replace_strings: tuple[str, str] | list[tuple[str, str]], replace_files: str | list[str] | None = None, test_files: str | list[str] | None = None):
+        self.files = [files] if isinstance(files, str) else files
+        self.test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
+        self.test_files = [test_files] if isinstance(test_files, str) else test_files
+        self.replace_strings = [replace_strings] if isinstance(replace_strings, tuple) else replace_strings
+        self.replace_files = [replace_files] if isinstance(replace_files, str) else replace_files
+
+    def __call__(self, file: str, *, regex: bool = False):
         replace = False
-        for files in self.files:
-            if files == file:
-                if self.test_files is None:
-                    with open(file, 'r') as f:  # opens file
-                        text = f.read()  # stores all the data in a variable
-                        for test_string in self.test_string:
-                            if test_string in text:
+        for target_file in self.files:
+            if target_file == file:
+                search_files = self.test_files if self.test_files else [file]
+                for search_file in search_files:
+                    with open(search_file, 'r') as f:
+                        text = f.read()
+                        for test_string in self.test_strings:
+                            if (regex and re.search(test_string, text)) or (test_string in text):
                                 replace = True
-                else:
-                    for test_file in self.test_files:
-                        with open(test_file, 'r') as f:  # opens file
-                            text = f.read()  # stores all the data in a variable
-                            for test_string in self.test_string:
-                                if test_string in text:
-                                    replace = False
+
         if replace:
-            if self.replace_files is None:
-                with open(file, 'w') as f:  # opens file
-                    for replace_string in self.replace_strings:
-                        text.replace(replace_string[0], replace_string[1])
+            write_files = self.replace_files if self.replace_files else [file]
+            for write_file in write_files:
+                with open(write_file, 'w') as f:
+                    for old, new in self.replace_strings:
+                        text = re.sub(old, new, text) if regex else text.replace(old, new)
                     f.write(text)
-            else:
-                for replace_file in self.replace_files:
-                    with open(replace_file, 'w') as f:  # opens file
-                        for replace_string in self.replace_strings:
-                            text.replace(replace_string[0], replace_string[1])
-                        f.write(text)
 
 
 class Swap:
-    files = [tuple[str, str]]  # the names of files that will be swapping before and after a method
+    """
+    Swaps file names between two or more files.
+    If called again, the files swap back to their original names.
+
+    Parameter:
+        files (tuple[str, str] | list[tuple[str, str]]): Pairs of (old file, new file) to swap.
+    """
 
     def __init__(self, files: tuple[str, str] | list[tuple[str, str]]):
-        # makes sure parts of filer are always a list if needed
-        if isinstance(files, str):  # FIX THIS PART
-            self.files = [files]
-        else:
-            self.files = files
+        self.files = [files] if isinstance(files, tuple) else files
 
     def __call__(self):
         for file in self.files:
-            temp_file = f"{uuid.uuid4().hex}"  # used as a placeholder for file names
-            os.rename(file[0], temp_file)
-            os.rename(file[1], file[0])
-            os.rename(temp_file, file[1])
+            os.rename(file[0], file[1])
+            file[0], file[1] = file[1], file[0]  # swaps them to and swaps back to normal once its recalled
+
+
+class Logic(IntEnum):
+    AND = 0
+    NAND = 1
+    OR = 2
+    NOR = 3
+    XOR = 4
+    XNOR = 5
