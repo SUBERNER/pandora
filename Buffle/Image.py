@@ -3,9 +3,89 @@ from PIL import Image, ImageEnhance, ImageFilter, ImageOps  # Pillow
 import numpy
 import os
 import Buffle
+from Buffle.Filter import *
 # Used for altering single or non atlas images
 
-def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcolor: tuple[int, int, int] | None = None, resampling: int = 2, optimize: bool = False):
+
+def layer(files: str | list[str], layers: str | list[str], *, optimize: bool = False, mask: str | [str] | None = None,
+          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
+    try:
+        # makes files always a list
+        if isinstance(files, str):
+            files = [files]
+        if isinstance(layers, str):
+            layers = [layers]
+
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
+        for file in files:
+            try:
+                image = Image.open(file)
+                for layer in layers:  # goes through and adds layers in the order provided in the layer list
+                    layer = Image.open(layer)
+                    new_image = image.paste(layer, (image.width, 0))
+
+                    new_image.save(file, optimize=optimize)
+
+                    Buffle.Display.image.result(file, "layer", len(layers), 0)  # FIGURE OUT WHAT TO DISPLAY
+            except Exception as e:
+                Buffle.Display.image.error_result(file, "layer", str(e.args))
+    except Exception as e:
+        Buffle.Display.image.error_result(files, "layer", str(e.args))
+
+
+def spread(files: str | list[str], distance: int, *, optimize: bool = False,
+           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
+    try:
+        # makes files always a list
+        if isinstance(files, str):
+            files = [files]
+
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
+        for file in files:
+            try:
+                image = Image.open(file)
+                new_image = image.effect_spread(distance)
+
+                new_image.save(file, optimize=optimize)
+
+                Buffle.Display.image.result(file, "spread", 0, 0)  # FIGURE OUT WHAT TO DISPLAY
+            except Exception as e:
+                Buffle.Display.image.error_result(file, "spread", str(e.args))
+    except Exception as e:
+        Buffle.Display.image.error_result(files, "spread", str(e.args))
+
+
+def crop(files: str | list[str], dimensions: tuple[int, int, int, int], *, optimize: bool = False,
+         ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
+
+    try:
+        # makes files always a list
+        if isinstance(files, str):
+            files = [files]
+
+        # gets size of largest path for better result formatting
+        Buffle.Display.image.set_length(max(files, key=len))
+
+        for file in files:
+            try:
+                image = Image.open(file)
+                new_image = image.crop(dimensions)
+
+                new_image.save(file, optimize=optimize)
+
+                Buffle.Display.image.result(file, "crop", new_image.size, image.size)
+            except Exception as e:
+                Buffle.Display.image.error_result(file, "crop", str(e.args))
+    except Exception as e:
+        Buffle.Display.image.error_result(files, "crop", str(e.args))
+
+
+def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcolor: tuple[int, int, int] | None = None, resampling: int = 2, optimize: bool = False, mask: str | [str] | None = None,
+           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Rotates the image clockwise or counterclockwise.
 
@@ -54,7 +134,8 @@ def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcol
         Buffle.Display.image.error_result(files, "rotate", str(e.args))
 
 
-def flip(files: str | list[str], horizontal: bool, vertical: bool, *, optimize: bool = False):
+def flip(files: str | list[str], horizontal: bool, vertical: bool, *, optimize: bool = False,
+         ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Flips the image vertically and/or horizontally.
 
@@ -94,7 +175,8 @@ def flip(files: str | list[str], horizontal: bool, vertical: bool, *, optimize: 
         Buffle.Display.image.error_result(files, "flip", str(e.args))
 
 
-def resize(files: str | list[str], width: int, height: int, *, resampling: int = 2, optimize: bool = False):
+def resize(files: str | list[str], width: int, height: int, *, resampling: int = 2, optimize: bool = False,
+           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Resizes the image's dimensions.
 
@@ -139,7 +221,8 @@ def resize(files: str | list[str], width: int, height: int, *, resampling: int =
         Buffle.Display.image.error_result(files, "resize", str(e.args))
 
 
-def invert(files: str | list[str], *, optimize: bool = False):
+def invert(files: str | list[str], *, optimize: bool = False, mask: str | [str],
+           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Inverts the image's colors.
 
@@ -172,7 +255,8 @@ def invert(files: str | list[str], *, optimize: bool = False):
         Buffle.Display.image.error_result(files, "invert", str(e.args))
 
 
-def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tuple[int, int] = (0, 255), optimize: bool = False):
+def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tuple[int, int] = (0, 255), optimize: bool = False, mask: str | [str] | None = None,
+          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Adds random variation (noise) to the image's pixels.
 
@@ -230,7 +314,8 @@ def noise(files: str | list[str], factor: float, *, mean: float = 0, range: tupl
         Buffle.Display.image.error_result(files, "noise", str(e.args))
 
 
-def blur(files: str | list[str], factor: float, *, optimize: bool = False):
+def blur(files: str | list[str], factor: float, *, optimize: bool = False, mask: str | [str] | None = None,
+         ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Applies a Gaussian blur to the image.
 
@@ -267,7 +352,8 @@ def blur(files: str | list[str], factor: float, *, optimize: bool = False):
         Buffle.Display.image.error_result(files, "blur", str(e.args))
 
 
-def saturation(files: str | list[str], factor: float, *, optimize: bool = False):
+def saturation(files: str | list[str], factor: float, *, optimize: bool = False, mask: str | [str] | None = None,
+               ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Adjusts the image's saturation (color intensity).
 
@@ -309,7 +395,8 @@ def saturation(files: str | list[str], factor: float, *, optimize: bool = False)
         Buffle.Display.image.error_result(files, "saturation", str(e.args))
 
 
-def contrast(files: str | list[str], factor: float, optimize: bool = False):
+def contrast(files: str | list[str], factor: float, optimize: bool = False, mask: str | [str] | None = None,
+             ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Adjusts the image's contrast (range of brightness).
 
@@ -351,7 +438,8 @@ def contrast(files: str | list[str], factor: float, optimize: bool = False):
         Buffle.Display.image.error_result(files, "contrast", str(e.args))
 
 
-def brightness(files: str | list[str], factor: float, *, optimize: bool = False):
+def brightness(files: str | list[str], factor: float, *, optimize: bool = False, mask: str | [str] | None = None,
+               ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Adjusts the image's brightness.
 
@@ -393,7 +481,8 @@ def brightness(files: str | list[str], factor: float, *, optimize: bool = False)
         Buffle.Display.image.error_result(files, "brightness", str(e.args))
 
 
-def sharpness(files: str | list[str], factor: float, *, optimize: bool = False):
+def sharpness(files: str | list[str], factor: float, *, optimize: bool = False, mask: str | [str] | None = None,
+              ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Adjusts the image's sharpness (clarity of detail).
 
@@ -429,7 +518,8 @@ def sharpness(files: str | list[str], factor: float, *, optimize: bool = False):
         Buffle.Display.image.error_result(files, "sharpness", str(e.args))
 
 
-def resolution(files: str | list[str], factor: float, *, resampling: int = 2, optimize: bool = False):
+def resolution(files: str | list[str], factor: float, *, resampling: int = 2, optimize: bool = False,
+               ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Adjusts the image's resolution by scaling its dimensions.
 
@@ -472,7 +562,8 @@ def resolution(files: str | list[str], factor: float, *, resampling: int = 2, op
         Buffle.Display.image.error_result(files, "resolution", str(e.args))
 
 
-def quality(files: str | list[str], factor: float, *, optimize: bool = False):
+def quality(files: str | list[str], factor: float, *, optimize: bool = False, mask: str | [str] | None = None,
+            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Adjusts the image's quality and detail.
 
@@ -523,3 +614,4 @@ def quality(files: str | list[str], factor: float, *, optimize: bool = False):
                 Buffle.Display.image.error_result(file, "quality", str(e.args))
     except Exception as e:
         Buffle.Display.image.error_result(files, "quality", str(e.args))
+

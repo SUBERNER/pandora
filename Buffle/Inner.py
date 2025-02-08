@@ -5,8 +5,10 @@ import uuid
 import Buffle
 from Buffle.Filter import *
 
+
 # used to collect and randomize text inside a multiple files
-def normal(files: str | list[str], contains: str | list[str], *, chance: float = 1, duplicates: bool = False, flags: list[re.RegexFlag] = None, ignores: Ignore | list[Ignore] | None = None):
+def normal(files: str | list[str], contains: str | list[str], *, chance: float = 1, duplicates: bool = False, replaces_manual: str | list[str] | None = None, replace_auto: bool = False, flags: list[re.RegexFlag] = None,
+           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Randomizes and shuffles occurrences of specific substrings across multiple files.
 
@@ -40,6 +42,12 @@ def normal(files: str | list[str], contains: str | list[str], *, chance: float =
             contains = [contains]
         if isinstance(ignores, Ignore):
             ignores = [ignores]
+        if isinstance(excludes, Exclude):
+            excludes = [excludes]
+        if isinstance(alters, Alter):
+            alters = [alters]
+        if isinstance(replaces_manual, str):
+            replaces_manual = [replaces_manual]
 
         # combine selected flags or default to 0 (no flags)
         combined_flags = 0
@@ -53,7 +61,13 @@ def normal(files: str | list[str], contains: str | list[str], *, chance: float =
         chance_matches = []  # temporary location of all text matching the contains
         # gets data from the fills to be shuffled later
         for entry in files:
-            if ignores is None or not ignore_test(ignores, entry):
+            # checks if a file should be ignored, excluded, or altered:
+            if (ignores is None or not any(ignore(entry) for ignore in ignores)) and (excludes is None or not any(exclude(entry) for exclude in excludes)):
+                # Apply Alter before reading file
+                if alters is not None:
+                    for alter in alters:
+                        alter(entry)
+
                 with open(entry, 'r') as file:
                     text = file.read()  # stores all the data in a variable
 
@@ -67,16 +81,42 @@ def normal(files: str | list[str], contains: str | list[str], *, chance: float =
                             text = text.replace(match, placeholder, 1)  # Replace first occurrence of match with placeholder
 
                         else:  # displays file as unaltered as it was ignored do to chance
-                            Buffle.Display.inner.result(os.path.abspath(entry), "normal shuffle", os.path.basename(match), os.path.basename(match))
+                            Buffle.Display.inner.result(os.path.abspath(entry), "normal", os.path.basename(match), os.path.basename(match))
 
                 with open(entry, 'w') as file:  # saves changes to file temporarily
                     file.write(text)
 
-        # randomly shuffles data
-        if duplicates:  # options can be selected multiple times
-            random_matches = random.choices(chance_matches, k=len(chance_matches))
-        else:  # normal randomizing of data
-            random_matches = chance_matches.copy()
+            # Step 1: Remove duplicates but keep the correct list length
+            if replace_auto:
+                if replaces_manual is not None:
+                    replaces_manual = list(set(replaces_manual))  # Remove duplicates
+                else:
+                    unique_matches = list(set(chance_matches))  # Remove duplicates
+                    if len(unique_matches) < len(chance_matches):
+                        chance_matches = random.choices(unique_matches, k=len(chance_matches))  # Fill back to original size
+                    else:
+                        chance_matches = unique_matches  # If same size, no need to expand
+
+            # Step 2: Shuffle replacements if `replaces_manual` exists
+            if replaces_manual is not None:
+                random.shuffle(replaces_manual)
+
+            # Step 3: Ensure `random_matches` is always the correct size
+            if duplicates:
+                if replaces_manual is None:
+                    unique_matches = list(set(chance_matches))  # Remove duplicates
+                    random_matches = random.choices(unique_matches, k=len(chance_matches))  # Fill back up
+                    print(random_matches)
+                else:
+                    unique_replaces = list(set(replaces_manual))  # Remove duplicates
+                    random_matches = random.choices(unique_replaces, k=len(chance_matches))  # Fill to correct size
+                    print(random_matches)
+            else:
+                if replaces_manual is None:
+                    random_matches = chance_matches.copy()
+                else:
+                    random_matches = replaces_manual.copy()
+                random.shuffle(random_matches)  # Shuffle for randomness
             random.shuffle(random_matches)
 
         # changes the file data and shuffles text
@@ -92,8 +132,10 @@ def normal(files: str | list[str], contains: str | list[str], *, chance: float =
     except Exception as e:
         Buffle.Display.image.error_result(files, "normal", str(e.args))
 
+
 # used to collect and randomize text in groups inside a multiple files
-def group(files: str | list[str], contains: str | list[str], *, chance: float = 1, duplicates: bool = False, flags: list[re.RegexFlag] = None, ignores: Ignore | list[Ignore] | None = None):
+def group(files: str | list[str], contains: str | list[str], *, replaces_manual: str | list[str] | None = None, replace_auto: bool = False, chance: float = 1, duplicates: bool = False, flags: list[re.RegexFlag] = None,
+          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Groups and randomizes occurrences of specific substrings across multiple files, preserving group structure.
 
@@ -127,6 +169,10 @@ def group(files: str | list[str], contains: str | list[str], *, chance: float = 
             contains = [contains]
         if isinstance(ignores, Ignore):
             ignores = [ignores]
+        if isinstance(excludes, Exclude):
+            excludes = [excludes]
+        if isinstance(alters, Alter):
+            alters = [alters]
 
         # Combine selected flags or default to 0 (no flags)
         combined_flags = 0
@@ -141,7 +187,13 @@ def group(files: str | list[str], contains: str | list[str], *, chance: float = 
 
         # gets data and alters file to prepare for shuffling text
         for entry in files:
-            if ignores is None or not ignore_test(ignores, entry):
+            # checks if a file should be ignored or excluded:
+            if (ignores is None or not any(ignore(entry) for ignore in ignores)) and (excludes is None or not any(exclude(entry) for exclude in excludes)):
+                # Apply Alter before reading file
+                if alters is not None:
+                    for alter in alters:
+                        alter(entry)
+
                 group_matches = [[] for index in contains]  # groups text together to me shuffled together
                 valid_group = True  # checks if file should be ignored
 
@@ -190,12 +242,38 @@ def group(files: str | list[str], contains: str | list[str], *, chance: float = 
                 with open(entry, 'w') as file:
                     file.write(text)
 
-        # shuffles groups
+        # Step 1: Remove duplicates but keep the correct list length
+        if replace_auto:
+            if replaces_manual is not None:
+                replaces_manual = list(set(replaces_manual))  # Remove duplicates
+            else:
+                unique_groups = list(set(chance_groups))  # Remove duplicates
+                if len(unique_groups) < len(chance_groups):
+                    chance_groups = random.choices(unique_groups, k=len(chance_groups))  # Fill back to original size
+                else:
+                    chance_groups = unique_groups  # If same size, no need to expand
+
+        # Step 2: Shuffle replacements if `replaces_manual` exists
+        if replaces_manual is not None:
+            random.shuffle(replaces_manual)
+
+        # Step 3: Ensure `random_matches` is always the correct size
         if duplicates:
-            random_groups = random.choices(chance_groups, k=len(chance_groups))
+            if replaces_manual is None:
+                unique_groups = list(set(chance_groups))  # Remove duplicates
+                random_groups = random.choices(unique_groups, k=len(chance_groups))  # Fill back up
+                print(random_groups)
+            else:
+                unique_replaces = list(set(replaces_manual))  # Remove duplicates
+                random_groups = random.choices(unique_replaces, k=len(chance_groups))  # Fill to correct size
+                print(random_groups)
         else:
-            random_groups = chance_groups.copy()
-            random.shuffle(random_groups)
+            if replaces_manual is None:
+                random_groups = chance_groups.copy()
+            else:
+                random_groups = replaces_manual.copy()
+            random.shuffle(random_groups)  # Shuffle for randomness
+        random.shuffle(random_groups)
 
         # make alterations to files
         for entry in files:
@@ -214,7 +292,9 @@ def group(files: str | list[str], contains: str | list[str], *, chance: float = 
     except Exception as e:
         Buffle.Display.image.error_result(files, "group", str(e.args))
 
-def reverse(files: str | list[str], contains: str | list[str], *, chance: float = 1, flags: list[re.RegexFlag] = None, ignores: Ignore | list[Ignore] | None = None):
+
+def reverse(files: str | list[str], contains: str | list[str], *, chance: float = 1, flags: list[re.RegexFlag] = None,
+            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Reverses the order of matching substrings or patterns within file contents.
 
@@ -247,6 +327,10 @@ def reverse(files: str | list[str], contains: str | list[str], *, chance: float 
             contains = [contains]
         if isinstance(ignores, Ignore):
             ignores = [ignores]
+        if isinstance(excludes, Exclude):
+            excludes = [excludes]
+        if isinstance(alters, Alter):
+            alters = [alters]
 
         # Combine selected flags or default to 0 (no flags)
         combined_flags = 0
@@ -260,7 +344,13 @@ def reverse(files: str | list[str], contains: str | list[str], *, chance: float 
         chance_matches = []  # temporary location of all text matching the contains
         # gets data from the fills to be shuffled later
         for entry in files:
-            if ignores is None or not ignore_test(ignores, entry):
+            # checks if a file should be ignored, excluded, or altered:
+            if (ignores is None or not any(ignore(entry) for ignore in ignores)) and (excludes is None or not any(exclude(entry) for exclude in excludes)):
+                # Apply Alter before reading file
+                if alters is not None:
+                    for alter in alters:
+                        alter(entry)
+
                 with open(entry, 'r') as file:
                     text = file.read()  # stores all the data in a variable
 
@@ -393,7 +483,3 @@ def multiply(files: str | list[str], contains: str | list[str], factor: float | 
 
     except Exception as e:
         Buffle.Display.image.error_result(files, "multiply", str(e.args))
-
-
-
-

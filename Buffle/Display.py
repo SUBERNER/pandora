@@ -276,17 +276,50 @@ class Result:
             original_value: The value of the file or folder before the alteration.
         """
         try:
-            if self._file_format == 1:  # limited
-                limited_parts = source.split(os.sep)[-3:]
-                source = os.path.join(*limited_parts)
-            elif self._file_format == 2:  # file
-                source = source.split("\\")[-1]
+            original_source = source  # saves in case of file_format fails
+            try:
+                if self._file_format == 1:  # limited
+                    limited_parts = source.split(os.sep)[-3:]
+                    source = os.path.join(*limited_parts)
+                elif self._file_format == 2:  # file
+                    source = source.split("\\")[-1]
+            except:
+                source = original_source
 
             if original_value != updated_value:
                 print(f"{source:>{self._source_length}} <|> {self._method_color}{method}{Color.RESET} <|>   altered <|> [{Color.RED}{original_value}{Color.RESET}] --> [{Color.GREEN}{updated_value}{Color.RESET}]")
                 self._count += 1 # updated total edits
             else:
                 print(f"{source:>{self._source_length}} <|> {self._method_color}{method}{Color.RESET} <|> unaltered <|> [{Color.YELLOW}{updated_value}{Color.RESET}]")
+        except Exception as e:
+            self.error_result(f"{source:>{self._source_length}}", method, str(e.args))
+            if self._error_quit:
+                quit()  # ends running code
+
+    def text_result(self, source: str, method: str, text: str):
+        """
+        Displays text with the style of the display method.
+
+        Parameter:
+            source (str): The target file or folder's directory or location.
+
+            method (str): The name of the method or action performed.
+
+            text (str): The string displayed for information
+        """
+        try:
+            original_source = source  # saves in case of file_format fails
+            try:
+                if self._file_format == 1:  # limited
+                    limited_parts = source.split(os.sep)[-3:]
+                    source = os.path.join(*limited_parts)
+                elif self._file_format == 2:  # file
+                    source = source.split("\\")[-1]
+            except:
+                source = original_source
+
+            print(f"{source:>{self._source_length}} <|> {self._method_color}{method}{Color.RESET} <|> {text}{Color.RESET}")
+
         except Exception as e:
             self.error_result(f"{source:>{self._source_length}}", method, str(e.args))
             if self._error_quit:
@@ -304,11 +337,16 @@ class Result:
             error (str): Description of the error encountered.
         """
         try:
-            if self._file_format == 1:  # limited
-                limited_parts = source.split(os.sep)[-3:]
-                source = os.path.join(*limited_parts)
-            elif self._file_format == 2:  # file
-                source = source.split("\\")[-1]
+            original_source = source  # saves in case of file_format fails
+            try:
+                if self._file_format == 1:  # limited
+                    limited_parts = source.split(os.sep)[-3:]
+                    source = os.path.join(*limited_parts)
+                elif self._file_format == 2:  # file
+                    source = source.split("\\")[-1]
+            except:
+                source = original_source
+
             print(f"{Color.RED_BACKGROUND}{source:>{self._source_length}} <|> {method} <|>     ERROR <|> {error}{Color.RESET}")
             if self._error_quit:
                 quit()  # ends running code
@@ -330,11 +368,16 @@ class Result:
             warning (str): Description of the warning encountered.
         """
         try:
-            if self._file_format == 1:  # limited
-                limited_parts = source.split(os.sep)[-3:]
-                source = os.path.join(*limited_parts)
-            elif self._file_format == 2:  # file
-                source = source.split("\\")[-1]
+            original_source = source  # saves in case of file_format fails
+            try:
+                if self._file_format == 1:  # limited
+                    limited_parts = source.split(os.sep)[-3:]
+                    source = os.path.join(*limited_parts)
+                elif self._file_format == 2:  # file
+                    source = source.split("\\")[-1]
+            except:
+                source = original_source
+
             print(f"{Color.YELLOW_BACKGROUND}{source:>{self._source_length}} <|> {method} <|>   WARNING <|> {warning}{Color.RESET}")
 
         except Exception as e:
@@ -352,3 +395,4 @@ image = Result(1, True, Color.METHODS[1])
 methods = Result(1, True, Color.METHODS[12])
 search = Result(1, True, Color.METHODS[8])
 audio = Result(1, True, Color.METHODS[38])
+filter = Result(1, True, Color.METHODS[59])

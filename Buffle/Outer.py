@@ -2,9 +2,11 @@ from Buffle import random  # used for seeds
 import os
 import uuid
 import Buffle
+from Buffle.Filter import *
 
 
-def normal(files: str | list[str], *, chance: float = 1, duplicates: bool = False):
+def normal(files: str | list[str], *, chance: float = 1, duplicates: bool = False,
+           ignores: Ignore | list[Ignore] | None = None, swaps: Swap | list[Swap] | None = None):
     """
     Shuffles and randomizes the names of all files.
 
@@ -19,9 +21,13 @@ def normal(files: str | list[str], *, chance: float = 1, duplicates: bool = Fals
         duplicates (bool): Whether the same file can be selected multiple times during shuffling. Defaults to False.
     """
     try:
-        # makes files always a list
+        # makes files and filters always a list
         if isinstance(files, str):
             files = [files]
+        if isinstance(ignores, Ignore):
+            ignores = [ignores]
+        if isinstance(swaps, Swap):
+            swaps = [swaps]
 
         # gets size of largest path for better result formatting
         Buffle.Display.outer.set_length(max(files, key=len))
@@ -39,7 +45,7 @@ def normal(files: str | list[str], *, chance: float = 1, duplicates: bool = Fals
                 chance_files.append(file)
                 temp_files.append(temp_file)
             else:  # displays file as unaltered as it was ignored do to chance
-                Buffle.Display.outer.result(os.path.abspath(file), "normal shuffle", os.path.basename(file), os.path.basename(file))
+                Buffle.Display.outer.result(os.path.abspath(file), "normal", os.path.basename(file), os.path.basename(file))
 
         # randomly shuffles files
         if duplicates:  # options can be selected multiple times
@@ -51,12 +57,14 @@ def normal(files: str | list[str], *, chance: float = 1, duplicates: bool = Fals
         # alters files
         for temp_file, new_file, original_file in zip(temp_files, random_files, chance_files):
             os.rename(os.path.abspath(temp_file), os.path.abspath(new_file))
-            Buffle.Display.outer.result(os.path.abspath(original_file), "normal shuffle", os.path.basename(new_file), os.path.basename(original_file))
+            Buffle.Display.outer.result(os.path.abspath(original_file), "normal", os.path.basename(new_file), os.path.basename(original_file))
+
     except Exception as e:
-        Buffle.Display.image.error_result(files, "normal shuffle", str(e.args))
+        Buffle.Display.image.error_result(files, "normal", str(e.args))
 
 
-def group(files: str | list[str], contains: str | list[str], *, chance: float = 1, duplicates: bool = False):
+def group(files: str | list[str], contains: str | list[str], *, chance: float = 1, duplicates: bool = False,
+          ignores: Ignore | list[Ignore] | None = None, swaps: Swap | list[Swap] | None = None):
     """
     Shuffles and randomizes the specified substrings ('contains') within file names, grouped by similarity.
 
@@ -73,11 +81,15 @@ def group(files: str | list[str], contains: str | list[str], *, chance: float = 
         duplicates (bool): Whether the same substring can be selected multiple times during shuffling. Defaults to False.
     """
     try:
-        # makes files always a list
+        # makes files, contains, and filters always a list
         if isinstance(files, str):
             files = [files]
         if isinstance(contains, str):
             contains = [contains]
+        if isinstance(ignores, Ignore):
+            ignores = [ignores]
+        if isinstance(swaps, Swap):
+            swaps = [swaps]
 
         # gets size of largest path for better result formatting
         Buffle.Display.outer.set_length(max(files, key=len))
@@ -103,7 +115,7 @@ def group(files: str | list[str], contains: str | list[str], *, chance: float = 
             else:  # displays file as unaltered as it was ignored do to chance
                 for file in files:
                     if contain in os.path.basename(file):
-                        Buffle.Display.outer.result(os.path.abspath(file), "group shuffle", os.path.basename(file), os.path.basename(file))
+                        Buffle.Display.outer.result(os.path.abspath(file), "group", os.path.basename(file), os.path.basename(file))
 
         # randomly shuffles files
         if duplicates:  # options can be selected multiple times
@@ -120,12 +132,13 @@ def group(files: str | list[str], contains: str | list[str], *, chance: float = 
                     # Replace the index in the filename with the random target name
                     final_name = os.path.basename(file).replace(temp_names[i], target_name)
                     os.rename(os.path.abspath(file), os.path.join(os.path.dirname(file), final_name))
-                    Buffle.Display.outer.result(os.path.abspath(display_names[index]), "group shuffle", os.path.basename(final_name), os.path.basename(display_names[index]))
+                    Buffle.Display.outer.result(os.path.abspath(display_names[index]), "group", os.path.basename(final_name), os.path.basename(display_names[index]))
     except Exception as e:
-        Buffle.Display.image.error_result(files, "group shuffle", str(e.args))
+        Buffle.Display.image.error_result(files, "group", str(e.args))
 
 
-def reverse(files: str | list[str], *, chance: float = 1):
+def reverse(files: str | list[str], *, chance: float = 1,
+    ignores: Ignore | list[Ignore] | None = None, swaps: Swap | list[Swap] | None = None):
     """
     Reverses the order of file names in a directory.
 
@@ -138,34 +151,38 @@ def reverse(files: str | list[str], *, chance: float = 1):
             - 1.0: All files are reversed.
     """
     try:
-        # makes files always a list
+        # makes files and filters always a list
         if isinstance(files, str):
             files = [files]
+        if isinstance(ignores, Ignore):
+            ignores = [ignores]
+        if isinstance(swaps, Swap):
+            swaps = [swaps]
 
-        # gets size of largest path for better result formatting
-        Buffle.Display.outer.set_length(max(files, key=len))
+        # Sort files in natural order (to ensure consistent reversal)
+        files.sort()
 
-        temp_files = []  # temporary list of all uuid files
-        chance_files = []  # temporary list of all files that will be altered
-        # renames files to avoid conflict
+        # Check chance condition
+        if chance < random.random():
+            for file in files:
+                Buffle.Display.outer.result(os.path.abspath(file), "reverse", os.path.basename(file), os.path.basename(file))
+            return
+
+        # Create a temporary renaming scheme
+        temp_files = {}
         for file in files:
-            if chance >= random.random():
-                temp_name = f"{uuid.uuid4().hex}{os.path.splitext(os.path.basename(file))[1]}"  # creates unique name for file
-                temp_file = os.path.join(os.path.dirname(file), temp_name)  # creates a path for the file
-                os.rename(os.path.abspath(file), temp_file)
-                # adds to lists
-                chance_files.append(file)
-                temp_files.append(temp_file)
-            else:  # displays file as unaltered as it was ignored do to chance
-                Buffle.Display.outer.result(os.path.abspath(file), "reverse shuffle", os.path.basename(file), os.path.basename(file))
+            temp_name = f"{uuid.uuid4().hex}{os.path.splitext(file)[1]}"
+            temp_path = os.path.join(os.path.dirname(file), temp_name)
+            os.rename(file, temp_path)
+            temp_files[temp_path] = file  # Store original file mapping
 
-        # randomly shuffles files
-        reverse_files = chance_files.copy()
-        reverse_files.reverse()
-        # alters files
-        for temp_file, new_file, original_file in zip(temp_files, reverse_files, chance_files):
-            new_file = os.path.join(os.path.dirname(original_file), new_file)
+        # Reverse the file order
+        reversed_files = list(temp_files.values())[::-1]
+
+        # Rename files back in reversed order
+        for temp_file, new_file in zip(temp_files.keys(), reversed_files):
             os.rename(temp_file, new_file)
-            Buffle.Display.outer.result(os.path.abspath(original_file), "reverse shuffle", os.path.basename(new_file), os.path.basename(original_file))
+            Buffle.Display.outer.result(os.path.abspath(new_file), "reverse", os.path.basename(new_file), os.path.basename(temp_file))
+
     except Exception as e:
-        Buffle.Display.image.error_result(files, "reverse shuffle", str(e.args))
+        Buffle.Display.image.error_result(files, "reverse", str(e.args))

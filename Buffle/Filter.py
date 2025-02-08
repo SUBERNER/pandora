@@ -1,3 +1,4 @@
+import Buffle.Display
 from Buffle import random  # used for seeds
 from enum import IntEnum
 import re
@@ -25,20 +26,22 @@ class Ignore:
     def __call__(self, file: str) -> bool:
         for files in self.files:
             if file == files:
+                Buffle.Display.filter.result(os.path.abspath(file), "ignore", "ignored", "acknowledge")
                 return True
         return False
 
 
 class Input:
-    def __init__(self, files: str | list[str], test_inputs: str | list[str]):
+    def __init__(self, files: str | list[str], test_inputs: str | list[str], *, regex: bool = False):
         self.files = [files] if isinstance(files, str) else files
         self.test_inputs = [test_inputs] if isinstance(test_inputs, str) else test_inputs
+        self.regex = regex
 
-    def __call__(self, file: str, input: str, *, regex: bool = False) -> bool:
+    def __call__(self, file: str, input: str) -> bool:
         for files in self.files:
             if file == files:
                 for test_input in self.test_inputs:
-                    if (regex and re.search(test_input, input)) or (test_input in input):
+                    if (self.regex and re.search(test_input, input)) or (test_input in input):
                         return True
         return False
 
@@ -59,12 +62,13 @@ class Exclude:
         regex (bool): Whether `test_strings` should be treated as regular expressions. Defaults to False.
     """
 
-    def __init__(self, files: str | list[str], test_strings: str | list[str], test_files: str | list[str] | None = None):
+    def __init__(self, files: str | list[str], test_strings: str | list[str], test_files: str | list[str] | None = None, *, regex: bool = False):
         self.files = [files] if isinstance(files, str) else files
         self.test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
         self.test_files = [test_files] if isinstance(test_files, str) else test_files
+        self.regex = regex
 
-    def __call__(self, file: str, *, regex: bool = False) -> bool:
+    def __call__(self, file: str) -> bool:
         for target_file in self.files:
             if target_file == file:
                 search_files = self.test_files if self.test_files else [file]
@@ -72,7 +76,8 @@ class Exclude:
                     with open(search_file, 'r') as f:
                         text = f.read()
                         for test_string in self.test_strings:
-                            if (regex and re.search(test_string, text)) or (test_string in text):
+                            if (self.regex and re.search(test_string, text)) or (test_string in text):
+                                Buffle.Display.filter.result(os.path.abspath(file), "exclude", "exclude", "accept")
                                 return True
         return False
 
@@ -87,9 +92,9 @@ class Alter:
 
         test_strings (str | list[str]): Strings or patterns to search for.
 
-        test_files (str | list[str] | None): If specified, the search occurs in these files instead.
-
         replace_strings (tuple[str, str] | list[tuple[str, str]]): Pairs of (old, new) strings to replace.
+
+        test_files (str | list[str] | None): If specified, the search occurs in these files instead.
 
         replace_files (str | list[str] | None): If specified, changes are written to these files instead of `files`.
 
@@ -97,14 +102,15 @@ class Alter:
         regex (bool): Whether `test_strings` and `replace_strings` should be treated as regex patterns. Defaults to False.
     """
 
-    def __init__(self, files: str | list[str], test_strings: str | list[str], replace_strings: tuple[str, str] | list[tuple[str, str]], replace_files: str | list[str] | None = None, test_files: str | list[str] | None = None):
+    def __init__(self, files: str | list[str], test_strings: str | list[str], replace_strings: tuple[str, str] | list[tuple[str, str]], test_files: str | list[str] | None = None, replace_files: str | list[str] | None = None, *, regex: bool = False):
         self.files = [files] if isinstance(files, str) else files
         self.test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
         self.test_files = [test_files] if isinstance(test_files, str) else test_files
         self.replace_strings = [replace_strings] if isinstance(replace_strings, tuple) else replace_strings
         self.replace_files = [replace_files] if isinstance(replace_files, str) else replace_files
+        self.regex = regex
 
-    def __call__(self, file: str, *, regex: bool = False):
+    def __call__(self, file: str):
         replace = False
         for target_file in self.files:
             if target_file == file:
@@ -113,7 +119,7 @@ class Alter:
                     with open(search_file, 'r') as f:
                         text = f.read()
                         for test_string in self.test_strings:
-                            if (regex and re.search(test_string, text)) or (test_string in text):
+                            if (self.regex and re.search(test_string, text)) or (test_string in text):
                                 replace = True
 
         if replace:
@@ -121,7 +127,8 @@ class Alter:
             for write_file in write_files:
                 with open(write_file, 'w') as f:
                     for old, new in self.replace_strings:
-                        text = re.sub(old, new, text) if regex else text.replace(old, new)
+                        text = re.sub(old, new, text) if self.regex else text.replace(old, new)
+                        Buffle.Display.filter.result(os.path.abspath(file), "alter", new, old)
                     f.write(text)
 
 
@@ -138,9 +145,10 @@ class Swap:
         self.files = [files] if isinstance(files, tuple) else files
 
     def __call__(self):
-        for file in self.files:
+        for index, file in enumerate(self.files):
             os.rename(file[0], file[1])
-            file[0], file[1] = file[1], file[0]  # swaps them to and swaps back to normal once its recalled
+            Buffle.Display.filter.result(os.path.abspath(file[0]), "swap", os.path.abspath(file[1]), os.path.abspath(file[0]))
+            self.files[index] = (file[1], file[0])  # swaps them to and swaps back to normal once its recalled
 
 
 class Logic(IntEnum):

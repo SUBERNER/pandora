@@ -1,0 +1,31 @@
+ 
+{
+    "format_version": 2,
+    "header": {
+      "description": "With Minecraft Randomizer, blocks give you random results when they are broken!",
+      "name": "Minecraft Randomizer",
+      "uuid":"0a1bbb37-6a58-437e-b005-ac7fb4dcd9a0",
+      "version": [1, 0, 0],
+      "min_engine_version": [1, 20, 30]
+    },
+    "modules":
+      [
+        {
+          "description": "script",
+            "type": "script",
+            "uuid": "54049ed7-22f6-450a-9ad3-aa2e80e69c68",
+            "version": [1, 0, 0],
+            "entry": "scripts/index.js"
+        }
+      ],
+    "dependencies": [
+      {
+        "module_name": "@minecraft/server",
+        "version": "1.14.0"
+      },
+      {
+      "module_name": "@minecraft/server-ui",
+      "version": "1.3.0"
+      }
+   ]
+  }

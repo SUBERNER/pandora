@@ -5,7 +5,7 @@
         "name": "Vanilla Behavior Pack",
         "uuid": "ee649bcf-256c-4013-9068-6a802b89d756",
         "version": [ 0, 0, 1 ],
-        "min_engine_version": [ 1, 21, 50 ]
+        "min_engine_version": [ 1, 21, 30 ]
     },
     "modules": [
         {
@@ -13,12 +13,27 @@
             "type": "data",
             "uuid": "fa6e90c8-c925-460f-8155-c8a60b753caa",
             "version": [0, 0, 1]
+        },
+        {
+            "description": "script",
+              "type": "script",
+              "uuid": "54049ed7-22f6-450a-9ad3-aa2e80e69c68",
+              "version": [1, 0, 0],
+              "entry": "scripts/index.js"
         }
     ],
     "dependencies": [
         {
             "uuid": "66c6e9a8-3093-462a-9c36-dbb052165822",
             "version": [0, 0, 1]
+        },
+        {
+            "module_name": "@minecraft/server",
+            "version": [1, 14, 0]
+        },
+        {
+          "module_name": "@minecraft/server-ui",
+          "version": [1, 3, 0]
         }
     ]
 }
