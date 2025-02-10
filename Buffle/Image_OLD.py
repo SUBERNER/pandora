@@ -22,9 +22,9 @@ def layer(files: str | list[str], layers: str | list[str], *, optimize: bool = F
         for file in files:
             try:
                 image = Image.open(file)
-                for layer in layers:  # goes through and adds layers in the order provided in the layer list
-                    layer = Image.open(layer)
-                    new_image = image.paste(layer, (image.width, 0))
+                for lay in layers:  # goes through and adds layers in the order provided in the layer list
+                    lay = Image.open(lay)
+                    new_image = image.paste(lay, (image.width, 0))
 
                     new_image.save(file, optimize=optimize)
 
@@ -83,10 +83,10 @@ def crop(files: str | list[str], dimensions: tuple[int, int, int, int], *, optim
     except Exception as e:
         Buffle.Display.image.error_result(files, "crop", str(e.args))
 
-
+"""
 def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcolor: tuple[int, int, int] | None = None, resampling: int = 2, optimize: bool = False, mask: str | [str] | None = None,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
-    """
+    """"""
     Rotates the image clockwise or counterclockwise.
 
     Parameter:
@@ -111,7 +111,7 @@ def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcol
             - 5: HAMMING
 
         optimize (bool): If True, optimizes the image file during saving, reducing file size without compromising quality. Defaults to False.
-    """
+    """"""
     try:
         # makes files always a list
         if isinstance(files, str):
@@ -132,7 +132,7 @@ def rotate(files: str | list[str], degree: int, *, expand: bool = False, fillcol
                 Buffle.Display.image.error_result(file, "rotate", str(e.args))
     except Exception as e:
         Buffle.Display.image.error_result(files, "rotate", str(e.args))
-
+"""
 
 def flip(files: str | list[str], horizontal: bool, vertical: bool, *, optimize: bool = False,
          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):

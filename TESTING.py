@@ -22,6 +22,8 @@ Buffle.seed(3347899999999)
 Buffle.copy(unchanged_base, changed_base)
 changed_base = Buffle.redo_name(changed_base, "RANDOMIZER")
 boss_ignore = Buffle.Filter.Ignore([changed_base + "\\behavior_pack\\entities\\OTHERS\\ender_dragon.json", changed_base + "\\behavior_pack\\entities\\OTHERS\\elder_guardian.json", changed_base + "\\behavior_pack\\entities\\OTHERS\\wither.json"])
+
+
 # entities
 entities_list = []
 entities_path = changed_base + "\\behavior_pack\\entities"
@@ -498,7 +500,8 @@ entities_path = changed_base + "\\resource_pack\\textures\\entities"
 # environment
 environment_path = changed_base + "\\resource_pack\\textures\\environment"
 environment_list = Buffle.Search.full(environment_path + "\\DESTROY")
-Buffle.Outer.reverse(environment_list, chance=0.5)
+if random.random() >= 0.5:
+    Buffle.Outer.reverse(environment_list)
 environment_list = Buffle.Search.full(environment_path + "\\DESTROY")
 for file in environment_list:
     Buffle.move(file, os.path.dirname(os.path.dirname(file)))
@@ -509,7 +512,34 @@ Buffle.Image.saturation(environment_path + "\\end_portal_colors.png", random.uni
 
 # UI
 ui_path = changed_base + "\\resource_pack\\textures\\ui"
-environment_list = Buffle.Search.full(ui_path)
+ui_list = Buffle.Search.full(ui_path + "\\SLOT")
+if random.random() >= 0.5:
+    Buffle.Outer.reverse(ui_list)
+    Buffle.Image.flip(ui_list, False, True)
+ui_list = Buffle.Search.full(ui_path + "\\SLOT")
+for file in ui_list:
+    Buffle.move(file, os.path.dirname(os.path.dirname(file)))
+
+ui_list = Buffle.Search.full(ui_path + "\\BUBBLE")
+if random.random() >= 0.5:
+    Buffle.Outer.reverse(ui_list)
+ui_list = Buffle.Search.full(ui_path + "\\BUBBLE")
+for file in ui_list:
+    Buffle.move(file, os.path.dirname(os.path.dirname(file)))
+
+ui_list = Buffle.Search.full(ui_path + "\\ARMOR")
+if random.random() >= 0.5:
+    Buffle.Outer.reverse(ui_list)
+    Buffle.Image.flip(ui_path + "\\armor_half.png", True, False)
+ui_list = Buffle.Search.full(ui_path + "\\ARMOR")
+for file in ui_list:
+    Buffle.move(file, os.path.dirname(os.path.dirname(file)))
+
+ui_list = Buffle.Search.full(ui_path + "\\HEART")
+Buffle.Outer.group(ui_list, ["absorption", "freeze", "poison", "wither"])  # UPDATE MORE LATER
+ui_list = Buffle.Search.full(ui_path + "\\HEART")
+for file in ui_list:
+    Buffle.move(file, os.path.dirname(os.path.dirname(file)))
 
 
 # other

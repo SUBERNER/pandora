@@ -1,4 +1,4 @@
-# common imports used by others
+# all imports used by other methods of the code
 import random
 import os
 import shutil
