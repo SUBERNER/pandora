@@ -37,6 +37,7 @@ class Color:
 class Result:
     _display_results = True  # Displaying input, process, and output information from a method
     _display_warning = False  # Displaying warning information from a method
+    _flatten_value = False  # Removed new lines from displaying with original and updated values
     _source_compression = True  # Shortens the method's source to the last 3 directories
     _source_length = 0  # Minimum amount of space given to the source section of a result for readability
     _method_color = None  # Colors used for easier method groups identification
@@ -46,7 +47,8 @@ class Result:
     _stats = tuple[0, 0, 0, 0]  # data for the result output for a method group [altered, unaltered, warnings, errors]
 
     def __init__(self, *, method_color: str = Color.GROUPS[12], display_results: bool = True, display_warning: bool = False,
-                 source_compression: bool = True, raw_error: bool = False, quit_error: bool = True, quit_warning: bool = False):
+                 source_compression: bool = True, raw_error: bool = False, quit_error: bool = True, quit_warning: bool = False,
+                 flatten_value: bool = True):
         try:
             self._display_results = display_results
             self._method_color = method_color
@@ -55,14 +57,21 @@ class Result:
             self._raw_error = raw_error
             self._quit_error = quit_error
             self._quit_warning = quit_warning
+            self._flatten_value = flatten_value
         except Exception as e:
             self.error_result(f"None", "display", str(e if self._raw_error else e.args))
 
-    def result(self, source: str, method: str, updated_value, original_value):
+    def result(self, source: str, method: str, original_value, updated_value):
         try:
             if self._source_compression:
                 limited_parts = source.split(os.sep)[-3:]
                 source = os.path.join(*limited_parts)
+
+            if self._flatten_value:
+                if isinstance(original_value, str):
+                    original_value.replace("\n", "")
+                if isinstance(updated_value, str):
+                    updated_value.replace("\n", "")
 
             if original_value != updated_value:  # value changed
                 print(f"{source:>{self._source_length}} <|> {self._method_color}{method}{Color.RESET} <|>   altered <|> [{Color.RED}{original_value}{Color.RESET}] -> [{Color.GREEN}{updated_value}{Color.RESET}]")
@@ -79,6 +88,9 @@ class Result:
                 limited_parts = source.split(os.sep)[-3:]
                 source = os.path.join(*limited_parts)
 
+            if self._flatten_value and isinstance(error, str):
+                error.replace("\n", "")
+
             print(f"{Color.ERROR}{source:>{self._source_length}} <|> {method} <|>     ERROR <|> {error}{Color.RESET}")
             if self._quit_error:
                 quit()  # ends running code
@@ -94,6 +106,9 @@ class Result:
                 if self._source_compression:
                     limited_parts = source.split(os.sep)[-3:]
                     source = os.path.join(*limited_parts)
+
+                if self._flatten_value and isinstance(warning, str):
+                    warning.replace("\n", "")
 
                 print(f"{Color.WARNING}{source:>{self._source_length}} <|> {method} <|>   WARNING <|> {warning}{Color.RESET}")
                 if self._quit_warning:

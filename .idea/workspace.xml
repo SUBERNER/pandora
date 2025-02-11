@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Massma/Display.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Massma/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Buffle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Buffle.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Massma/Display.py" beforeDir="false" afterPath="$PROJECT_DIR$/Massma/Display.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NEW_TEST.py" beforeDir="false" afterPath="$PROJECT_DIR$/NEW_TEST.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -82,6 +81,7 @@
   <component name="RunManager">
     <configuration name="TESTING" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Buffle" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
