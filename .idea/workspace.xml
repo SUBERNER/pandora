@@ -8,6 +8,12 @@
       <change beforePath="$PROJECT_DIR$/.idea/Buffle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Buffle.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Audio.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Audio.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Image_OLD.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Image_OLD.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Inner/Inner.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Inner/Inner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Outer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Search.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Massma/Display.py" beforeDir="false" afterPath="$PROJECT_DIR$/Massma/Display.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NEW_TEST.py" beforeDir="false" afterPath="$PROJECT_DIR$/NEW_TEST.py" afterDir="false" />
     </list>
@@ -45,27 +51,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.File.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Methods.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Result.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Search.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Settings.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Shuffle.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Single.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TESTING.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Texture.executor&quot;: &quot;Run&quot;,
-    &quot;Python.__init__.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fdff.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/tompk/Documents/GitHub/Buffle/Buffle&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Console&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.File.executor": "Run",
+    "Python.Methods.executor": "Run",
+    "Python.Result.executor": "Run",
+    "Python.Search.executor": "Run",
+    "Python.Settings.executor": "Run",
+    "Python.Shuffle.executor": "Run",
+    "Python.Single.executor": "Run",
+    "Python.TESTING.executor": "Run",
+    "Python.Texture.executor": "Run",
+    "Python.__init__.executor": "Run",
+    "Python.fdff.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/tompk/Documents/GitHub/Buffle/Buffle",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\tompk\Documents\GitHub\Buffle\Buffle" />
@@ -81,7 +87,6 @@
   <component name="RunManager">
     <configuration name="TESTING" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Buffle" />
-      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
