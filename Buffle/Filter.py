@@ -147,14 +147,5 @@ class Swap:
     def __call__(self):
         for index, file in enumerate(self.files):
             os.rename(file[0], file[1])
-            Buffle.Display.filter.result(os.path.abspath(file[0]), "swap", os.path.abspath(file[1]), os.path.abspath(file[0]))
+            Buffle.Display.filter.result(os.path.abspath(file[0]), "swap", os.path.abspath(file[0]), os.path.abspath(file[1]))
             self.files[index] = (file[1], file[0])  # swaps them to and swaps back to normal once its recalled
-
-
-class Logic(IntEnum):
-    AND = 0
-    NAND = 1
-    OR = 2
-    NOR = 3
-    XOR = 4
-    XNOR = 5

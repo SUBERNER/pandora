@@ -5,16 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Buffle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Buffle.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Massma/Filter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Massma/Search.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Audio.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Audio.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Image_OLD.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Image_OLD.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Inner/Inner.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Inner/Inner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Methods.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Outer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Outer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Buffle/Search.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Search.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Buffle/Filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/Buffle/Filter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Massma/Display.py" beforeDir="false" afterPath="$PROJECT_DIR$/Massma/Display.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Massma/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Massma/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NEW_TEST.py" beforeDir="false" afterPath="$PROJECT_DIR$/NEW_TEST.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

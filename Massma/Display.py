@@ -20,7 +20,7 @@ class Color:
         "\033[92m",  # [2] light green
         "\033[32m",  # [3] green
         "\033[93m",  # [4] light yellow
-        "\033[33m",  # [5] dark yellow
+        "\033[33m",  # [5] yellow
         "\033[94m",  # [6] light blue
         "\033[34m",  # [7] blue
         "\033[95m",  # [8] light purple
@@ -34,7 +34,7 @@ class Color:
     )
 
 
-class _Stats:
+class Stats:
     altered = 0  # total alters made by a method
     unaltered = 0  # total unalters made by a method
     warnings = 0  # total warnings triggered by a method
@@ -56,7 +56,7 @@ class Result:
     _source_compression = False  # Shortens the method's source to the last 3 directories
     _source_length = 0  # Minimum amount of space given to the source section of a result for readability
     _method_color = Color.GROUPS[12]  # Colors used for easier method groups identification, white by default
-    _stats = _Stats  # tracks the running total of changed and triggered activated
+    _stats = Stats  # tracks the running total of changed and triggered activated
 
     def __init__(self, *, method_color: str = Color.GROUPS[12], display_alter: bool = True, display_warning: bool = True,
                  display_notify: bool = True, source_compression: bool = False, raw_error: bool = False, quit_error: bool = True,
@@ -440,3 +440,12 @@ class Result:
 
         except Exception as e:
             self.result_error(f"{source:>{self._source_length}}", method, e)
+
+# PLACE RESULT INSTANCES HERE FOR ORGANIZED ACCESS
+outer = Result(method_color=Color.GROUPS[10])
+inner = Result(method_color=Color.GROUPS[6])
+image = Result(method_color=Color.GROUPS[4])
+methods = Result(method_color=Color.GROUPS[12])
+search = Result(method_color=Color.GROUPS[0])
+audio = Result(method_color=Color.GROUPS[2])
+filter = Result(method_color=Color.GROUPS[8])

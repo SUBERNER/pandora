@@ -20,6 +20,10 @@ try:
     result_test.result_notify("CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd(), "NOTI", "have a good day")
     print("YES DONE")
 
+    Massma.Display.filter.set_source_compression(True)
+    ignoring = Massma.Filter.Ignore("CHANGED\\bedrock-samples-1.21.50.7\\CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd())
+    ignoring("CHANGED\\bedrock-samples-1.21.50.7\\CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd())
+
 except Exception as e:
     result_test.result_error(f"None", "display", e)
     print("NO DONE")
