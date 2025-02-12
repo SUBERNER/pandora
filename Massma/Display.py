@@ -382,7 +382,7 @@ class Result:
             self._stats.errors += 1  # tracking total "errors" made
 
         except Exception as e:
-            print(f"{Color.ERROR}{os.getcwd():>{self._source_length}} <|> display <|>     ERROR <|> {error if self._raw_error else error.args}{Color.RESET}")
+            print(f"{Color.ERROR}{os.getcwd():>{self._source_length}} <|> display <|>     ERROR <|> {e if self._raw_error else e.args}{Color.RESET}")
             if self._quit_error:
                 quit()  # ends running code
 
@@ -440,6 +440,7 @@ class Result:
 
         except Exception as e:
             self.result_error(f"{source:>{self._source_length}}", method, e)
+
 
 # PLACE RESULT INSTANCES HERE FOR ORGANIZED ACCESS
 outer = Result(method_color=Color.GROUPS[10])
