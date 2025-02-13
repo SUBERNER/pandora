@@ -3,13 +3,14 @@ import re
 import os
 from enum import IntEnum
 
+
 class Logic(IntEnum):
-    AND = 0
-    NAND = 1
-    OR = 2
-    NOR = 3
-    XOR = 4
-    XNOR = 5
+    AND = 0  # all patterns must match
+    NAND = 1  # opposite of AND
+    OR = 2  # at least one must match
+    NOR = 3  # opposite of OR
+    XOR = 4  # exactly one match
+    XNOR = 5  # opposite of XOR
 
 
 class Ignore:
@@ -36,8 +37,8 @@ class Exclude:
         self.files = [files] if isinstance(files, str) else files
         self.test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
         self.test_files = [test_files] if isinstance(test_files, str) else test_files
-        self.logic_strings = [logic_strings] if isinstance(logic_strings, str) else logic_strings
-        self.logic_files = [logic_files] if isinstance(logic_files, str) else logic_files
+        self.logic_strings = logic_strings
+        self.logic_files = logic_files
 
     def __call__(self, file: str) -> bool:
         try:
@@ -103,13 +104,14 @@ class Alter:
         self.test_files = [test_files] if isinstance(test_files, str) else test_files
         self.replace_strings = [replace_strings] if isinstance(replace_strings, tuple) else replace_strings
         self.replace_files = [replace_files] if isinstance(replace_files, str) else replace_files
-        self.logic_strings = [logic_strings] if isinstance(logic_strings, str) else logic_strings
-        self.logic_files = [logic_files] if isinstance(logic_files, str) else logic_files
+        self.logic_strings = logic_strings
+        self.logic_files = logic_files
 
-    def __call__(self, file: str) -> bool:
+    def __call__(self, file: str):
         try:
             texts = []  # stores all text found to be logic tested later
             matches_text = []  # stores all matches found in text to be logic tested later
+            replaces_text = []  # stores all the texts that will be replaced
             for files in self.files:
                 if file == files:
                     if self.test_files is not None:
@@ -153,20 +155,37 @@ class Alter:
                     else:
                         result = False  # default case
 
+                    # replacing data in files
                     if result:
-                        Massma.Display.filter.result(os.path.abspath(file), "alter", file, ''.join(char + '\u0336' for char in file))
-                    return result
-            return False
+                        if self.replace_files is not None:
+                            for replace_file in self.replace_files:
+                                with open(replace_file, "r") as f:
+                                    text = f.read()
+                                with open(replace_file, "w") as f:
+                                    for old, new in self.replace_strings:
+                                        text = re.sub(old, new, text)
+                                        Massma.Display.filter.result(os.path.abspath(replace_file), "alter", old, new)  # DISPLAYS CHANGED IT DOSE NOT ALWAYS MAKE
+                                    f.write(text)
+
+                        else:
+                            with open(file, "r") as f:
+                                text = f.read()
+
+                            with open(file, "w") as f:
+                                for old, new in self.replace_strings:
+                                    text = re.sub(old, new, text)
+                                    Massma.Display.filter.result(os.path.abspath(file), "alter", old, new)  # DISPLAYS CHANGED IT DOSE NOT ALWAYS MAKE
+                                f.write(text)
+
         except Exception as e:
             Massma.Display.filter.result_error(os.path.abspath(file), "alter", e)
-            return False
 
 
 class Input:
-    def __init__(self, files: str | list[str], test_inputs: str | list[str], *, logic_inputs: Logic | list[Logic] = Logic.AND):
+    def __init__(self, files: str | list[str], test_inputs: str | list[str], *, logic_inputs: Logic = Logic.AND):
         self.files = [files] if isinstance(files, str) else files
         self.test_inputs = [test_inputs] if isinstance(test_inputs, str) else test_inputs
-        self.logic_inputs = [logic_inputs] if isinstance(logic_inputs, Logic) else logic_inputs
+        self.logic_inputs = logic_inputs
 
     def __call__(self, file: str, input: str) -> bool:
         try:
@@ -208,7 +227,7 @@ class Swap:
         try:
             for index, file in enumerate(self.files):
                 os.rename(file[0], file[1])
-                Massma.Display.filter.result(os.path.abspath(file[0]), "swap", os.path.abspath(file[1]), os.path.abspath(file[0]))
+                Massma.Display.filter.result(os.path.abspath(file[0]), "swap", os.path.abspath(file[0]), os.path.abspath(file[1]))
                 self.files[index] = (file[1], file[0])  # swaps them to and swaps back to normal once its recalled
         except Exception as e:
             Massma.Display.filter.result_error(os.path.abspath(file[0]), "swap", e)

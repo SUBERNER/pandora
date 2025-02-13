@@ -1,5 +1,6 @@
 import Massma
 import os
+import re
 
 result_test = Massma.Display.Result()
 try:
@@ -20,9 +21,34 @@ try:
     result_test.result_notify("CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd(), "NOTI", "have a good day")
     print("YES DONE")
 
+    Massma.Display.filter.set_source_length(25)
     Massma.Display.filter.set_source_compression(True)
-    ignoring = Massma.Filter.Ignore("CHANGED\\bedrock-samples-1.21.50.7\\CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd())
+    Massma.Display.filter.set_raw_error(True)
+    swapping = Massma.Filter.Swap([(os.getcwd() + "\\ONE.txt", os.getcwd() + "\\THREE.txt"), (os.getcwd() + "\\TWO.txt", os.getcwd() + "\\FOUR.txt")])
+    swapping()
+    ignoring = Massma.Filter.Ignore(["CHANGED\\bedrock-samples-1.21.50.7\\CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd(), "bedrock-samples-1.21.50.7\\CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd()])
     ignoring("CHANGED\\bedrock-samples-1.21.50.7\\CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd())
+    ignoring("bedrock-samples-1.21.50.7\\CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd())
+    swapping()
+
+    print("EXCLUDING")
+
+    exclude = Massma.Filter.Exclude(os.getcwd() + "\\ONE.txt", ["TWO", "SIX"], test_files=[os.getcwd() + "\\TWO.txt", os.getcwd() + "\\SIX.txt"],
+                                    logic_files=Massma.Logic.OR, logic_strings=Massma.Logic.OR)
+    exclude(os.getcwd() + "\\ONE.txt")
+
+    print("INPUT")
+
+    inputting = Massma.Filter.Input(os.getcwd() + "\\ONE.txt", ["111", "222", "333", "111"], logic_inputs=Massma.Logic.XNOR)
+    inputting(os.getcwd() + "\\ONE.txt", "111")
+
+    print("ALTER")
+    alter_path = os.getcwd() + "\\OTHERS - Copy"
+    altering = Massma.Filter.Alter([alter_path + "\\camel.json", alter_path + "\\goat.json", alter_path + "\\sheep.json"]
+                                   , [r'"is_spawnable": true', r'"is_summonable": false'], [(r'"entity_type": "minecraft:skeleton"', r'"entity_type": "minecraft:booba"'), (r'"weight": 80', r'"weight": 999')], logic_files=Massma.Logic.OR, logic_strings=Massma.Logic.OR,
+                                   replace_files=alter_path + "\\spider.json")
+    altering(alter_path + "\\goat.json")
+
 
 except Exception as e:
     result_test.result_error(f"None", "display", e)
