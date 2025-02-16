@@ -11,7 +11,7 @@
     "component_groups": {
       "minecraft:spider_jockey": {
         "minecraft:addrider": {
-          "entity_type": "minecraft:skeleton"
+          "entity_type": "minecraft:booba"
         },
         "minecraft:rideable": {
           "seat_count": 1,
@@ -254,7 +254,7 @@
             "weight": 1,
             "randomize": [
               {
-                "weight": 80,
+                "weight": 999,
                 "filters": {
                   "all_of": [
                     { "test": "is_daytime", "value": false },
@@ -271,7 +271,7 @@
                 }
               },
               {
-                "weight": 80,
+                "weight": 999,
                 "filters": {
                   "test": "is_biome",
                   "value": "the_nether"

@@ -49,7 +49,6 @@ class Result:
     _display_alter = True  # Displaying alter and unalter information from a method
     _display_warning = True  # Displaying warning information from a method
     _display_notify = True  # Displaying notification information from a method
-    _raw_error = False  # Displays errors in a non-formatted style
     _quit_error = True  # Stops script program while running is an error result appears
     _quit_warning = False  # Stops script program while running is a warning result appears
     _flatten_output = True  # Removed new lines from displaying with outputs
@@ -59,7 +58,7 @@ class Result:
     _stats = Stats  # tracks the running total of changed and triggered activated
 
     def __init__(self, *, method_color: str = Color.GROUPS[12], display_alter: bool = True, display_warning: bool = True,
-                 display_notify: bool = True, source_compression: bool = False, raw_error: bool = False, quit_error: bool = True,
+                 display_notify: bool = True, source_compression: bool = False, quit_error: bool = True,
                  quit_warning: bool = False, flatten_output: bool = True, source_length: int = 0):
         """
         Initializes the result handler with configurable display options.
@@ -75,8 +74,6 @@ class Result:
 
             source_compression (bool): Whether to shorten source paths to the last 3 directories. Defaults to False.
 
-            raw_error (bool): Whether to display raw error messages. Defaults to False.
-
             quit_error (bool): Whether to terminate script on error. Defaults to True.
 
             quit_warning (bool): Whether to terminate script on warning. Defaults to False.
@@ -91,13 +88,12 @@ class Result:
             self._display_warning = display_warning
             self._display_notify = display_notify
             self._source_compression = source_compression
-            self._raw_error = raw_error
             self._quit_error = quit_error
             self._quit_warning = quit_warning
             self._flatten_output = flatten_output
             self._source_length = source_length
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_display_alter(self, display_alter: bool = None) -> bool:
         """
@@ -115,7 +111,7 @@ class Result:
                 self._display_alter = display_alter
             return self._display_alter
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_display_warning(self, display_warning: bool = None) -> bool:
         """
@@ -133,7 +129,7 @@ class Result:
                 self._display_warning = display_warning
             return self._display_warning
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_display_notify(self, display_notify: bool = None) -> bool:
         """
@@ -151,7 +147,7 @@ class Result:
                 self._display_notify = display_notify
             return self._display_notify
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_flatten_output(self, flatten_output: bool = None) -> bool:
         """
@@ -169,7 +165,7 @@ class Result:
                 self._flatten_output = flatten_output
             return self._flatten_output
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_source_compression(self, source_compression: bool = None) -> bool:
         """
@@ -187,25 +183,7 @@ class Result:
                 self._source_compression = source_compression
             return self._source_compression
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
-
-    def set_raw_error(self, raw_error: bool = None) -> bool:
-        """
-        Enables or disables raw error output formatting.
-
-        Parameters:
-            raw_error (bool | None): If provided, updates the setting. Otherwise, returns the current value.
-
-        Return:
-            bool: Current setting for raw error formatting.
-        """
-        try:
-            # only changes data if not None, use None to only see data
-            if raw_error is not None:
-                self._raw_error = raw_error
-            return self._raw_error
-        except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_quit_error(self, quit_error: bool = None) -> bool:
         """
@@ -223,7 +201,7 @@ class Result:
                 self._quit_error = quit_error
             return self._quit_error
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_quit_warning(self, quit_warning: bool = None) -> bool:
         """
@@ -241,7 +219,7 @@ class Result:
                 self._quit_warning = quit_warning
             return self._quit_warning
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_source_length(self, source_length: int | str = None) -> int:
         """
@@ -267,7 +245,7 @@ class Result:
                     self._source_length = len(source_length)
             return self._source_length
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_method_color(self, method_color: str = None) -> str:
         """
@@ -284,7 +262,7 @@ class Result:
                 self._method_color = method_color
             return self._method_color
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def set_stats(self, alters: int = None, unalters: int = None, warnings: int = None, errors: int = None, notifications: int = None) -> [int, int, int, int, int]:
         """
@@ -318,7 +296,7 @@ class Result:
                 self._stats.notifications = notifications
             return [self._stats.altered, self._stats.unaltered, self._stats.warnings, self._stats.errors, self._stats.notifications]
         except Exception as e:
-            self.result_error(os.getcwd(), "display", e)
+            self.result_error(os.getcwd(), "display", str(e))
 
     def result(self, source: str, method: str, original_value, updated_value):
         """
@@ -355,9 +333,9 @@ class Result:
                 self._stats.unaltered += 1  # tracking total "unaltered" made
 
         except Exception as e:
-            self.result_error(f"{source:>{self._source_length}}", method, e)
+            self.result_error(f"{source:>{self._source_length}}", method, str(e))
 
-    def result_error(self, source: str, method: str, error: Exception):
+    def result_error(self, source: str, method: str, error: str):
         """
         Displays and handles error messages.
 
@@ -366,7 +344,7 @@ class Result:
 
             method (str): Name of the method that caused the error.
 
-            error (Exception): Exception message.
+            error (str): Error message.
         """
         try:
             if self._source_compression:
@@ -375,14 +353,14 @@ class Result:
 
             # add flattening to error in the future
 
-            print(f"{Color.ERROR}{source:>{self._source_length}} <|> {method} <|>     ERROR <|> {error if self._raw_error else error.args}{Color.RESET}")
+            print(f"{Color.ERROR}{source:>{self._source_length}} <|> {method} <|>     ERROR <|> {error}{Color.RESET}")
             if self._quit_error:
                 self._stats.errors += 1  # tracking total "errors" made
                 quit()  # ends running code
             self._stats.errors += 1  # tracking total "errors" made
 
         except Exception as e:
-            print(f"{Color.ERROR}{os.getcwd():>{self._source_length}} <|> display <|>     ERROR <|> {e if self._raw_error else e.args}{Color.RESET}")
+            print(f"{Color.ERROR}{os.getcwd():>{self._source_length}} <|> error <|>     ERROR <|> {e}{Color.RESET}")
             if self._quit_error:
                 quit()  # ends running code
 
@@ -413,7 +391,7 @@ class Result:
             self._stats.warnings += 1  # tracking total "warnings" made
 
         except Exception as e:
-            self.result_error(f"{source:>{self._source_length}}", method, e)
+            self.result_error(f"{source:>{self._source_length}}", method, str(e))
 
     def result_notify(self, source: str, method: str, notification: str):
         """
@@ -439,7 +417,7 @@ class Result:
             self._stats.notifications += 1  # tracking total "notifications" made
 
         except Exception as e:
-            self.result_error(f"{source:>{self._source_length}}", method, e)
+            self.result_error(f"{source:>{self._source_length}}", method, str(e))
 
 
 # PLACE RESULT INSTANCES HERE FOR ORGANIZED ACCESS
