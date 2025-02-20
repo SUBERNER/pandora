@@ -21,8 +21,11 @@ def full(source: str, *, deep_search: bool = False, inverse_search: bool = False
                     files.extend([f.path for f in os.scandir(folder) if f.is_file()])  # gets all files inside source directory
 
         for file in files:   # test chances to see if files will stay in list
-            if chance_files <= random.random():
-                files.remove(file)
+            # checks if a file should be ignored or excluded
+            if (ignores is None or not any(ignore(file) for ignore in ignores)) and (excludes is None or not any(exclude(file) for exclude in excludes)):
+                if chance_files <= random.random():
+                    if alters is None or not any(alters(file)):
+                        files.remove(file)
 
         Massma.Display.search.result(source, "full", 0, len(files))
         return files  # returns all files in a list
