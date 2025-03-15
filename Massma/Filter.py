@@ -62,7 +62,6 @@ class Exclude:
 
            test_strings (str | list[str]): Strings or regex patterns to look for within the files.
 
-       Keyword Parameters:
            test_files (str | list[str] | None): Alternative files to check instead of the primary files.
 
            logic_strings (Logic): Logical operation applied between test strings. Defaults to AND.
@@ -168,7 +167,6 @@ class Alter:
 
             replace_strings (tuple[str, str] | list[tuple[str, str]]): List of tuples containing old and new substrings for replacement.
 
-        Keyword Parameters:
             test_files (str | list[str] | None): List of alternative files to check for the test strings.
 
             replace_files (str | list[str] | None): List of files where the replacements should be made.
@@ -287,9 +285,9 @@ class Input:
 
         Parameters:
             files (str | list[str]): The file(s) where validation applies.
+
             test_inputs (str | list[str]): Patterns against which the input is tested.
 
-        Keyword Parameters:
             logic_inputs (Logic): Logical condition for pattern matching (AND, OR, XOR, etc.). Defaults to Logic.AND.
 
             flags (list[re.RegexFlag]): List of `re` module flags to apply during regex matching.

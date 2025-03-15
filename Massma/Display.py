@@ -64,7 +64,7 @@ class Result:
         """
         Initializes the result handler with configurable display options.
 
-        Keyword Parameter:
+        Parameters:
             method_color (str): Color for method name display. Defaults to white.
 
             display_alter (bool): Whether to display altered/unaltered results. Defaults to True.

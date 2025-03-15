@@ -21,6 +21,7 @@ result_test.result_warning("CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd(),
 result_test.result_notify("CHANGED\\bedrock-samples-1.21.50.7\\" + os.getcwd(), "NOTIFY", "have a good day")
 print("YES DONE")
 
+"""
 Massma.Display.filter.set_source_length(25)
 Massma.Display.filter.set_source_compression(True)
 swapping = Massma.Filter.Swap([(os.getcwd() + "\\ONE.txt", os.getcwd() + "\\THREE.txt"), (os.getcwd() + "\\TWO.txt", os.getcwd() + "\\FOUR.txt")])
@@ -55,4 +56,11 @@ Massma.Display.search.set_flatten_output(False)
 Massma.Search.full(os.getcwd() + "\\SEARCH", deep_search=True)
 files = Massma.Search.content(os.getcwd() + "\\SEARCH", ["monster", "overworld"], logic=Massma.Logic.OR, deep_search=True)
 print(files)
+"""
+
+ignoring = Massma.Filter.Ignore(os.getcwd() + "\\IMAGES\\eye.jpg")
+Massma.Display.image.set_raw_error(True)
+Massma.Display.image.set_flatten_output(False)
+Massma.Image.sharpness([os.getcwd() + "\\IMAGES\\eye.jpg", os.getcwd() + "\\IMAGES\\fether.jpg"], 20, masks=[os.getcwd() + "\\IMAGES\\circle.png", os.getcwd() + "\\IMAGES\\long.png"], ignores=ignoring)
+
 
