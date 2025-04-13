@@ -6,6 +6,9 @@ from .Filter import Logic  # allowing for easier access
 from . import Search
 from . import Image
 
+from . import Outer
+from . import Inner
+
 
 from .Methods import seed
 from .Methods import move

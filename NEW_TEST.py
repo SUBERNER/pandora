@@ -61,6 +61,6 @@ print(files)
 ignoring = Massma.Filter.Ignore(os.getcwd() + "\\IMAGES\\eye.jpg")
 Massma.Display.image.set_raw_error(True)
 Massma.Display.image.set_flatten_output(False)
-Massma.Image.quality([os.getcwd() + "\\IMAGES\\eye - Copy.jpg", os.getcwd() + "\\IMAGES\\fether - Copy.jpg",  os.getcwd() + "\\IMAGES\\camera - Copy.png"], 0.0001, optimize=True)
+Massma.Image.noise([os.getcwd() + "\\IMAGES\\eye - Copy.jpg", os.getcwd() + "\\IMAGES\\camera - Copy.png"], 0, 100, resampling=0, masks=[os.getcwd() + "\\IMAGES\\long.png", os.getcwd() + "\\IMAGES\\circle.png"])
 
 
