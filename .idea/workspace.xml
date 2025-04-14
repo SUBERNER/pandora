@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="465473ba-b41a-4c4a-a82f-34598d293102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/IMAGES/fether.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Buffle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Buffle.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Massma/Image.py" beforeDir="false" afterPath="$PROJECT_DIR$/Massma/Image.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NEW_TEST.py" beforeDir="false" afterPath="$PROJECT_DIR$/NEW_TEST.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Massma/Inner.py" beforeDir="false" afterPath="$PROJECT_DIR$/Massma/Inner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Massma/Outer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Massma/Outer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +64,8 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/tompk/Documents/GitHub/discord-steam&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/tompk/OneDrive/Documents/GitHub/Massma&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
@@ -106,7 +108,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-14705d77f0bb-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.25659.43" />
+        <option value="bundled-python-sdk-4f4e415b4190-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.26053.29" />
       </set>
     </attachedChunks>
   </component>
