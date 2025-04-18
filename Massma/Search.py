@@ -50,7 +50,7 @@ def full(source: str, *, deep_search: bool = False, chance_files: float = 1, cha
 
             # determines what files should be altered or removed from search
             for file in files:  # test chances to see if files will stay in a list
-                if (chance_files > random.random() and  # random change to be added or removed by filters
+                if (chance_files >= random.random() and  # random change to be added or removed by filters
                         not (any(ignore(file) for ignore in ignores)) and
                         not (any(exclude(file) for exclude in excludes))):
 
@@ -151,7 +151,7 @@ def name(source: str, contains: str | list[str], *, deep_search: bool = False, c
 
             # determines what files should be altered or removed from search
             for file in files:  # test chances to see if files will stay in a list
-                if (chance_files > random.random() and  # random change to be added or removed by filters
+                if (chance_files >= random.random() and  # random change to be added or removed by filters
                         not (any(ignore(file) for ignore in ignores)) and
                         not (any(exclude(file) for exclude in excludes))):
 
@@ -241,7 +241,7 @@ def content(source: str, contains: str | list[str], *, deep_search: bool = False
                     or (logic == Logic.XNOR and sum(bool(re.search(contain, f.name, flags=flags)) for contain in contains) != 1)):  # opposite of XOR
 
                         # if any of the logics work, it will alter and determine if it will be added to searched files
-                        if (chance_files > random.random() and  # random change to be added or removed by filters
+                        if (chance_files >= random.random() and  # random change to be added or removed by filters
                                 not (any(ignore(file) for ignore in ignores)) and
                                 not (any(exclude(file) for exclude in excludes))):
 
