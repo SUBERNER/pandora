@@ -4,8 +4,8 @@ __pycache__/
 *$py.class
 
 # Project Specific
-UNCHANGED
-CHANGED
+UNCHANGED/
+CHANGED/
 
 # C extensions
 *.so

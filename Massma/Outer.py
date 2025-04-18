@@ -18,6 +18,10 @@ def normal(files: str | list[str], *, duplicate: bool = False, flatten: bool = F
             # gets size of the largest path for better result formatting
             Massma.Display.outer.set_source_length(max(files, key=len))
 
+            # renames files to avoid conflict
+            for file in files:
+                pass
+
     except Exception as e:
         Massma.Display.outer.result_error(len(files), "normal", e)
 
