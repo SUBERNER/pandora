@@ -15,7 +15,8 @@ def saturation(files: str | list[str], factor: float, *, optimize: bool = False,
             masks = masks if isinstance(masks, list) else ([masks] if masks else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -105,7 +106,8 @@ def brightness(files: str | list[str], factor: float, *, optimize: bool = False,
             masks = masks if isinstance(masks, list) else ([masks] if masks else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -150,7 +152,8 @@ def sharpness(files: str | list[str], factor: float, *, optimize: bool = False, 
             masks = masks if isinstance(masks, list) else ([masks] if masks else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -195,7 +198,8 @@ def invert(files: str | list[str], *, optimize: bool = False, masks: str | list[
             masks = masks if isinstance(masks, list) else ([masks] if masks else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -239,7 +243,8 @@ def flip(files: str | list[str], *, optimize: bool = False, chance_files: float 
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -269,7 +274,8 @@ def mirror(files: str | list[str], *, optimize: bool = False, chance_files: floa
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -299,7 +305,8 @@ def rotate(files: str | list[str], degree: int, *, optimize: bool = False, resam
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -331,7 +338,8 @@ def layer(files: str | list[str], layers: str | list[str], *, optimize: bool = F
             layers = layers if isinstance(layers, list) else ([layers] if layers else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -378,7 +386,8 @@ def crop(files: str | list[str], dimensions: tuple[int, int, int, int], *, optim
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -409,7 +418,8 @@ def noise(files: str | list[str], mean: float, standard_deviation: float, *, opt
             masks = masks if isinstance(masks, list) else ([masks] if masks else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -460,7 +470,8 @@ def blur(files: str | list[str], factor: float, *, optimize: bool = False, masks
             masks = masks if isinstance(masks, list) else ([masks] if masks else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -504,7 +515,8 @@ def resize(files: str | list[str], dimensions: tuple[int, int] | list[int], *, o
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:
@@ -534,7 +546,8 @@ def resolution(files: str | list[str], factor: float, *, optimize: bool = False,
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
 
             # gets size of the largest path for better result formatting
-            Massma.Display.image.set_source_length(max(files, key=len))
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
             for file in files:
                 try:

@@ -58,9 +58,13 @@ files = Massma.Search.content(os.getcwd() + "\\SEARCH", ["monster", "overworld"]
 print(files)
 """
 
-ignoring = Massma.Filter.Ignore(os.getcwd() + "\\IMAGES\\eye.jpg")
-Massma.Display.image.set_raw_error(True)
-Massma.Display.image.set_flatten_output(False)
-Massma.Image.noise([os.getcwd() + "\\IMAGES\\eye - Copy.jpg", os.getcwd() + "\\IMAGES\\camera - Copy.png"], 0, 100, resampling=0, masks=[os.getcwd() + "\\IMAGES\\long.png", os.getcwd() + "\\IMAGES\\circle.png"])
+#ignoring = Massma.Filter.Ignore(os.getcwd() + "\\IMAGES\\eye.jpg")
+#Massma.Display.image.set_raw_error(True)
+#Massma.Display.image.set_flatten_output(False)
+#Massma.Image.noise([os.getcwd() + "\\IMAGES\\eye - Copy.jpg", os.getcwd() + "\\IMAGES\\camera - Copy.png"], 0, 100, resampling=0, masks=[os.getcwd() + "\\IMAGES\\long.png", os.getcwd() + "\\IMAGES\\circle.png"])
 
-
+Massma.Display.outer.set_flatten_output(True)
+Massma.Display.outer.set_raw_error(True)
+flowers = Massma.Search.full("OUTER_TEST - Copy")
+#Massma.Outer.normal(flowers, preshuffle=[0, 1, 2, 3, 4, 5, 6, 12, 10, 11, 8, 9, 7], preset=['OUTER_TEST - Copy\\1.png', 'OUTER_TEST - Copy\\2.png', 'OUTER_TEST - Copy\\3.png', 'OUTER_TEST - Copy\\4.png', 'OUTER_TEST - Copy\\5.png', 'OUTER_TEST - Copy\\6.png', 'OUTER_TEST - Copy\\7.png', 'OUTER_TEST - Copy\\8.png', 'OUTER_TEST - Copy\\9.png', 'OUTER_TEST - Copy\\10.png', 'OUTER_TEST - Copy\\11.png', 'OUTER_TEST - Copy\\12.png', 'OUTER_TEST - Copy\\13.png'])
+Massma.Outer.group(flowers, ['rose', 'tulip', 'double'], preset=['robert', 'penis', 'sigma'])
