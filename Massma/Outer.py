@@ -22,7 +22,7 @@ def normal(files: str | list[str], *, presets: str | list[str] | None = None, pr
             filtered_files = []  # stores all files after chances and filters
 
             # renames files to avoid conflict
-            for file in files:
+            for index, file in enumerate(files):
                 try:
                     if (chance_files >= random.random() and  # random change to be added or removed by filters
                             not (any(ignore(file) for ignore in ignores)) and
@@ -40,7 +40,14 @@ def normal(files: str | list[str], *, presets: str | list[str] | None = None, pr
 
                         # adds both to lists
                         hash_files.append(hash_file)
-                        filtered_files.append(file)
+                        # checks if presets exists
+                        if presets:  # uses presets instead original file names
+                            filtered_files.append(presets[index])
+                        else:
+                            filtered_files.append(file)  # stores file names being used
+
+                    else:  # runs when it fails the chance files, adding empty value to keep order and structure to the preshuffle
+                        filtered_files.append(None)  # notify system that file name will not be used in the shuffle
 
                 except Exception as e:
                     Massma.Display.outer.result_error(file, "normal", e)
@@ -48,8 +55,6 @@ def normal(files: str | list[str], *, presets: str | list[str] | None = None, pr
             # shuffles files
             # PROGRAM IS CURRENTLY PICKY ABOUT LIST SIZES, THEY ALL MUST BE THE SAME
             # SIZES OF PRESET AND PRESHUFFLED MUST BE THE SAME AS FILTERED FILES AND HASH FILES
-            if presets:  # preset list of files being shuffled instead of the ones originally used
-                filtered_files = presets.copy()
 
             if preshuffle:  # preset format on how the files will be shuffled
                 # goes through each number in the preshuffle list to determine where an item should go
@@ -61,6 +66,11 @@ def normal(files: str | list[str], *, presets: str | list[str] | None = None, pr
             else:  # normal randomizing of files
                 random_files = filtered_files.copy()
                 random.shuffle(random_files)
+
+            # removes all None values caused by failing the chance files
+            # the none values are used to solve the problem with preshuffles and chances not being in sync
+            random_files = [file for file in random_files if file is not None]
+            filtered_files = [file for file in filtered_files if file is not None] # souly to display changes correctly
 
             # alters files
             for hash_file, new_file, original_file in zip(hash_files, random_files, filtered_files):
@@ -131,12 +141,12 @@ def group(files: str | list[str], contains: str | list[str], *, presets: str | l
                         except Exception as e:
                             Massma.Display.outer.result_error(file, "group", e)
 
+                else: # runs when it fails the chance contains, adding empty value to keep order and structure to the preshuffle
+                    filtered_contains.append(None) # notify system that contain will not be used in the shuffle
+
             # shuffles files
             # PROGRAM IS CURRENTLY PICKY ABOUT LIST SIZES, THEY ALL MUST BE THE SAME
             # SIZES OF PRESET AND PRESHUFFLED MUST BE THE SAME AS FILTERED FILES AND HASH FILES
-            if presets:  # preset list of contains being shuffled instead of the ones originally used
-                filtered_contains = presets.copy()  # you are putting the contains inside the preset
-
             if preshuffle:  # preset format on how the files will be shuffled
                 # goes through each number in the preshuffle list to determine where an item should go
                 # the numbers in the preshuffle set determine the new indexes of elements in a list
@@ -147,6 +157,10 @@ def group(files: str | list[str], contains: str | list[str], *, presets: str | l
             else:  # normal randomizing of files
                 random_contains = filtered_contains.copy()
                 random.shuffle(random_contains)
+
+            # removes all None values caused by failing the chance contains
+            # the none values are used to solve the problem with preshuffles and chances not being in sync
+            random_contains = [contain for contain in random_contains if contain is not None]
 
             # CANNOT HAVE 2 DIFFERENT HASHES IN ONE FILE NAME
             # alters file group names
@@ -159,12 +173,4 @@ def group(files: str | list[str], contains: str | list[str], *, presets: str | l
 
     except Exception as e:
         Massma.Display.outer.result_error(len(files), "group", e)
-
-def reverse(files: str | list[str], *, preset: str | list[str] | None = None, preshuffle: list[int] | None = None, chance_files: float = 1, chance_total: float = 1,
-            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
-    pass
-
-def rotate(files: str | list[str], *, preset: str | list[str] | None = None, preshuffle: list[int] | None = None, chance_files: float = 1, chance_total: float = 1,
-           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
-    pass
 
