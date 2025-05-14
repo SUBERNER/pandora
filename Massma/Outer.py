@@ -2,13 +2,13 @@ from Massma import random  # used for seeds
 from Massma.Filter import *
 import Massma
 
-def normal(files: str | list[str], *, preset: str | list[str] | None = None, preshuffle: list[int] | None = None, chance_files: float = 1, chance_total: float = 1,
+def normal(files: str | list[str], *, presets: str | list[str] | None = None, preshuffle: list[int] | None = None, chance_files: float = 1, chance_total: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     try:
         if chance_total >= random.random():  # test if method will happen
             # makes data always a list
             files = [files] if isinstance(files, str) else files
-            preset = preset if isinstance(preset, list) else ([preset] if preset else [])
+            presets = presets if isinstance(presets, list) else ([presets] if presets else [])
             preshuffle = preshuffle if isinstance(preshuffle, list) else ([preshuffle] if preshuffle else [])
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
             excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
@@ -48,13 +48,13 @@ def normal(files: str | list[str], *, preset: str | list[str] | None = None, pre
             # shuffles files
             # PROGRAM IS CURRENTLY PICKY ABOUT LIST SIZES, THEY ALL MUST BE THE SAME
             # SIZES OF PRESET AND PRESHUFFLED MUST BE THE SAME AS FILTERED FILES AND HASH FILES
-            if preset:  # preset list of files being shuffled instead of the ones originally used
-                filtered_files = preset.copy()
+            if presets:  # preset list of files being shuffled instead of the ones originally used
+                filtered_files = presets.copy()
 
             if preshuffle:  # preset format on how the files will be shuffled
                 # goes through each number in the preshuffle list to determine where an item should go
                 # the numbers in the preshuffle set determine the new indexes of elements in a list
-                random_files = [0] * len(filtered_files)  # sets preset length
+                random_files = [None] * len(filtered_files)  # sets preset length
                 for index, file in zip(preshuffle, filtered_files):
                     random_files[index] = file
 
@@ -70,14 +70,14 @@ def normal(files: str | list[str], *, preset: str | list[str] | None = None, pre
     except Exception as e:
         Massma.Display.outer.result_error(len(files), "normal", e)
 
-def group(files: str | list[str], contains: str | list[str], *, preset: str | list[str] | None = None, preshuffle: list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1,
+def group(files: str | list[str], contains: str | list[str], *, presets: str | list[str] | None = None, preshuffle: list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1,
           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     try:
         if chance_total >= random.random():  # test if method will happen
             # makes data always a list
             files = [files] if isinstance(files, str) else files
             contains = [contains] if isinstance(contains, str) else contains
-            preset = preset if isinstance(preset, list) else ([preset] if preset else [])
+            presets = presets if isinstance(presets, list) else ([presets] if presets else [])
             preshuffle = preshuffle if isinstance(preshuffle, list) else ([preshuffle] if preshuffle else [])
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
             excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
@@ -94,11 +94,17 @@ def group(files: str | list[str], contains: str | list[str], *, preset: str | li
             filtered_contains = []  # stores all contains that will be used in the shuffle
 
             # checks each file for having the contains
-            for contain in contains:
+            # also will swap out contains with presets if there are any
+            for index, contain in enumerate(contains):
                 if chance_contains >= random.random():  # test if a contain will even be used
                     # generates temporary hash name assigned to contain
                     hash_contains.append(str(hash(contain)))  # converts hash into a string
-                    filtered_contains.append(contain)  # stores contains being used
+
+                    # checks if presets exists
+                    if presets:  # uses presets instead original contains
+                        filtered_contains.append(presets[index])
+                    else:
+                        filtered_contains.append(contain)  # stores contains being used
 
                     # renames files to avoid conflict
                     for file in files:
@@ -128,8 +134,8 @@ def group(files: str | list[str], contains: str | list[str], *, preset: str | li
             # shuffles files
             # PROGRAM IS CURRENTLY PICKY ABOUT LIST SIZES, THEY ALL MUST BE THE SAME
             # SIZES OF PRESET AND PRESHUFFLED MUST BE THE SAME AS FILTERED FILES AND HASH FILES
-            if preset:  # preset list of contains being shuffled instead of the ones originally used
-                filtered_contains = preset.copy()  # you are putting the contains inside the preset
+            if presets:  # preset list of contains being shuffled instead of the ones originally used
+                filtered_contains = presets.copy()  # you are putting the contains inside the preset
 
             if preshuffle:  # preset format on how the files will be shuffled
                 # goes through each number in the preshuffle list to determine where an item should go
