@@ -77,5 +77,5 @@ print(preshuffle)
 #shifted = preshuffle.reverse()
 #print(shifted)
 
-Massma.Outer.normal(flowers, preshuffle=preshuffle, chance_files=0.75)
+#Massma.Outer.normal(flowers, preshuffle=preshuffle, chance_files=0.75)
 #Massma.Outer.group(flowers, ['rose', 'tulip', 'double', 'lilly'], preshuffle=shifted)

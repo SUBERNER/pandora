@@ -5,6 +5,7 @@ from . import Filter
 from .Filter import Logic  # allowing for easier access
 from . import Search
 from . import Image
+from . import Audio
 
 from . import Outer
 from . import Inner
