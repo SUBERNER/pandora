@@ -20,6 +20,19 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
             Massma.Display.inner.set_source_length(max(file_paths, key=len))
 
+            hash_contains = []  # stores all contains in their hash format
+            hash_values = []  # stores all files in their hash format
+            filtered_values = []  # stores all files after chances and filters
+
+            # sets up the hashes for each contain
+            # also will swap out contains with presets if there are any
+            for index, contain in enumerate(contains):
+                if chance_contains >= random.random():  # test if a contain will even be used
+                    # generates temporary hash name assigned to contain
+                    hash_contains.append(str(hash(contain)))  # converts hash into a string
+                #else: hash_contains.append()
+                #WILL FINISH LATER
+
             for file in files:
                 try:
                     if (chance_files >= random.random() and  # random change to be added or removed by filters
@@ -33,9 +46,6 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
 
                         with open(file, 'r') as f:
                             data = f.read()  # stores all the data in a variable
-
-                        for contain in contains:
-                            pass
 
                 except Exception as e:
                     Massma.Display.inner.result_error(files, "normal", e)

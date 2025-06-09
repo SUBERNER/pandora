@@ -2,6 +2,28 @@ import Massma
 import os
 import re
 
+print(os.getcwd())
+
+# SETTING UP LOGGERS
+log_name_value = None
+log_output_value = True
+
+Massma.Display.methods.set_log_output(log_output_value)
+Massma.Display.outer.set_log_output(log_output_value)
+Massma.Display.inner.set_log_output(log_output_value)
+Massma.Display.image.set_log_output(log_output_value)
+Massma.Display.audio.set_log_output(log_output_value)
+Massma.Display.filter.set_log_output(log_output_value)
+Massma.Display.search.set_log_output(log_output_value)
+
+Massma.Display.methods.set_log_name(log_name_value)
+Massma.Display.outer.set_log_name(log_name_value)
+Massma.Display.inner.set_log_name(log_name_value)
+Massma.Display.image.set_log_name(log_name_value)
+Massma.Display.audio.set_log_name(log_name_value)
+Massma.Display.filter.set_log_name(log_name_value)
+Massma.Display.search.set_log_name(log_name_value)
+
 result_test = Massma.Display.Result()
 
 print(F"TESTING, HELLO THERE!")
@@ -77,5 +99,4 @@ print(preshuffle)
 #shifted = preshuffle.reverse()
 #print(shifted)
 
-#Massma.Outer.normal(flowers, preshuffle=preshuffle, chance_files=0.75)
-#Massma.Outer.group(flowers, ['rose', 'tulip', 'double', 'lilly'], preshuffle=shifted)
+Massma.Outer.normal(flowers, preshuffle=preshuffle, chance_files=0.75)

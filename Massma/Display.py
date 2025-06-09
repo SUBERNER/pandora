@@ -15,16 +15,16 @@ class Color:
     # Used to better communicate the grouping of methods effected files
     # These are the recommend colors to be used, as they are more likely to work with many terminals
     GROUPS = (
-        "\033[91m",  # [0] light red
-        "\033[31m",  # [1] red
-        "\033[92m",  # [2] light green
-        "\033[32m",  # [3] green
-        "\033[93m",  # [4] light yellow
-        "\033[33m",  # [5] yellow
-        "\033[94m",  # [6] light blue
-        "\033[34m",  # [7] blue
-        "\033[95m",  # [8] light purple
-        "\033[35m",  # [9] purple
+        "\033[91m",  # [00] light red
+        "\033[31m",  # [01] red
+        "\033[92m",  # [02] light green
+        "\033[32m",  # [03] green
+        "\033[93m",  # [04] light yellow
+        "\033[33m",  # [05] yellow
+        "\033[94m",  # [06] light blue
+        "\033[34m",  # [07] blue
+        "\033[95m",  # [08] light purple
+        "\033[35m",  # [09] purple
         "\033[96m",  # [10] light cyan
         "\033[36m",  # [11] cyan
         "\033[97m",  # [12] white
@@ -55,12 +55,14 @@ class Result:
     _flatten_output = True  # Removed new lines from displaying with outputs
     _source_compression = False  # Shortens the method's source to the last 3 directories
     _source_length = 0  # Minimum amount of space given to the source section of a result for readability
+    _log_output = False # Logs outputs made form the results that are stored in a .txt file
+    _log_name = "Massma_logs.txt"  # Sets the name of the log file and the location where logs are entered
     _method_color = Color.GROUPS[12]  # Colors used for easier method groups identification, white by default
-    _stats = Stats  # tracks the running total of changed and triggered activated
+    _stats = Stats  # Tracks the running total of changed and triggered activated
 
     def __init__(self, *, method_color: str = Color.GROUPS[12], display_alter: bool = True, display_warning: bool = True,
                  display_notify: bool = True, source_compression: bool = False, raw_error: bool = False, quit_error: bool = True,
-                 quit_warning: bool = False, flatten_output: bool = True, source_length: int = 0):
+                 quit_warning: bool = False, flatten_output: bool = True, source_length: int = 0, log_output = False, log_name = "Massma_logs.txt"):
         """
         Initializes the result handler with configurable display options.
 
@@ -94,10 +96,36 @@ class Result:
             self._raw_error = raw_error
             self._quit_error = quit_error
             self._quit_warning = quit_warning
+            self._log_output = log_output
+            self._log_name = log_name
             self._flatten_output = flatten_output
             self._source_length = source_length
         except Exception as e:
             self.result_error(os.getcwd(), "display", e)
+
+    def set_log_output(self, log_output: bool = None) -> bool:
+        """
+        """
+        try:
+            # only changes data if not None, use None to only see data
+            if log_output is not None:
+                self._log_output = log_output
+            return self._log_output
+        except Exception as e:
+            self.result_error(os.getcwd(), "display", e)
+            return self._log_output
+
+    def set_log_name(self, log_name: str = None) -> str:
+        """
+        """
+        try:
+            # only changes data if not None, use None to only see data
+            if log_name is not None:
+                self._log_name = log_name
+            return self._log_name
+        except Exception as e:
+            self.result_error(os.getcwd(), "display", e)
+            return self._log_name
 
     def set_display_alter(self, display_alter: bool = None) -> bool:
         """
@@ -358,11 +386,21 @@ class Result:
             if original_value != updated_value:  # changed value
                 if self._display_alter:
                     print(f"{source:>{self._source_length}} <|> {self._method_color}{method}{Color.RESET} <|>   altered <|> [{Color.RED}{original_value}{Color.RESET}] -> [{Color.GREEN}{updated_value}{Color.RESET}]")
+                    # used for logging outputs and changes made
+                    if self._log_output:
+                        with open(f"{os.getcwd()}\\{self._log_name}", 'a') as file:  # can only be in working directory
+                            file.write(f"{source} <|> {method} <|>   altered <|> [{original_value}] -> [{updated_value}]\n")  # appends output into the log file
+
                 self._stats.altered += 1  # tracking total "altered" made
 
             else:  # unchanged value
                 if self._display_alter:
                     print(f"{source:>{self._source_length}} <|> {self._method_color}{method}{Color.RESET} <|> unaltered <|> [{Color.YELLOW}{updated_value}{Color.RESET}]")
+                    # used for logging outputs and changes made
+                    if self._log_output:
+                        with open(f"{os.getcwd()}\\{self._log_name}", 'a') as file: # can only be in working directory
+                            file.write(f"{source} <|> {method} <|> unaltered <|> [{updated_value}]\n")  # appends output into the log file
+
                 self._stats.unaltered += 1  # tracking total "unaltered" made
 
         except Exception as e:
@@ -395,6 +433,11 @@ class Result:
                     formatted_error = "\t".join(formatted_error.splitlines())
 
             print(f"{Color.ERROR}{source:>{self._source_length}} <|> {method} <|>     ERROR <|> {formatted_error}{Color.RESET}")
+            # used for logging outputs and changes made
+            if self._log_output:
+                with open(f"{os.getcwd()}\\{self._log_name}", 'a') as file:  # can only be in working directory
+                    file.write(f"{source} <|> {method} <|>     ERROR <|> {formatted_error}\n")  # appends output into the log file
+
             if self._quit_error:
                 self._stats.errors += 1  # tracking total "errors" made
                 quit()  # ends running code
@@ -403,6 +446,11 @@ class Result:
         except Exception as e:
             # errors of errors do not make try to format them at all to make more errors less common
             print(f"{Color.ERROR}{os.getcwd():>{self._source_length}} <|> error <|>     ERROR <|> {e}{Color.RESET}")
+            # used for logging outputs and changes made
+            if self._log_output:
+                with open(f"{os.getcwd()}\\{self._log_name}", 'a') as file:  # can only be in working directory
+                    file.write(f"{os.getcwd()} <|> error <|>     ERROR <|> {e}\n")  # appends output into the log file
+
             if self._quit_error:
                 self._stats.errors += 1  # tracking total "errors" made
                 quit()  # ends running code
@@ -429,6 +477,11 @@ class Result:
 
             if self._display_warning:  # if warning will be displayed
                 print(f"{Color.WARNING}{source:>{self._source_length}} <|> {method} <|>   WARNING <|> {warning}{Color.RESET}")
+                # used for logging outputs and changes made
+                if self._log_output:
+                    with open(f"{os.getcwd()}\\{self._log_name}", 'a') as file:  # can only be in working directory
+                        file.write(f"{source} <|> {method} <|>   WARNING <|> {warning}\n")  # appends output into the log file
+
                 if self._quit_warning:
                     self._stats.warnings += 1  # tracking total "warnings" made
                     quit()  # ends running code
@@ -436,6 +489,7 @@ class Result:
 
         except Exception as e:
             self.result_error(f"{source:>{self._source_length}}", method, e)
+
 
     def result_notify(self, source: str, method: str, notification: str):
         """
@@ -458,6 +512,11 @@ class Result:
 
             if self._display_notify:  # if notification will be displayed
                 print(f"{Color.NOTIFY}{source:>{self._source_length}} <|> {method} <|>    NOTIFY <|> {notification}{Color.RESET}")
+                # used for logging outputs and changes made
+                if self._log_output:
+                    with open(f"{os.getcwd()}\\{self._log_name}", 'a') as file:  # can only be in working directory
+                        file.write(f"{source} <|> {method} <|>    NOTIFY <|> {notification}\n")  # appends output into the log file
+
             self._stats.notifications += 1  # tracking total "notifications" made
 
         except Exception as e:
@@ -465,10 +524,10 @@ class Result:
 
 
 # PLACE RESULT INSTANCES HERE FOR ORGANIZED ACCESS
-outer = Result(method_color=Color.GROUPS[10])
-inner = Result(method_color=Color.GROUPS[6])
-image = Result(method_color=Color.GROUPS[4])
-methods = Result(method_color=Color.GROUPS[12])
-search = Result(method_color=Color.GROUPS[0])
-audio = Result(method_color=Color.GROUPS[2])
-filter = Result(method_color=Color.GROUPS[8])
+outer = Result(method_color=Color.GROUPS[10])  # light cyan
+inner = Result(method_color=Color.GROUPS[6])  # light blue
+image = Result(method_color=Color.GROUPS[4])  # light yellow
+methods = Result(method_color=Color.GROUPS[12])  # white
+search = Result(method_color=Color.GROUPS[0])  # light red
+audio = Result(method_color=Color.GROUPS[2])  # light green
+filter = Result(method_color=Color.GROUPS[8])  # light purple
