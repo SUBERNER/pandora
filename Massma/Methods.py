@@ -49,7 +49,7 @@ def move(source: str | list[str], destination: str, *, garbage_collection: bool 
 
         return destination
     except Exception as e:
-        Massma.Display.methods.result_error(source, "move", str(e))
+        Massma.Display.methods.result_error(source, "move", e)
         return source
 
 
@@ -81,7 +81,7 @@ def copy(source: str | list[str], destination: str, *, garbage_collection: bool 
 
         return destination
     except Exception as e:
-        Massma.Display.methods.result_error(source, "copy", str(e))
+        Massma.Display.methods.result_error(source, "copy", e)
         return source
 
 
@@ -110,7 +110,7 @@ def zip(source: str, extension: str) -> str:
 
         return new_source
     except Exception as e:
-        Massma.Display.methods.result_error(original_source, "zip", str(e))
+        Massma.Display.methods.result_error(original_source, "zip", e)
         return original_source
 
 
@@ -132,7 +132,7 @@ def unzip(source: str) -> str:
 
         return source
     except Exception as e:
-        Massma.Display.methods.result_error(source, "unzip", str(e))
+        Massma.Display.methods.result_error(source, "unzip", e)
         return source
 
 
@@ -167,7 +167,7 @@ def delete(source: str, *, garbage_collection: bool = True) -> str | None:
 
         return None
     except Exception as e:
-        Massma.Display.methods.result_error(source, "delete", str(e))
+        Massma.Display.methods.result_error(source, "delete", e)
         return source
 
 
@@ -187,7 +187,7 @@ def create_folder(source: str) -> str | None:
 
         return source
     except Exception as e:
-        Massma.Display.methods.result_error(source, "create_folder", str(e))
+        Massma.Display.methods.result_error(source, "create_folder", e)
         return None
 
 
@@ -207,7 +207,7 @@ def create_file(source: str) -> str | None:
         Massma.Display.methods.result(source, "create file", None, source)
 
     except Exception as e:
-        Massma.Display.methods.result_error(source, "create file", str(e))
+        Massma.Display.methods.result_error(source, "create file", e)
         return None
 
 
@@ -237,7 +237,7 @@ def redo_name(source: str, name: str, *, garbage_collection: bool = True) -> str
 
         return new_source
     except Exception as e:
-        Massma.Display.methods.result_error(source, "redo name", str(e))
+        Massma.Display.methods.result_error(source, "redo name", e)
         return source
 
 
@@ -269,5 +269,5 @@ def redo_extension(source: str, extension: str, *, garbage_collection: bool = Tr
 
         return new_source
     except Exception as e:
-        Massma.Display.methods.result_error(source, "redo extension", str(e))
+        Massma.Display.methods.result_error(source, "redo extension", e)
         return source

@@ -91,18 +91,38 @@ Massma.Display.outer.set_raw_error(True)
 Massma.Display.inner.set_flatten_output(False)
 Massma.Display.inner.set_raw_error(True)
 
-flowers = Massma.Search.full("OUTER_TEST - Copy")
-preshuffle = list(range(len(flowers)))
+Massma.Display.methods.set_flatten_output(False)
+Massma.Display.methods.set_raw_error(True)
+
+
+# SETS UP TEST FILES HERE
+# deletes old folders
+#Massma.delete("OUTER_NORMAL - Copy")
+#Massma.delete("OUTER_GROUP - Copy")
+#Massma.delete("ENTITIES - Copy")
+# copies all files in one folder to newly created folders
+if not os.path.exists("OUTER_NORMAL - Copy"):
+    Massma.copy("OUTER_NORMAL","OUTER_NORMAL - Copy")
+if not os.path.exists("OUTER_GROUP - Copy"):
+    Massma.copy("OUTER_GROUP","OUTER_GROUP - Copy")
+if not os.path.exists("ENTITIES - Copy"):
+    Massma.copy("ENTITIES", "ENTITIES - Copy")
+
+
+# FOR NORMAL
+normal = Massma.Search.full("OUTER_NORMAL - Copy")
+preshuffle = list(range(len(normal)))
 print(preshuffle)
 preshuffle.reverse()
 print(preshuffle)
+Massma.Outer.normal(normal, preshuffle=preshuffle)
 
-#preshuffle = [0,1,2,3]
-#print(preshuffle)
-#shifted = preshuffle.reverse()
-#print(shifted)
+# FOR GROUP
+group = Massma.Search.full("OUTER_GROUP - Copy")
+preshuffle = [3,2,1,0]
+print(preshuffle)
+Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuffle, chance_contains=0.5)
 
-Massma.Outer.normal(flowers, preshuffle=preshuffle, chance_files=0.75)
 
 entites = Massma.Search.full("ENTITIES - Copy")
 Massma.Inner.normal(entites,r'"value": .*', chance_data=0.5)
