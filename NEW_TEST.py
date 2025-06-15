@@ -88,6 +88,9 @@ print(files)
 Massma.Display.outer.set_flatten_output(False)
 Massma.Display.outer.set_raw_error(True)
 
+Massma.Display.inner.set_flatten_output(False)
+Massma.Display.inner.set_raw_error(True)
+
 flowers = Massma.Search.full("OUTER_TEST - Copy")
 preshuffle = list(range(len(flowers)))
 print(preshuffle)
@@ -100,3 +103,6 @@ print(preshuffle)
 #print(shifted)
 
 Massma.Outer.normal(flowers, preshuffle=preshuffle, chance_files=0.75)
+
+entites = Massma.Search.full("ENTITIES - Copy")
+Massma.Inner.normal(entites,r'"value": .*', chance_data=0.5)
