@@ -4,7 +4,7 @@ from Massma import random  # used for seeds
 from Massma.Filter import *
 import Massma
 
-def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
+def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, weights: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     try:
         if chance_total >= random.random():  # test if method will happen
@@ -13,6 +13,7 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
             contains = [contains] if isinstance(contains, str) else contains
             preset = preset if isinstance(preset, list) else ([preset] if preset else [])
             preshuffle = preshuffle if isinstance(preshuffle, list) else ([preshuffle] if preshuffle else [])
+            weights = weights if isinstance(weights, list) else ([weights] if weights else [])
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
             excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
             alters = alters if isinstance(alters, list) else ([alters] if alters else [])
@@ -36,12 +37,16 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
             # finding all the matches in file data and storing them to later be shuffled
             for file in files:
                 try:
+                    skipped_file = False # indicates if a file all the matches are set to None instead of keeping matches
                     # goes through all filters needed to make
-                    if (chance_files >= random.random() and  # random change to be added or removed by filters
-                            not (any(ignore(file) for ignore in ignores)) and
-                            not (any(exclude(file) for exclude in excludes))):
+                    # random change to be added or removed by filters
+                    if chance_files < random.random(): # if file fails the chance, it will set all the matches to none
+                       skipped_file =  True # will not set all matches to None
+
+                    if not (any(ignore(file) for ignore in ignores)) and not (any(exclude(file) for exclude in excludes)):
                         # gives a chance to alter inside a file
-                        if alters is not None:
+                        # FILES ARE NOT ALTERED WHEN SKIPPED!!!
+                        if alters is not None and skipped_file == False:
                             for alter in alters:
                                 alter(file)
 
@@ -62,21 +67,14 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
                             for filtered_contain, contain in zip(filtered_contains, contains):
                                 # goes through each filtered contain and calls the replace method
                                 # allowing for found matches to have a chance of being filtered out, and if now they will be stored and replaced
-                                if filtered_contain is not None: # normaly adds found data
+                                if filtered_contain is not None and skipped_file == False: # normally adds found data
                                     data = re.sub(filtered_contain, replace, data, flags=flags)
-                                else:  # still gets the data from ignored contained, this is to make sure preshuffle is accurate and in sync
+                                else:  # still gets the data from ignored contained, this is to make sure preshuffle is accurate and in sync, will also do this if file is suppose to be skipped
                                     matches = len(re.findall(contain, data, flags=flags)) # gets a number of all the matches to determine the amounts of nons needed
                                     filtered_matches.extend([None] * matches)  # adds the exact amounts of Nones as there are matches
 
-
                         with open(file, 'w') as f:  # saves changes to file temporarily
                             f.write(data)
-
-                    # even if the file is skipped, it will still need to go through the file
-                    # ass it needs to get all the match data and replace it with None, to keep the preshuffle working
-                    # !!!WORK ON LATER!!!
-                    else:
-                        pass
 
                 except Exception as e:
                     Massma.Display.inner.result_error(files, "normal", e)
@@ -105,14 +103,20 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
             random_matches = [match for match in random_matches if match is not None]
             filtered_matches = [match for match in filtered_matches if match is not None]  # souly to display changes correctly
 
+            # if no weight is assigned, this will set all to 1 to make sure random.choices does not break
+            # if a user enters any amount of weights, this will not run, causing errors occur if the wrong amount is givin
+            # STILL NEEDS WORK ON
+            if not weights:
+                weights = [1] * len(filtered_matches)  # adds the exact amounts of 0 weights as there are filtered matches
+
             # flatting and duplication for the shuffled lists
             # additionally weight can be used to calibrate the duplication to your needs
             if duplicate: # allows for the same data to be given to multiple different files instead of just one
                 if flatten: # removes all redundant and duplicate data before
                     flatten_matches = list(set(random_matches))  # Remove duplicates and allowing for highly more even distribution of data
-                    random_matches = random.choices(flatten_matches, k=len(filtered_matches))  # Fills list back up
+                    random_matches = random.choices(flatten_matches, k=len(filtered_matches), weights=weights)  # Fills list back up
                 else:
-                    random_matches = random.choices(random_matches, k=len(filtered_matches))  # Fills list back up
+                    random_matches = random.choices(random_matches, k=len(filtered_matches), weights=weights)  # Fills list back up
 
             elif not preshuffle:  # normal shuffle, only if there was no preshuffle used
                 random.shuffle(random_matches)
@@ -174,10 +178,12 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "group", e)
 
-def scale(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, chance_files: float = 1, chance_total: float = 1,
+def scale(files: str | list[str], range: tuple[float, float] | tuple[int, int], *, zeros: bool = False, decimals: bool = False, rounding: int = 0,clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None,
+          chance_files: float = 1, chance_total: float = 1, chance_data: float = 1,
           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     pass
 
-def offset(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, chance_files: float = 1, chance_total: float = 1,
+def offset(files: str | list[str], range: tuple[float, float] | tuple[int, int], *, zeros: bool = False, decimals: bool = False, rounding: int = 0, clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None,
+           chance_files: float = 1, chance_total: float = 1, chance_data: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     pass

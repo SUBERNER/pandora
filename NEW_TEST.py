@@ -130,4 +130,4 @@ Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuf
 # INNER NORMAL
 Massma.Display.inner.set_source_compression(False)
 entites_normal = Massma.Search.full(os.path.abspath("ENTITIES - Copy"))
-Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], chance_contains=0.5)
+Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], )
