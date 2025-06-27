@@ -109,20 +109,25 @@ if not os.path.exists("ENTITIES - Copy"):
     Massma.copy("ENTITIES", "ENTITIES - Copy")
 
 
-# FOR NORMAL
+# OUTER NORMAL
+"""
 normal = Massma.Search.full("OUTER_NORMAL - Copy")
 preshuffle = list(range(len(normal)))
 print(preshuffle)
 preshuffle.reverse()
 print(preshuffle)
 Massma.Outer.normal(normal, preshuffle=preshuffle)
+"""
 
-# FOR GROUP
+# OUTER GROUP
+"""
 group = Massma.Search.full("OUTER_GROUP - Copy")
 preshuffle = [3,2,1,0]
 print(preshuffle)
 Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuffle, chance_contains=0.5)
+"""
 
-
-entites = Massma.Search.full("ENTITIES - Copy")
-Massma.Inner.normal(entites,r'"value": .*', chance_data=0.5)
+# INNER NORMAL
+Massma.Display.inner.set_source_compression(False)
+entites_normal = Massma.Search.full(os.path.abspath("ENTITIES - Copy"))
+Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], chance_contains=0.5)
