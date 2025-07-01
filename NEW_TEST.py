@@ -107,8 +107,8 @@ if not os.path.exists("OUTER_GROUP - Copy"):
     Massma.copy("OUTER_GROUP","OUTER_GROUP - Copy")
 if not os.path.exists("ENTITIES - Copy"):
     Massma.copy("ENTITIES", "ENTITIES - Copy")
-
-
+if not os.path.exists("FEATURES - Copy"):
+    Massma.copy("FEATURES", "FEATURES - Copy")
 # OUTER NORMAL
 """
 normal = Massma.Search.full("OUTER_NORMAL - Copy")
@@ -130,4 +130,9 @@ Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuf
 # INNER NORMAL
 Massma.Display.inner.set_source_compression(False)
 entites_normal = Massma.Search.full(os.path.abspath("ENTITIES - Copy"))
-Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], )
+"""Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], )"""
+#Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (0.01, 100), zeros=True, clamps_outer=(1,100), matching=True)
+Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (-5, 5))
+# ERRORS 266, INTS ON FLOAT VALUES
+#features_normal = Massma.Search.full(os.path.abspath("FEATURES - Copy"))
+#Massma.Inner.scale(features_normal,[r'"numerator": -?\d+\.?\d*,.*"denominator": -?\d+\.?\d*'], (1, 1, minmaxing=True, zeros=False,flags=[re.M, re.S])

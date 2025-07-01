@@ -1,5 +1,4 @@
 import re
-
 from Massma import random  # used for seeds
 from Massma.Filter import *
 import Massma
@@ -178,12 +177,315 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "group", e)
 
-def scale(files: str | list[str], range: tuple[float, float] | tuple[int, int], *, zeros: bool = False, decimals: bool = False, rounding: int = 0,clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None,
-          chance_files: float = 1, chance_total: float = 1, chance_data: float = 1,
+def scale(files: str | list[str],contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, mode: float | int | None = None, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, matching: bool = False,
+          clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
-    pass
+    try:
+        if chance_total >= random.random():  # test if method will happen
+            # makes data always a list
+            files = [files] if isinstance(files, str) else files
+            contains = [contains] if isinstance(contains, str) else contains
+            ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
+            excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
+            alters = alters if isinstance(alters, list) else ([alters] if alters else [])
+            flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
 
-def offset(files: str | list[str], range: tuple[float, float] | tuple[int, int], *, zeros: bool = False, decimals: bool = False, rounding: int = 0, clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None,
-           chance_files: float = 1, chance_total: float = 1, chance_data: float = 1,
-           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
-    pass
+            # gets size of the largest path for better result formatting
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.inner.set_source_length(max(file_paths, key=len))
+
+            hash_contain = f"{hash(contains[0])}"  # stores the hash of one of the contains to indicate where data is swapped
+            filtered_contains = []  # stores all the contains that will be used
+
+            # determines if contain will be used
+            for contain in contains:
+                if chance_contains >= random.random():  # test if a contain will even be used
+                    filtered_contains.append(contain)  # contain that was randomly filtered
+                else:
+                    filtered_contains.append(None)  # notify system that contains name will not be used in the shuffle and will all finds with None
+
+            # finding all the matches in file data and storing them to be added or subtracted
+            for file in files:
+                try:
+                    if chance_files < random.random(): # if file fails the chance, it will move on to the next file, not effected the current file
+                        continue # moves to next file
+
+                    # goes here instead as they need to be reset after every file, as the scaled data is not shuffled between or in files
+                    filtered_matches = []  # stores all the matches that will be scaled and used
+                    altered_matches = []  # matches altered from scaling and will be put back into the files
+
+                    # test the files in filters to see if they should be ignored
+                    if not (any(ignore(file) for ignore in ignores)) and not (any(exclude(file) for exclude in excludes)):
+                        # gives a chance to alter inside a file
+                        if alters is not None:
+                            for alter in alters:
+                                alter(file)
+
+                        with open(file, 'r') as f:
+                            data = f.read()  # stores all the data in a variable
+
+                            # used for replacing and chance filtering out matches
+                            # group(0) only grabs first match found
+                            def replace(match):
+                                if chance_data >= random.random():
+                                    filtered_matches.append(match.group(0))
+                                    return hash_contain  # will replace data with hash
+                                return match.group(0)  # does not replace data with hash
+
+
+                            # goes throw each contain for a file to find matches
+                            for filtered_contain, contain in zip(filtered_contains, contains):
+                                # goes through each filtered contain and calls the replace method
+                                # allowing for found matches to have a chance of being filtered out, and if now they will be stored and replaced
+                                if filtered_contain is not None:  # normally adds found data
+                                    data = re.sub(filtered_contain, replace, data, flags=flags)
+
+                            with open(file, 'w') as f:  # saves changes to file temporarily
+                                f.write(data)
+
+                        # goes though each match collected scaled up or down, and then put back inside its original location in the file
+                        for filtered_match in filtered_matches:
+                            values = re.findall(r"-?\d+\.?\d*", filtered_match)  # finds all the numbers to scale in the filtered_match
+                            altered_match = re.sub(r"-?\d+\.?\d*", hash_contain ,filtered_match) # temporarily replaces with hashes to replace later with new values
+
+                            # altering and scaling data inside matches
+                            reroll_attempts = 0  # the current attempts to reroll the values, if it get to 10000, then the code does not scale the match provided
+                            while True: #continues this loop as long as rerolling is required, if a reroll happens, then loop is activated again
+                                altered_values = []  # will store all the vales altered so that they can be put in the altered match
+                                reroll = False # store if while loop should continue, if true, the while loop will happen again
+                                # when a reroll happens, all values are redone to make sure infinite loops do not occur if the first value is always bigger than the second
+
+                                for value in values:
+                                    # everything below scales the value and then adds attributes and criteria to the value to make sure its the correct value
+                                    if isinstance(range, tuple) and all(isinstance(datatype, int) for datatype in range):  # makes the value generated a integer
+                                        value = int(value)
+                                        altered_value = value * int(random.triangular(range[0], range[1], mode))  # Random between range in integer values
+                                    elif isinstance(range, tuple) and all(isinstance(datatype, float) for datatype in range):  # makes the value generated a integer
+                                        value = float(value)
+                                        altered_value = value * random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                    else: # if user inputs a float and int in tuple, defaults to float
+                                        value = float(value)
+                                        altered_value = value * random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+
+                                    # if decimals is true, it will stay as a decimal and float form, round value
+                                    if decimals:
+                                        altered_value = round(altered_value, rounding)
+                                    else:  # if value will not be in decimal form, then it will be converted to an integer format
+                                        altered_value = int(altered_value)
+
+                                    # clamps the value to make sure the value is within the desired range
+                                    # clamps_outer makes sure that the value is not over the desired bounds
+                                    # clamps_inner makes sure that the value is not under the desired values
+                                    # if matching is used, that means it can also equal the clamps, and cannot be equal to clamps if matching is off
+                                        if (not matching and (clamps_outer and (altered_value <= clamps_outer[0] or altered_value >= clamps_outer[1])) or
+                                           (clamps_inner and (altered_value >= clamps_inner[0] and altered_value <= clamps_inner[1])) or
+                                           (matching and (clamps_outer and (altered_value < clamps_outer[0] or altered_value > clamps_outer[1])) or
+                                           (clamps_inner and (altered_value > clamps_inner[0] and altered_value < clamps_inner[1])))):
+
+                                            reroll = True # requires while true loop to reactive after fully altering the value
+                                            break # as reroll happens, skips rest of values loop, as everything else is wrong
+
+                                    # test if altered value is a zero and if zeros are a sufficient value option
+                                    if not zeros and altered_value == 0:
+                                        reroll = True  # requires while true loop to reactive after fully altering the value
+                                        break  # as reroll happens, skips rest of values loop, as everything else is wrong
+
+                                    # tests if the vales are minmax, this mean that each value is bigger or the same as the previous one added to the altered_values list
+                                    # if a values does not pass this, reroll happens, and this is skipped if no values have been given yet
+                                    if altered_values and minmaxing: # runs if something is in the list to start a minmax test
+                                        if altered_values[-1] > altered_value: # test the last added value into the list with the newly added value
+                                            reroll = True # requires while true loop to reactive after fully altering the value
+                                            break # as reroll happens, skips rest of values loop, as everything else is wrong
+
+                                    # stores all altered values to later be put back in the altered match
+                                    altered_values.append(altered_value)
+
+                                if not reroll: # no reroll is needed
+                                    # adds the altered values back into the altered match to then be put back into data
+                                    for altered_value in altered_values:
+                                        altered_match = re.sub(hash_contain, str(altered_value), altered_match, 1) # adds back each altered value in order`
+
+                                    altered_matches.append(altered_match) # adds to list to be added back to data later
+                                    break # ends the while true loop, stopping the reroll loop
+                                else: # adds one to the reroll tries and then tries again
+                                    reroll_attempts += 1
+                                if reroll_attempts >= 10000:  # too many attempts where made, does not change the match and moves to the next filtered match
+                                    # adds the none altered version of the match to be put back in the data
+                                    altered_matches.append(filtered_match)  # adds the filtered match in as the other failed
+                                    Massma.Display.inner.result_warning(file, "scale", 'value unaltered due to unfulfilled constraints')
+                                    break  # ends the while true loop, stopping the reroll loop
+
+
+                        # get back the data from the file to renter the scaled values back into the file and display the changes
+                        with open(file, 'r') as f:
+                            data = f.read()  # stores all the data in a variable
+
+                            while data.count(hash_contain) > 0:  # continues loop until there are 0 hashes left
+                                data = data.replace(hash_contain, altered_matches[0], 1)
+                                Massma.Display.inner.result(file, "scale", filtered_matches.pop(0), altered_matches.pop(0))
+
+                        with open(file, 'w') as f:  # saves changes made after all the scaling
+                            f.write(data)
+
+                except Exception as e:
+                    Massma.Display.inner.result_error(files, "scale", e)
+
+    except Exception as e:
+        Massma.Display.inner.result_error(len(files), "scale", e)
+
+
+def offset(files: str | list[str],contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, mode: float | int | None = None, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, matching: bool = False,
+          clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
+          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
+    try:
+        if chance_total >= random.random():  # test if method will happen
+            # makes data always a list
+            files = [files] if isinstance(files, str) else files
+            contains = [contains] if isinstance(contains, str) else contains
+            ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
+            excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
+            alters = alters if isinstance(alters, list) else ([alters] if alters else [])
+            flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
+
+            # gets size of the largest path for better result formatting
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.inner.set_source_length(max(file_paths, key=len))
+
+            hash_contain = f"{hash(contains[0])}"  # stores the hash of one of the contains to indicate where data is swapped
+            filtered_contains = []  # stores all the contains that will be used
+
+            # determines if contain will be used
+            for contain in contains:
+                if chance_contains >= random.random():  # test if a contain will even be used
+                    filtered_contains.append(contain)  # contain that was randomly filtered
+                else:
+                    filtered_contains.append(None)  # notify system that contains name will not be used in the shuffle and will all finds with None
+
+            # finding all the matches in file data and storing them to be added or subtracted
+            for file in files:
+                try:
+                    if chance_files < random.random(): # if file fails the chance, it will move on to the next file, not effected the current file
+                        continue # moves to next file
+
+                    # goes here instead as they need to be reset after every file, as the offseted data is not shuffled between or in files
+                    filtered_matches = []  # stores all the matches that will be offseted and used
+                    altered_matches = []  # matches altered from scaling and will be put back into the files
+
+                    # test the files in filters to see if they should be ignored
+                    if not (any(ignore(file) for ignore in ignores)) and not (any(exclude(file) for exclude in excludes)):
+                        # gives a chance to alter inside a file
+                        if alters is not None:
+                            for alter in alters:
+                                alter(file)
+
+                        with open(file, 'r') as f:
+                            data = f.read()  # stores all the data in a variable
+
+                            # used for replacing and chance filtering out matches
+                            # group(0) only grabs first match found
+                            def replace(match):
+                                if chance_data >= random.random():
+                                    filtered_matches.append(match.group(0))
+                                    return hash_contain  # will replace data with hash
+                                return match.group(0)  # does not replace data with hash
+
+
+                            # goes throw each contain for a file to find matches
+                            for filtered_contain, contain in zip(filtered_contains, contains):
+                                # goes through each filtered contain and calls the replace method
+                                # allowing for found matches to have a chance of being filtered out, and if now they will be stored and replaced
+                                if filtered_contain is not None:  # normally adds found data
+                                    data = re.sub(filtered_contain, replace, data, flags=flags)
+
+                            with open(file, 'w') as f:  # saves changes to file temporarily
+                                f.write(data)
+
+                        # goes though each match collected offseted up or down, and then put back inside its original location in the file
+                        for filtered_match in filtered_matches:
+                            values = re.findall(r"-?\d+\.?\d*", filtered_match)  # finds all the numbers to offset in the filtered_match
+                            altered_match = re.sub(r"-?\d+\.?\d*", hash_contain ,filtered_match) # temporarily replaces with hashes to replace later with new values
+
+                            # altering and scaling data inside matches
+                            reroll_attempts = 0  # the current attempts to reroll the values, if it get to 10000, then the code does not offset the match provided
+                            while True: #continues this loop as long as rerolling is required, if a reroll happens, then loop is activated again
+                                altered_values = []  # will store all the vales altered so that they can be put in the altered match
+                                reroll = False # store if while loop should continue, if true, the while loop will happen again
+                                # when a reroll happens, all values are redone to make sure infinite loops do not occur if the first value is always bigger than the second
+
+                                for value in values:
+                                    # everything below offsets the value and then adds attributes and criteria to the value to make sure its the correct value
+                                    if isinstance(range, tuple) and all(isinstance(datatype, int) for datatype in range):  # makes the value generated a integer
+                                        value = int(value)
+                                        altered_value = value + int(random.triangular(range[0], range[1], mode))  # Random between range in integer values
+                                    elif isinstance(range, tuple) and all(isinstance(datatype, float) for datatype in range):  # makes the value generated a integer
+                                        value = float(value)
+                                        altered_value = value + random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                    else: # if user inputs a float and int in tuple, defaults to float
+                                        value = float(value)
+                                        altered_value = value + random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+
+                                    # if decimals is true, it will stay as a decimal and float form, round value
+                                    if decimals:
+                                        altered_value = round(altered_value, rounding)
+                                    else:  # if value will not be in decimal form, then it will be converted to an integer format
+                                        altered_value = int(altered_value)
+
+                                    # clamps the value to make sure the value is within the desired range
+                                    # clamps_outer makes sure that the value is not over the desired bounds
+                                    # clamps_inner makes sure that the value is not under the desired values
+                                    # if matching is used, that means it can also equal the clamps, and cannot be equal to clamps if matching is off
+                                        if (not matching and (clamps_outer and (altered_value <= clamps_outer[0] or altered_value >= clamps_outer[1])) or
+                                           (clamps_inner and (altered_value >= clamps_inner[0] and altered_value <= clamps_inner[1])) or
+                                           (matching and (clamps_outer and (altered_value < clamps_outer[0] or altered_value > clamps_outer[1])) or
+                                           (clamps_inner and (altered_value > clamps_inner[0] and altered_value < clamps_inner[1])))):
+
+                                            reroll = True # requires while true loop to reactive after fully altering the value
+                                            break # as reroll happens, skips rest of values loop, as everything else is wrong
+
+                                    # test if altered value is a zero and if zeros are a sufficient value option
+                                    if not zeros and altered_value == 0:
+                                        reroll = True  # requires while true loop to reactive after fully altering the value
+                                        break  # as reroll happens, skips rest of values loop, as everything else is wrong
+
+                                    # tests if the vales are minmax, this mean that each value is bigger or the same as the previous one added to the altered_values list
+                                    # if a values does not pass this, reroll happens, and this is skipped if no values have been given yet
+                                    if altered_values and minmaxing: # runs if something is in the list to start a minmax test
+                                        if altered_values[-1] > altered_value: # test the last added value into the list with the newly added value
+                                            reroll = True # requires while true loop to reactive after fully altering the value
+                                            break # as reroll happens, skips rest of values loop, as everything else is wrong
+
+                                    # stores all altered values to later be put back in the altered match
+                                    altered_values.append(altered_value)
+
+                                if not reroll: # no reroll is needed
+                                    # adds the altered values back into the altered match to then be put back into data
+                                    for altered_value in altered_values:
+                                        altered_match = re.sub(hash_contain, str(altered_value), altered_match, 1) # adds back each altered value in order`
+
+                                    altered_matches.append(altered_match) # adds to list to be added back to data later
+                                    break # ends the while true loop, stopping the reroll loop
+                                else: # adds one to the reroll tries and then tries again
+                                    reroll_attempts += 1
+                                if reroll_attempts >= 10000:  # too many attempts where made, does not change the match and moves to the next filtered match
+                                    # adds the none altered version of the match to be put back in the data
+                                    altered_matches.append(filtered_match)  # adds the filtered match in as the other failed
+                                    Massma.Display.inner.result_warning(file, "offset", 'value unaltered due to unfulfilled constraints')
+                                    break  # ends the while true loop, stopping the reroll loop
+
+
+                        # get back the data from the file to renter the offseted values back into the file and display the changes
+                        with open(file, 'r') as f:
+                            data = f.read()  # stores all the data in a variable
+
+                            while data.count(hash_contain) > 0:  # continues loop until there are 0 hashes left
+                                data = data.replace(hash_contain, altered_matches[0], 1)
+                                Massma.Display.inner.result(file, "offset", filtered_matches.pop(0), altered_matches.pop(0))
+
+                        with open(file, 'w') as f:  # saves changes made after all the scaling
+                            f.write(data)
+
+                except Exception as e:
+                    Massma.Display.inner.result_error(files, "offset", e)
+
+    except Exception as e:
+        Massma.Display.inner.result_error(len(files), "offset", e)
