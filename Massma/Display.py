@@ -100,6 +100,7 @@ class Result:
             self._log_name = log_name
             self._flatten_output = flatten_output
             self._source_length = source_length
+            self._stats = Stats()
         except Exception as e:
             self.result_error(os.getcwd(), "display", e)
 
@@ -521,6 +522,37 @@ class Result:
 
         except Exception as e:
             self.result_error(f"{source:>{self._source_length}}", method, e)
+
+    def result_stats(self, alters: bool = True, unalters: bool = True, warnings: bool = True, errors: bool = True, notifications: bool = True):
+        """
+        Displays a results stats message.
+
+        Parameters:
+            method (str): Name of the method issuing the stats.
+        """
+        try:
+            statistic = f"{os.getcwd()} <|> {self._method_color}stats{Color.RESET} " # will store the output to be displayed after selecting what to display
+            if alters: # will display the alters
+                statistic += f"<|> ALTERED: {self._stats.altered} "
+            if unalters:  # will display the unalters
+                statistic += f"<|> UNALTERED: {self._stats.unaltered} "
+            if warnings:  # will display the warnings
+                statistic += f"<|> WARNING: {self._stats.warnings} "
+            if errors:  # will display the errors
+                statistic += f"<|> ERRORS: {self._stats.errors} "
+            if notifications:  # will display the notifications
+                statistic += f"<|> NOTIFICATIONS: {self._stats.notifications} "
+
+            print(statistic + Color.RESET)
+            # used for logging outputs and changes made
+            if self._log_output:
+                with open(f"{os.getcwd()}\\{self._log_name}", 'a') as file:  # can only be in working directory
+                    file.write(statistic)  # appends output into the log file
+
+            self._stats.notifications += 1  # tracking total "notifications" made
+
+        except Exception as e:
+            self.result_error(f"{os.getcwd()}", "stats", e)
 
 
 # PLACE RESULT INSTANCES HERE FOR ORGANIZED ACCESS

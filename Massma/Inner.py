@@ -3,7 +3,7 @@ from Massma import random  # used for seeds
 from Massma.Filter import *
 import Massma
 
-def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, weights: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
+def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     try:
         if chance_total >= random.random():  # test if method will happen
@@ -12,7 +12,6 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
             contains = [contains] if isinstance(contains, str) else contains
             preset = preset if isinstance(preset, list) else ([preset] if preset else [])
             preshuffle = preshuffle if isinstance(preshuffle, list) else ([preshuffle] if preshuffle else [])
-            weights = weights if isinstance(weights, list) else ([weights] if weights else [])
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
             excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
             alters = alters if isinstance(alters, list) else ([alters] if alters else [])
@@ -76,7 +75,7 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
                             f.write(data)
 
                 except Exception as e:
-                    Massma.Display.inner.result_error(files, "normal", e)
+                    Massma.Display.inner.result_error(file, "normal", e)
 
             # all of this below shuffles data inside files
             if preshuffle:  # preshuffle format on how the files will be shuffled and does not work with any duplicate based features
@@ -102,20 +101,14 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
             random_matches = [match for match in random_matches if match is not None]
             filtered_matches = [match for match in filtered_matches if match is not None]  # souly to display changes correctly
 
-            # if no weight is assigned, this will set all to 1 to make sure random.choices does not break
-            # if a user enters any amount of weights, this will not run, causing errors occur if the wrong amount is givin
-            # STILL NEEDS WORK ON
-            if not weights:
-                weights = [1] * len(filtered_matches)  # adds the exact amounts of 0 weights as there are filtered matches
-
             # flatting and duplication for the shuffled lists
             # additionally weight can be used to calibrate the duplication to your needs
             if duplicate: # allows for the same data to be given to multiple different files instead of just one
                 if flatten: # removes all redundant and duplicate data before
                     flatten_matches = list(set(random_matches))  # Remove duplicates and allowing for highly more even distribution of data
-                    random_matches = random.choices(flatten_matches, k=len(filtered_matches), weights=weights)  # Fills list back up
+                    random_matches = random.choices(flatten_matches, k=len(filtered_matches))  # Fills list back up
                 else:
-                    random_matches = random.choices(random_matches, k=len(filtered_matches), weights=weights)  # Fills list back up
+                    random_matches = random.choices(random_matches, k=len(filtered_matches))  # Fills list back up
 
             elif not preshuffle:  # normal shuffle, only if there was no preshuffle used
                 random.shuffle(random_matches)
@@ -137,7 +130,7 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
         Massma.Display.inner.result_error(len(files), "normal", e)
 
 
-def group(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, weights: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
+def group(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     try:
         if chance_total >= random.random():  # test if method will happen
@@ -146,7 +139,6 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
             contains = [contains] if isinstance(contains, str) else contains
             preset = preset if isinstance(preset, list) else ([preset] if preset else [])
             preshuffle = preshuffle if isinstance(preshuffle, list) else ([preshuffle] if preshuffle else [])
-            weights = weights if isinstance(weights, list) else ([weights] if weights else [])
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
             excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
             alters = alters if isinstance(alters, list) else ([alters] if alters else [])
@@ -158,9 +150,8 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
 
             hash_contains = []  # stores the hash of each contain to indicate where data is shuffled in each group
             filtered_contains = []  # stores all the contains that will be used
-            filtered_matches = []  # stores all the matches that will be shuffled and used
-
-            # determines if contain will be used
+            filtered_matches = [[] for index in contains]  # stores all the matches that will be shuffled and used
+            group_matches = [[] for index in contains] # temporarily stores all matches into groups to them be filtered and given to filtered matches in a group organized format
             for contain in contains:
                 if chance_contains >= random.random():  # test if a contain will even be used
                     filtered_contains.append(contain)  # contain that was randomly filtered
@@ -191,30 +182,55 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
                             # goes throw each contain for a file to find matches
                             # indexes each contain so it can orderly organize the groups
                             for index, (filtered_contain, contain, hash_contain) in enumerate(zip(filtered_contains, contains, hash_contains)):
-                                # used for replacing and chance filtering out matches
-                                # group(0) only grabs first match found, so it can correctly filter out data
-                                def replace(match):
-                                    if chance_data >= random.random():
-                                        filtered_matches.append(match.group(0))
-                                        return hash_contain  # will replace data with hash
-                                    # runs when it fails the chance files, adding empty value to keep order and structure to the preshuffle
-                                    filtered_matches.append(
-                                        None)  # notify system that file name will not be used in the shuffle
-                                    return match.group(0)  # does not replace data with hash
 
-                                # goes through each filtered contain and calls the replace method
-                                # allowing for found matches to have a chance of being filtered out, and if now they will be stored and replaced
+                                # (CHANGE)goes through each filtered contain and calls the replace method
+                                # (CHANGE)allowing for found matches to have a chance of being filtered out, and if now they will be stored and replaced
                                 if filtered_contain is not None and skipped_file == False: # normally adds found data
-                                    data = re.sub(filtered_contain, replace, data, flags=flags)
+                                    matches = re.findall(filtered_contain, data, flags=flags) # finds all data in one contain
+                                    group_matches[index] = matches # adds and replaces previous matches to then be filtered and added to filtered matches
                                 else:  # still gets the data from ignored contained, this is to make sure preshuffle is accurate and in sync, will also do this if file is suppose to be skipped
                                     matches = len(re.findall(contain, data, flags=flags)) # gets a number of all the matches to determine the amounts of nons needed
-                                    filtered_matches.extend([None] * matches)  # adds the exact amounts of Nones as there are matches
+                                    # below adds the exact amounts of Nones as there are matches
+                                    group_matches[index] = [None] * matches # adds and replaces previous matches to then be filtered and added to filtered matches
+
+                            # shrink group to smallest contain
+                            group_limit = len(min(group_matches, key=len)) # finds the smallest contain group
+                            group_matches = [group[:group_limit] for group in group_matches] # makes all contain groups as small as the smallest group
+
+                            # the for loops are seperate do to making sure that all contains in one group will all be None, insted of some
+                            if chance_data >= random.random():
+                                # goes though each peice of match found, filteres it, and adds the hash to where it would be
+                                for index, group in enumerate(group_matches): # goes though each group of contains, not each contain
+                                    if group: # only if the list of matches in contains is not empty
+                                        filtered_matches[index].extend(group)
+                            else: # this is the same as the other one, but all matches are replaced with None, this is for better preshuffling
+                                for index, group in enumerate(group_matches):  # goes though each group of contains, not each contain
+                                    if group:  # only if the list of matches in contains is not empty
+                                        group = [None] * len(group)  # convers all matches in a group into None as it failed the chance filter
+                                        group_matches[index] = group # reenters the Nones into the orignal group, so it can correctly hash the data
+                                        filtered_matches[index].extend(group)
+
+                            # goes through adding the filtered matches hashes back into the data so they can be shuffled and reentered later
+                            for group in zip(*group_matches): # converts matches into proper groups within a list to then be added
+                                if all(match is None for match in group): # skips all since all the data is siomply none
+                                    continue
+                                for index, matches in enumerate(group): # goes through each match inside the groups
+                                    # used for replacing and chance filtering out matches
+                                    # group(0) only grabs first match found
+                                    def replace(match):
+                                        if all(matches is not None for matches in group):  # test if all matches are None. essentially if the group is skipped
+                                            return hash_contains[index]  # will replace data with hash that is assigned to that contain
+                                        # runs when it fails the chance files, adding empty value to keep order and structure to the preshuffle
+                                        return match.group(0)  # does not replace data with hash
+                                    data = re.sub(matches, replace, data, 1, flags=flags) # replaces the data with the hash if there are no Nones
 
                         with open(file, 'w') as f:  # saves changes to file temporarily
                             f.write(data)
 
+                        print(filtered_matches)
+
                 except Exception as e:
-                    Massma.Display.inner.result_error(files, "group", e)
+                    Massma.Display.inner.result_error(file, "group", e)
 
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "group", e)
@@ -370,7 +386,7 @@ def scale(files: str | list[str],contains: str | list[str], range: tuple[float, 
                             f.write(data)
 
                 except Exception as e:
-                    Massma.Display.inner.result_error(files, "scale", e)
+                    Massma.Display.inner.result_error(file, "scale", e)
 
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "scale", e)
@@ -527,7 +543,7 @@ def offset(files: str | list[str],contains: str | list[str], range: tuple[float,
                             f.write(data)
 
                 except Exception as e:
-                    Massma.Display.inner.result_error(files, "offset", e)
+                    Massma.Display.inner.result_error(file, "offset", e)
 
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "offset", e)
