@@ -249,10 +249,111 @@ def content(source: str, contains: str | list[str], *, deep_search: bool = False
                             for alter in alters:
                                 alter(file)
 
-                            filtered_files.append(file)
+                            # beginning source is simply how many files it went through
+                            filtered_files.append(len(file))
 
         Massma.Display.search.result(source, "content", 0, len(filtered_files))
         return filtered_files  # returns all files in a list
     except Exception as e:
         Massma.Display.search.result_error(source, "content", e)
         return []
+
+
+def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] | None = None,
+          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, flags: list[re.RegexFlag] = None) -> list[str]:
+    try:
+        # makes data always a list
+        files = [files] if isinstance(files, str) else files
+        contains = [contains] if isinstance(contains, str) else contains
+        ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
+        excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
+        flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
+
+        # gets size of the largest path for better result formatting
+        file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+        Massma.Display.inner.set_source_length(max(file_paths, key=len))
+
+        filtered_contains = []  # stores all the contains that will be used
+        filtered_matches = []  # stores all the matches that will be shuffled and used
+
+        if grouping:  # used to get data from inner group like method
+            # finding all the matches in file data and storing them to later be shuffled
+            for file in files:
+                try:
+                    # goes through all filters needed to make
+                    if not (any(ignore(file) for ignore in ignores)) and not (any(exclude(file) for exclude in excludes)): # could filter out files
+                        with open(file, 'r') as f:
+                            data = f.read()  # stores all the data in a variable
+
+                            # used for replacing and chance filtering out matches
+                            # group(0) only grabs first match found
+                            def replace(match):
+                                filtered_matches.append(match.group(0))
+                                return match.group(0)  # does not replace data with hash
+
+                            # goes throw each contain for a file to find matches
+                            for filtered_contain, contain in zip(filtered_contains, contains):
+                                # allowing for found matches to have a chance of being filtered out, and if now they will be stored and replaced
+                                data = re.sub(filtered_contain, replace, data, flags=flags)
+
+                except Exception as e:
+                    Massma.Display.inner.result_error(file, "inner", e)
+        else:  # used to get data from inner normal like method
+            pass
+
+    except Exception as e:
+        print(e)
+        Massma.Display.inner.result_error(len(files), "inner", e)
+
+
+# YES, I do understand that outer search method is absolutely useless, has no value, and are just worse version of other searches,
+# however, I am petty and like order, if there is going to be an inner search then there is going to be an outer search
+def outer(files: str | list[str], grouping: bool, *, contains: str | list[str] | None = None,
+          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None) -> list[str]:
+    try:
+        # makes data always a list
+        files = [files] if isinstance(files, str) else files
+        contains = [contains] if isinstance(contains, str) else contains
+        ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
+        excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
+
+        # gets size total files for better result formatting
+        Massma.Display.search.set_source_length(0)
+
+        filtered_data = []  # stores all files or contains after and filters
+
+        if grouping: # used to get data from outer group like method
+            #  goes through each file checking if they pass the filters and storing them to be returned to user
+            for contain in contains:
+                try:
+                    filtered_data.append(contain)  # stores contains to data being sent back
+
+                except Exception as e:
+                    Massma.Display.search.result_error(len(files), "outer", e)
+                    return []  # returns an empty list
+
+        else:  # used to get data from outer normal like method
+            #  goes through each file checking if they pass the filters and storing them to be returned to user
+            for file in files:
+                try:
+                    if (not (any(ignore(file) for ignore in ignores))
+                       and not (any(exclude(file) for exclude in excludes))):  # change to be filtered
+
+                        # adds file to list
+                        filtered_data.append(file)  # stores file names being used
+
+                except Exception as e:
+                    Massma.Display.search.result_error(file, "outer", e)
+                    return []  # returns an empty list
+
+
+        # displays and the returns list after finding all the data
+        Massma.Display.search.result(len(files), "outer", 0, len(filtered_data))
+        return filtered_data  # returns a list of all data that was found and would have been altered
+
+    except Exception as e:
+        Massma.Display.search.result_error(len(files), "outer", e)
+        return []  # returns an empty list
+
+
+

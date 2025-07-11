@@ -4,6 +4,18 @@ import Massma
 
 def normal(files: str | list[str], *, preshuffle: list[int] | None = None, chance_files: float = 1, chance_total: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
+    """
+    Shuffles and alters the names of all selected files together
+
+    Parameters:
+        files (str|list[str]): Selected file(s) to be shuffled
+        preshuffle (list[int]): List of positions determining the set shuffling order of file names, defaults to None
+        chance_files (float): Probability between 0 (0%) and 1 (100%) of each file being shuffled, defaults to 1
+        chance_total (float): Probability between 0 (0%) and 1 (100%) of any files being shuffled, defaults to 1
+        ignores (Filter.Ignore|list[Filter.Ignore]): Filter object(s) that skips files from shuffling based on file directory, defaults to None
+        excludes (Filter.Exclude|list[Filter.Exclude]): Filter object(s) that skips files from shuffling based on file data, defaults to None
+        alters (Filter.Alter|list[Filter.Alter]): Filter object(s) that alter files data based on existing file data, defaults to None
+    """
     try:
         if chance_total >= random.random():  # test if method will happen
             # makes data always a list
@@ -75,7 +87,21 @@ def normal(files: str | list[str], *, preshuffle: list[int] | None = None, chanc
         Massma.Display.outer.result_error(len(files), "normal", e)
 
 def group(files: str | list[str], contains: str | list[str], *, preshuffle: list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1,
-          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
+          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
+    """
+    Shuffles and alters the names all selected files by groups based on substring patterns
+
+    Parameters:
+        files (str|list[str]): Selected file(s) to be shuffled
+        contains: Substring(s) used to create groups by matching text in file names for shuffling
+        preshuffle (list[int]): List of positions determining the set shuffling order of file names, defaults to None
+        chance_files (float): Probability between 0 (0%) and 1 (100%) of each file being shuffled, defaults to 1
+        chance_contains (float): Probability between 0 (0%) and 1 (100%) of each contain creating groups, defaults to 1
+        chance_total (float): Probability between 0 (0%) and 1 (100%) of any files being shuffled, defaults to 1
+        ignores (Filter.Ignore|list[Filter.Ignore]): Filter object(s) that skips files from shuffling based on file directory, defaults to None
+        excludes (Filter.Exclude|list[Filter.Exclude]): Filter object(s) that skips files from shuffling based on file data, defaults to None
+        alters (Filter.Alter|list[Filter.Alter]): Filter object(s) that alter files data based on existing file data, defaults to None
+    """
     try:
         if chance_total >= random.random():  # test if method will happen
             # makes data always a list
@@ -85,7 +111,6 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
             excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
             alters = alters if isinstance(alters, list) else ([alters] if alters else [])
-            flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
 
             # gets size of the largest path for better result formatting
             file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
@@ -119,9 +144,9 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
 
                         # this for loop will temporary skip all nopes
                         for index, contain in enumerate([contain for contain in filtered_contains if contain is not None]): # goes though each contain
-                            if re.search(contain, os.path.basename(file), flags=flags):  # used regex
+                            if re.search(contain, os.path.basename(file)):
                                 # the re.sub uses regex, be careful with how you enter strings
-                                hash_name = re.sub(contain, hash_contains[index], os.path.basename(file), flags=flags)  # new name for the file
+                                hash_name = re.sub(contain, hash_contains[index], os.path.basename(file))  # new name for the file
                                 hash_file = os.path.join(os.path.dirname(file), hash_name) # creates the full file name with the hash
                                 os.rename(os.path.abspath(file), hash_file)  # changes file name to hash name
 
