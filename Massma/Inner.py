@@ -128,6 +128,7 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
     except Exception as e:
         print(e)
         Massma.Display.inner.result_error(len(files), "normal", e)
+    Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 
 def group(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
@@ -237,6 +238,7 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
 
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "group", e)
+    Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 def scale(files: str | list[str],contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, mode: float | int | None = None, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, matching: bool = False,
           clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
@@ -393,7 +395,7 @@ def scale(files: str | list[str],contains: str | list[str], range: tuple[float, 
 
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "scale", e)
-
+    Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 def offset(files: str | list[str],contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, mode: float | int | None = None, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, matching: bool = False,
           clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
@@ -550,3 +552,4 @@ def offset(files: str | list[str],contains: str | list[str], range: tuple[float,
 
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "offset", e)
+    Massma.Display.inner.set_source_length(0)  # resets source length after a method ends

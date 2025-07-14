@@ -7,27 +7,20 @@ import os
 def full(source: str, *, deep_search: bool = False, chance_files: float = 1, chance_folders: float = 1, chance_total: float = 1,
          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None) -> list[str]:
     """
-    Searches for all files within a directory.
+    Searches and returns all files found within a directory
 
     Parameters:
-        source (str): The directory to search.
-
-        deep_search (bool): If True, searches subdirectories as well. Defaults to False.
-
-        chance_files (float): Probability (0-1) of each file being included. Defaults to 1.
-
-        chance_folders (float): Probability (0-1) of searching each folder. Defaults to 1.
-
-        chance_total (float): Probability (0-1) of the method executing. Defaults to 1.
-
-        ignores (Ignore | list[Ignore] | None): Filters out specific files. Defaults to None.
-
-        excludes (Exclude | list[Exclude] | None): Excludes files based on content. Defaults to None.
-
-        alters (Alter | list[Alter] | None): Modifies files if found. Defaults to None.
-
+        source (str): The directory of selected files to be searched
+        deep_search (bool): Allows for also searching inside folders within the selected source directory, defaults to
+        chance_files (float): Probability between 0 (0%) and 1 (100%) of each file being selected, defaults to 1
+        chance_total (float): Probability between 0 (0%) and 1 (100%) of any files being selected, defaults to 1
+        chance_folder (float): Probability between 0 (0%) and 1 (100%) of each folder being selected, defaults to 1
+        ignores (Filter.Ignore|list[Filter.Ignore]): Filter object(s) that skips files from being selected based on file directory, defaults to None
+        excludes (Filter.Exclude|list[Filter.Exclude]): Filter object(s) that skips files from being selected based on file data, defaults to None
+        alters (Filter.Alter|list[Filter.Alter]): Filter object(s) that alter files data based on existing file data, defaults to None
+    
     Returns:
-        list[str]: A list of file paths matching the search criteria.
+        list[str]: file paths matching the search pattern
     """
     try:
         files = []  # will store all files found in this search
@@ -70,42 +63,43 @@ def full(source: str, *, deep_search: bool = False, chance_files: float = 1, cha
 def name(source: str, contains: str | list[str], *, deep_search: bool = False, chance_files: float = 1, chance_folders: float = 1, chance_total: float = 1,
          logic: Logic = Logic.AND, ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None) -> list[str]:
     """
-       Searches for files by name within a directory.
+    Searches and returns files found within a directory based on file name
 
-       Parameters:
-           source (str): The directory to search.
+    Parameters:
+        source (str): The directory of selected files to be searched
+        contains (str|list[str]): Substring(s) used for selecting files by matching text in file names
+        deep_search (bool): Allows for also searching inside folders within the selected source directory, defaults to
+        chance_files (float): Probability between 0 (0%) and 1 (100%) of each file being selected, defaults to 1
+        chance_total (float): Probability between 0 (0%) and 1 (100%) of any files being selected, defaults to 1
+        chance_folder (float): Probability between 0 (0%) and 1 (100%) of each folder being selected, defaults to 1
+        logic (Logic): BIG WORDS, defaults to Logic.AND
+        ignores (Filter.Ignore|list[Filter.Ignore]): Filter object(s) that skips files from being selected based on file directory, defaults to None
+        excludes (Filter.Exclude|list[Filter.Exclude]): Filter object(s) that skips files from being selected based on file data, defaults to None
+        alters (Filter.Alter|list[Filter.Alter]): Filter object(s) that alter files data based on existing file data, defaults to None
+        flags (list[re.RegexFlag]):
 
-           contains (str | list[str]): Substrings or patterns to match in file names.
+    Returns:
+        list[str]: file paths matching the search pattern
 
-           deep_search (bool): If True, searches subdirectories as well. Defaults to False.
+    Notes:
+        contains use BIG WORDS (re/Regex)
+        logic patterns:
+        - Logic.AND: All contains must match
+        - Logic.NAND: Opposite of AND
+        - Logic.OR: At least one must match
+        - Logic.NOR: Opposite of OR
+        - Logic.XOR: Exactly one match
+        - Logic.XNOR: opposite of XOR
+        BIG WORDS (re/Regex) flags:
+        - re.A: ASCII-only matching
+        - re.I: Ignore case
+        - re.L: Locale dependent
+        - re.M: Multi-line mode
+        - re.S: Dot matches all
+        - re.U: Unicode matching.
+        - re.X: Verbose
 
-           chance_files (float): Probability (0-1) of each file being included. Defaults to 1.
-
-           chance_folders (float): Probability (0-1) of searching each folder. Defaults to 1.
-
-           chance_total (float): Probability (0-1) of the method executing. Defaults to 1.
-
-           logic (Logic): Logic rule for matching patterns (AND, OR, etc.). Defaults to Logic.AND.
-
-           ignores (Ignore | list[Ignore] | None): Filters out specific files. Defaults to None.
-
-           excludes (Exclude | list[Exclude] | None): Excludes files based on content. Defaults to None.
-
-           alters (Alter | list[Alter] | None): Modifies files if found. Defaults to None.
-
-           flags (list[re.RegexFlag]): List of `re` module flags to apply during regex matching.
-            - re.A: ASCII-only matching.
-            - re.I: Ignore case.
-            - re.L: Locale dependent.
-            - re.M: Multi-line mode.
-            - re.S: Dot matches all (dotall).
-            - re.U: Unicode matching.
-            - re.X: Verbose (allow comments and whitespace).
-            - Defaults to None (no flags).
-
-       Returns:
-           list[str]: A list of file paths matching the search criteria.
-       """
+    """
     try:
         files = []  # will store all files found in this search
         filtered_files = []  # will store all files after chances and filters
@@ -171,42 +165,42 @@ def name(source: str, contains: str | list[str], *, deep_search: bool = False, c
 def content(source: str, contains: str | list[str], *, deep_search: bool = False, chance_files: float = 1, chance_folders: float = 1, chance_total: float = 1,
             logic: Logic = Logic.AND, ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None) -> list[str]:
     """
-    Searches for files within a directory that contain specified substrings.
+    Searches and returns files found within a directory based on data inside files
 
     Parameters:
-        source (str): The root directory to begin the search.
+        source (str): The directory of selected files to be searched
+        contains (str|list[str]): Substring(s) used for selecting files by matching text inside files
+        deep_search (bool): Allows for also searching inside folders within the selected source directory, defaults to
+        chance_files (float): Probability between 0 (0%) and 1 (100%) of each file being selected, defaults to 1
+        chance_total (float): Probability between 0 (0%) and 1 (100%) of any files being selected, defaults to 1
+        chance_folder (float): Probability between 0 (0%) and 1 (100%) of each folder being selected, defaults to 1
+        logic (Logic): BIG WORDS, defaults to Logic.AND
+        ignores (Filter.Ignore|list[Filter.Ignore]): Filter object(s) that skips files from being selected based on file directory, defaults to None
+        excludes (Filter.Exclude|list[Filter.Exclude]): Filter object(s) that skips files from being selected based on file data, defaults to None
+        alters (Filter.Alter|list[Filter.Alter]): Filter object(s) that alter files data based on existing file data, defaults to None
+        flags (list[re.RegexFlag]): BIG WORDS, defaults to None
 
-        contains (str | list[str]): The substring(s) to search for in file content.
+        Returns:
+            list[str]: file paths matching the search pattern
 
-        deep_search (bool, optional): If True, searches subdirectories recursively. Defaults to False.
-
-        chance_files (float, optional): Probability (0 to 1) of including a file in results. Defaults to 1.
-
-        chance_folders (float, optional): Probability (0 to 1) of searching inside a folder. Defaults to 1.
-
-        chance_total (float, optional): Probability (0 to 1) that the entire function runs. Defaults to 1.
-
-        logic (Logic, optional): Defines how multiple substrings should be evaluated (AND, OR, etc.). Defaults to Logic.AND.
-
-        ignores (Ignore | list[Ignore] | None, optional): List of Ignore filters to exclude specific files. Defaults to None.
-
-        excludes (Exclude | list[Exclude] | None, optional): List of Exclude filters for conditional exclusion. Defaults to None.
-
-        alters (Alter | list[Alter] | None, optional): List of Alter operations to modify file content. Defaults to None.
-
-        flags (list[re.RegexFlag]): List of `re` module flags to apply during regex matching.
-            - re.A: ASCII-only matching.
-            - re.I: Ignore case.
-            - re.L: Locale dependent.
-            - re.M: Multi-line mode.
-            - re.S: Dot matches all (dotall).
+        Notes:
+            contains use BIG WORDS (re/Regex)
+            logic patterns:
+            - Logic.AND: All contains must match
+            - Logic.NAND: Opposite of AND
+            - Logic.OR: At least one must match
+            - Logic.NOR: Opposite of OR
+            - Logic.XOR: Exactly one match
+            - Logic.XNOR: opposite of XOR
+            BIG WORDS (re/Regex) flags:
+            - re.A: ASCII-only matching
+            - re.I: Ignore case
+            - re.L: Locale dependent
+            - re.M: Multi-line mode
+            - re.S: Dot matches all
             - re.U: Unicode matching.
-            - re.X: Verbose (allow comments and whitespace).
-            - Defaults to None (no flags).
-
-    Returns:
-        list[str]: A list of file paths matching the search criteria.
-    """
+            - re.X: Verbose
+        """
     try:
         files = []  # will store all files found in this search
         filtered_files = []  # will store all files after chances and filters
@@ -269,10 +263,6 @@ def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] |
         excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
         flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
 
-        # gets size of the largest path for better result formatting
-        file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
-        Massma.Display.inner.set_source_length(max(file_paths, key=len))
-
         filtered_contains = []  # stores all the contains that will be used
         filtered_matches = []  # stores all the matches that will be shuffled and used
 
@@ -316,9 +306,6 @@ def outer(files: str | list[str], grouping: bool, *, contains: str | list[str] |
         contains = [contains] if isinstance(contains, str) else contains
         ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
         excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
-
-        # gets size total files for better result formatting
-        Massma.Display.search.set_source_length(0)
 
         filtered_data = []  # stores all files or contains after and filters
 

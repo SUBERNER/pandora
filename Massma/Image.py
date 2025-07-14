@@ -4,6 +4,59 @@ import Massma
 import numpy
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps  # Pillow
 
+class Sheet:
+    __images = [] # stores all the images in a sprite sheet
+    __file = None # stores the sheets location on the computer
+    __offset = (0,0) # stores the offset form where the images start
+    __padding = (0,0) # stores the gaps between each image in the sheet
+    __dimensions = (0,0) # stores the size of each image in the sheet
+
+    def __init__(self, file: str, dimensions: tuple[int, int], *, offset: tuple[int,int] = (0,0), padding: tuple[int,int] = (0,0)):
+        try:
+            self.__images = [] # resets images after each change made to it
+            self.__file = file
+            self.__offset = offset
+            self.__padding = padding
+            self.__dimensions = dimensions
+            # setting up the amount of times the loop will go though the image and crop the sheet into multiple small images
+            image = Image.open(self.__file) # gets image sheet
+            size = image.size  # gets the x and y size of the sheet, this is only used for offsets
+            new_image = image  # version of image after changes
+            new_image = new_image.crop((self.__offset[0], self.__offset[1], size[0], size[1])) # crop the image to offset blank space on the left and top of image sheets
+            size = new_image.size  # gets the x and y size of the sheet, this will be used to help get the correct images and their sizes
+
+            for index_vertical in range(int(size[1] / self.__dimensions[1])): # vertical length of sprite sheet
+                for index_horizontal in range(int(size[0] / self.__dimensions[0])): # horizontal length of sprite sheet
+                    # calculates the location and size of the crop, then crops and saves image
+                    # padding is the space between each image on the sheet
+                    new_image = new_image.crop((index_horizontal * self.__dimensions[0] + (index_horizontal * self.__padding[0]),
+                                            index_vertical * self.__dimensions[1] + (index_vertical * self.__padding[1]),
+                                            (index_horizontal + 1) * self.__dimensions[0] + (index_horizontal * self.__padding[0]),
+                                            (index_vertical + 1) * self.__dimensions[1] + (index_vertical * self.__padding[1])))
+
+                    self.__images.append(new_image)
+
+        except Exception as e:
+            Massma.Display.image.result_error(file, "sheet", e)
+
+    def set_images(self, images: list[Image.Image] = None):
+        try:
+            # only changes data if not None, use None to only see data
+            if images is not None:
+                self.__images = images
+                # makes changes to the images in the sheet
+                image = Image.open(self.__file)  # gets image sheet
+                size = image.size  # gets the x and y size of the sheet, this is only used for all parts of set_images
+                new_image = image  # version of image after changes
+
+                # goes through each image and adds them back into the sheet in order
+                for image in self.__images:
+                    pass
+            return self.__images
+        except Exception as e:
+            Massma.Display.image.result_error(self.__file, "sheet", e)
+            return self.__images
+
 
 def saturation(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
                ignores: Ignore | list[Ignore] | None = None):
@@ -49,6 +102,7 @@ def saturation(files: str | list[str], factor: float, *, optimize: bool = False,
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "saturation", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def contrast(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -94,6 +148,7 @@ def contrast(files: str | list[str], factor: float, *, optimize: bool = False, m
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "contrast", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def brightness(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -140,6 +195,7 @@ def brightness(files: str | list[str], factor: float, *, optimize: bool = False,
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "brightness", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def sharpness(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -186,6 +242,7 @@ def sharpness(files: str | list[str], factor: float, *, optimize: bool = False, 
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "sharpness", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def invert(files: str | list[str], *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -232,6 +289,7 @@ def invert(files: str | list[str], *, optimize: bool = False, masks: str | list[
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "invert", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def flip(files: str | list[str], *, optimize: bool = False, chance_files: float = 1, chance_total: float = 1,
@@ -263,6 +321,7 @@ def flip(files: str | list[str], *, optimize: bool = False, chance_files: float 
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "flip", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def mirror(files: str | list[str], *, optimize: bool = False, chance_files: float = 1, chance_total: float = 1,
@@ -294,6 +353,7 @@ def mirror(files: str | list[str], *, optimize: bool = False, chance_files: floa
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "mirror", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def rotate(files: str | list[str], degree: int, *, optimize: bool = False, resampling: int = 3, expand: bool = False, chance_files: float = 1, chance_total: float = 1,
@@ -325,6 +385,7 @@ def rotate(files: str | list[str], degree: int, *, optimize: bool = False, resam
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "rotate", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def layer(files: str | list[str], layers: str | list[str], *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -375,6 +436,7 @@ def layer(files: str | list[str], layers: str | list[str], *, optimize: bool = F
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "layer", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def crop(files: str | list[str], dimensions: tuple[int, int, int, int], *, optimize: bool = False, chance_files: float = 1, chance_total: float = 1,
@@ -406,6 +468,7 @@ def crop(files: str | list[str], dimensions: tuple[int, int, int, int], *, optim
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "crop", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def noise(files: str | list[str], mean: float, standard_deviation: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -458,6 +521,7 @@ def noise(files: str | list[str], mean: float, standard_deviation: float, *, opt
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "noise", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def blur(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -504,6 +568,7 @@ def blur(files: str | list[str], factor: float, *, optimize: bool = False, masks
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "blur", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def resize(files: str | list[str], dimensions: tuple[int, int] | list[int], *, optimize: bool = False, resampling: int = 3, chance_files: float = 1, chance_total: float = 1,
@@ -535,6 +600,7 @@ def resize(files: str | list[str], dimensions: tuple[int, int] | list[int], *, o
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "resize", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
 def resolution(files: str | list[str], factor: float, *, optimize: bool = False, resampling: int = 3, chance_files: float = 1, chance_total: float = 1,
@@ -566,3 +632,4 @@ def resolution(files: str | list[str], factor: float, *, optimize: bool = False,
 
     except Exception as e:
         Massma.Display.image.result_error(len(files), "resolution", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends

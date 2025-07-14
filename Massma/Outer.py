@@ -85,6 +85,8 @@ def normal(files: str | list[str], *, preshuffle: list[int] | None = None, chanc
 
     except Exception as e:
         Massma.Display.outer.result_error(len(files), "normal", e)
+    Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
+
 
 def group(files: str | list[str], contains: str | list[str], *, preshuffle: list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1,
           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
@@ -93,7 +95,7 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
 
     Parameters:
         files (str|list[str]): Selected file(s) to be shuffled
-        contains: Substring(s) used to create groups by matching text in file names for shuffling
+        contains: Substring(s) Used to create groups by matching text in file names for shuffling
         preshuffle (list[int]): List of positions determining the set shuffling order of file names, defaults to None
         chance_files (float): Probability between 0 (0%) and 1 (100%) of each file being shuffled, defaults to 1
         chance_contains (float): Probability between 0 (0%) and 1 (100%) of each contain creating groups, defaults to 1
@@ -186,4 +188,4 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
 
     except Exception as e:
         Massma.Display.outer.result_error(len(files), "group", e)
-
+    Massma.Display.inner.set_source_length(0)  # resets source length after a method ends

@@ -264,18 +264,19 @@ Massma.Display.outer.result_stats()
 Massma.Display.image.result_stats()
 Massma.Display.audio.result_stats()
 
+Massma.Search.content()
+
 """
 Clean up github repository
 Finish the audio method, to a good state, or scrap it
 Get sprite sheets to be editable and working within the image method
-Determine and maybe add presets to outer methods
 Fix Logic for Filters, with numbers
 Add documentation to methods
 Add documentation to the entire library
-Tuple range for Scale and Offset
 Get output listing/listing to a satisfiable state
 Get weight to work properly
 The ability to do contains in contains (groups)
 ints and floats with scale and offset when changing values types (319)
 Methods to only return the data that would be shuffled in inner methods, for preshuffles and weight
+improve error handling
 """
