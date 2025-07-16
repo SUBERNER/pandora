@@ -17,6 +17,7 @@ class Ignore:
     """
     Ignores files that match specified filenames.
     """
+    __files = None
     def __init__(self, files: str | list[str]):
         """
         Initializes the Ignore filter.
@@ -25,7 +26,7 @@ class Ignore:
             files (str | list[str]): Filename(s) to be ignored.
         """
         # makes each variable always a list
-        self.files = [files] if isinstance(files, str) else files
+        self.__files = [files] if isinstance(files, str) else files
 
     def __call__(self, file: str) -> bool:
         """
@@ -38,7 +39,7 @@ class Ignore:
             bool: True if the file should be ignored, False otherwise.
         """
         try:
-            for files in self.files:
+            for files in self.__files:
                 if file == files:
                     Massma.Display.filter.result(os.path.abspath(file), "ignore", file, ''.join(char + '\u0336' for char in file))
                     return True
@@ -52,6 +53,12 @@ class Exclude:
     """
     Excludes files based on specified substrings or patterns within file content.
     """
+    __files = None
+    __test_strings = None
+    __test_files = None
+    __logic_strings = Logic.AND
+    __logic_files = Logic.AND
+    __flags = 0
     def __init__(self, files: str | list[str], test_strings: str | list[str], *, test_files: str | list[str] | None = None,
                  logic_strings: Logic = Logic.AND, logic_files: Logic = Logic.AND, flags: list[re.RegexFlag] = None):
         """
@@ -79,12 +86,12 @@ class Exclude:
             - Defaults to None (no flags).
        """
         # makes each variable always a list
-        self.files = [files] if isinstance(files, str) else files
-        self.test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
-        self.test_files = [test_files] if isinstance(test_files, str) else test_files
-        self.logic_strings = logic_strings
-        self.logic_files = logic_files
-        self.flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
+        self.__files = [files] if isinstance(files, str) else files
+        self.__test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
+        self.__test_files = [test_files] if isinstance(test_files, str) else test_files
+        self.__logic_strings = logic_strings
+        self.__logic_files = logic_files
+        self.__flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
 
     def __call__(self, file: str) -> bool:
         """
@@ -99,10 +106,10 @@ class Exclude:
         try:
             texts = []  # stores all text found to be logic tested later
             matches_text = []  # stores all matches found in text to be logic tested later
-            for files in self.files:
+            for files in self.__files:
                 if file == files:
-                    if self.test_files is not None:
-                        for test_file in self.test_files:
+                    if self.__test_files is not None:
+                        for test_file in self.__test_files:
                             with open(test_file, "r") as f:
                                 texts.append(f.read())
                     else:
@@ -110,34 +117,34 @@ class Exclude:
                             texts.append(f.read())
 
                     for text in texts:  # stores matches for each text file separately for logic
-                        matches_string = [bool(re.search(test, text, flags=self.flags)) for test in self.test_strings]
-                        if self.logic_strings == Logic.AND:
+                        matches_string = [bool(re.search(test, text, flags=self.__flags)) for test in self.__test_strings]
+                        if self.__logic_strings == Logic.AND:
                             result = all(matches_string)  # all patterns must match
-                        elif self.logic_strings == Logic.OR:
+                        elif self.__logic_strings == Logic.OR:
                             result = any(matches_string)  # at least one must match
-                        elif self.logic_strings == Logic.NAND:
+                        elif self.__logic_strings == Logic.NAND:
                             result = not all(matches_string)  # opposite of AND
-                        elif self.logic_strings == Logic.NOR:
+                        elif self.__logic_strings == Logic.NOR:
                             result = not any(matches_string)  # opposite of OR
-                        elif self.logic_strings == Logic.XOR:
+                        elif self.__logic_strings == Logic.XOR:
                             result = sum(matches_string) == 1  # exactly one match
-                        elif self.logic_strings == Logic.XNOR:
+                        elif self.__logic_strings == Logic.XNOR:
                             result = sum(matches_string) != 1  # opposite of XOR
                         else:
                             result = False  # default case
                         matches_text.append(result)
 
-                    if self.logic_files == Logic.AND:
+                    if self.__logic_files == Logic.AND:
                         result = all(matches_text)  # all patterns must match
-                    elif self.logic_files == Logic.OR:
+                    elif self.__logic_files == Logic.OR:
                         result = any(matches_text)  # at least one must match
-                    elif self.logic_files == Logic.NAND:
+                    elif self.__logic_files == Logic.NAND:
                         result = not all(matches_text)  # opposite of AND
-                    elif self.logic_files == Logic.NOR:
+                    elif self.__logic_files == Logic.NOR:
                         result = not any(matches_text)  # opposite of OR
-                    elif self.logic_files == Logic.XOR:
+                    elif self.__logic_files == Logic.XOR:
                         result = sum(matches_text) == 1  # exactly one match
-                    elif self.logic_files == Logic.XNOR:
+                    elif self.__logic_files == Logic.XNOR:
                         result = sum(matches_text) != 1  # opposite of XOR
                     else:
                         result = False  # default case
@@ -155,6 +162,15 @@ class Alter:
     """
     Alters file contents by replacing specific patterns with new values based on logical operations.
     """
+    __files = None
+    __test_strings = None
+    __test_files = None
+    __replace_strings = None
+    __replace_files = None
+    __logic_strings = Logic.AND
+    __logic_files = Logic.AND
+    __flags = 0
+
     def __init__(self, files: str | list[str], test_strings: str | list[str], replace_strings: tuple[str, str] | list[tuple[str, str]], *, test_files: str | list[str] | None = None, replace_files: str | list[str] | None = None,
                  logic_strings: Logic = Logic.AND, logic_files: Logic = Logic.AND, flags: list[re.RegexFlag] = None):
         """
@@ -185,14 +201,14 @@ class Alter:
             - re.X: Verbose (allow comments and whitespace).
             - Defaults to None (no flags).
         """
-        self.files = [files] if isinstance(files, str) else files
-        self.test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
-        self.test_files = [test_files] if isinstance(test_files, str) else test_files
-        self.replace_strings = [replace_strings] if isinstance(replace_strings, tuple) else replace_strings
-        self.replace_files = [replace_files] if isinstance(replace_files, str) else replace_files
-        self.logic_strings = logic_strings
-        self.logic_files = logic_files
-        self.flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
+        self.__files = [files] if isinstance(files, str) else files
+        self.__test_strings = [test_strings] if isinstance(test_strings, str) else test_strings
+        self.__test_files = [test_files] if isinstance(test_files, str) else test_files
+        self.__replace_strings = [replace_strings] if isinstance(replace_strings, tuple) else replace_strings
+        self.__replace_files = [replace_files] if isinstance(replace_files, str) else replace_files
+        self.__logic_strings = logic_strings
+        self.__logic_files = logic_files
+        self.__flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
 
     def __call__(self, file: str):
         """
@@ -205,10 +221,10 @@ class Alter:
             texts = []  # stores all text found to be logic tested later
             matches_text = []  # stores all matches found in text to be logic tested later
             replaces_text = []  # stores all the texts that will be replaced
-            for files in self.files:
+            for files in self.__files:
                 if file == files:
-                    if self.test_files is not None:
-                        for test_file in self.test_files:
+                    if self.__test_files is not None:
+                        for test_file in self.__test_files:
                             with open(test_file, "r") as f:
                                 texts.append(f.read())
                     else:
@@ -216,46 +232,46 @@ class Alter:
                             texts.append(f.read())
 
                     for text in texts:  # stores matches for each text file separately for logic
-                        matches_string = [bool(re.search(test, text, flags=self.flags)) for test in self.test_strings]
-                        if self.logic_strings == Logic.AND:
+                        matches_string = [bool(re.search(test, text, flags=self.__flags)) for test in self.__test_strings]
+                        if self.__logic_strings == Logic.AND:
                             result = all(matches_string)  # all patterns must match
-                        elif self.logic_strings == Logic.OR:
+                        elif self.__logic_strings == Logic.OR:
                             result = any(matches_string)  # at least one must match
-                        elif self.logic_strings == Logic.NAND:
+                        elif self.__logic_strings == Logic.NAND:
                             result = not all(matches_string)  # opposite of AND
-                        elif self.logic_strings == Logic.NOR:
+                        elif self.__logic_strings == Logic.NOR:
                             result = not any(matches_string)  # opposite of OR
-                        elif self.logic_strings == Logic.XOR:
+                        elif self.__logic_strings == Logic.XOR:
                             result = sum(matches_string) == 1  # exactly one match
-                        elif self.logic_strings == Logic.XNOR:
+                        elif self.__logic_strings == Logic.XNOR:
                             result = sum(matches_string) != 1  # opposite of XOR
                         else:
                             result = False  # default case
                         matches_text.append(result)
 
-                    if self.logic_files == Logic.AND:
+                    if self.__logic_files == Logic.AND:
                         result = all(matches_text)  # all patterns must match
-                    elif self.logic_files == Logic.OR:
+                    elif self.__logic_files == Logic.OR:
                         result = any(matches_text)  # at least one must match
-                    elif self.logic_files == Logic.NAND:
+                    elif self.__logic_files == Logic.NAND:
                         result = not all(matches_text)  # opposite of AND
-                    elif self.logic_files == Logic.NOR:
+                    elif self.__logic_files == Logic.NOR:
                         result = not any(matches_text)  # opposite of OR
-                    elif self.logic_files == Logic.XOR:
+                    elif self.__logic_files == Logic.XOR:
                         result = sum(matches_text) == 1  # exactly one match
-                    elif self.logic_files == Logic.XNOR:
+                    elif self.__logic_files == Logic.XNOR:
                         result = sum(matches_text) != 1  # opposite of XOR
                     else:
                         result = False  # default case
 
                     # replacing data in files
                     if result:
-                        if self.replace_files is not None:
-                            for replace_file in self.replace_files:
+                        if self.__replace_files is not None:
+                            for replace_file in self.__replace_files:
                                 with open(replace_file, "r") as f:
                                     text = f.read()
                                 with open(replace_file, "w") as f:
-                                    for old, new in self.replace_strings:
+                                    for old, new in self.__replace_strings:
                                         text = re.sub(old, new, text)
                                         Massma.Display.filter.result(os.path.abspath(replace_file), "alter", old, new)  # DISPLAYS CHANGED IT DOSE NOT ALWAYS MAKE
                                     f.write(text)
@@ -265,7 +281,7 @@ class Alter:
                                 text = f.read()
 
                             with open(file, "w") as f:
-                                for old, new in self.replace_strings:
+                                for old, new in self.__replace_strings:
                                     text = re.sub(old, new, text)
                                     Massma.Display.filter.result(os.path.abspath(file), "alter", old, new)  # DISPLAYS CHANGED IT DOSE NOT ALWAYS MAKE
                                 f.write(text)
@@ -278,6 +294,10 @@ class Input:
     """
         Validates user input by checking for predefined patterns before processing.
     """
+    __files = None
+    __test_inputs = None
+    __logic_inputs = Logic.AND
+    __flags = 0
     def __init__(self, files: str | list[str], test_inputs: str | list[str],
                  *, logic_inputs: Logic = Logic.AND, flags: list[re.RegexFlag] = None):
         """
@@ -300,10 +320,10 @@ class Input:
             - re.X: Verbose (allow comments and whitespace).
             - Defaults to None (no flags).
         """
-        self.files = [files] if isinstance(files, str) else files
-        self.test_inputs = [test_inputs] if isinstance(test_inputs, str) else test_inputs
-        self.logic_inputs = logic_inputs
-        self.flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
+        self.__files = [files] if isinstance(files, str) else files
+        self.__test_inputs = [test_inputs] if isinstance(test_inputs, str) else test_inputs
+        self.__logic_inputs = logic_inputs
+        self.__flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
 
     def __call__(self, file: str, input: str) -> bool:
         """
@@ -318,21 +338,21 @@ class Input:
             logic_inputs (Logic): Logical condition for pattern matching (AND, OR, XOR, etc.). Defaults to Logic.AND.
         """
         try:
-            for files in self.files:
+            for files in self.__files:
                 if file == files:
                     # gets boolean values for if input_string was found
-                    matches = [bool(re.search(test, input, flags=self.flags)) for test in self.test_inputs]
-                    if self.logic_inputs == Logic.AND:
+                    matches = [bool(re.search(test, input, flags=self.__flags)) for test in self.__test_inputs]
+                    if self.__logic_inputs == Logic.AND:
                         result = all(matches)  # all test_inputs must match
-                    elif self.logic_inputs == Logic.OR:
+                    elif self.__logic_inputs == Logic.OR:
                         result = any(matches)  # at least one must match
-                    elif self.logic_inputs == Logic.NAND:
+                    elif self.__logic_inputs == Logic.NAND:
                         result = not all(matches)  # opposite of AND
-                    elif self.logic_inputs == Logic.NOR:
+                    elif self.__logic_inputs == Logic.NOR:
                         result = not any(matches)  # opposite of OR
-                    elif self.logic_inputs == Logic.XOR:
+                    elif self.__logic_inputs == Logic.XOR:
                         result = sum(matches) == 1  # exactly one match
-                    elif self.logic_inputs == Logic.XNOR:
+                    elif self.__logic_inputs == Logic.XNOR:
                         result = sum(matches) != 1  # opposite of XOR
                     else:
                         result = False
@@ -350,6 +370,7 @@ class Swap:
     """
     Swaps the names of specified files.
     """
+    __files = None
     def __init__(self, files: tuple[str, str] | list[tuple[str, str]]):
         """
         Initializes the Swap filter.
@@ -358,17 +379,17 @@ class Swap:
             files (tuple[str, str] | list[tuple[str, str]]): Pairs of filenames to swap.
         """
         # makes each variable always a list
-        self.files = [files] if isinstance(files, tuple) else files
+        self.__files = [files] if isinstance(files, tuple) else files
 
     def __call__(self):
         """
         Executes the swap operation on the specified file pairs.
         """
-        file = self.files[0]  # soul purpose is for if the try and except fails before it can get in the for loop
+        file = self.__files[0]  # soul purpose is for if the try and except fails before it can get in the for loop
         try:
-            for index, file in enumerate(self.files):
+            for index, file in enumerate(self.__files):
                 os.rename(file[0], file[1])
                 Massma.Display.filter.result(os.path.abspath(file[0]), "swap", os.path.abspath(file[0]), os.path.abspath(file[1]))
-                self.files[index] = (file[1], file[0])  # swaps them to and swaps back to normal once its recalled
+                self.__files[index] = (file[1], file[0])  # swaps them to and swaps back to normal once its recalled
         except Exception as e:
             Massma.Display.filter.result_error(os.path.abspath(file[0]), "swap", str(e))

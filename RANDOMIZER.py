@@ -269,7 +269,6 @@ Massma.Search.content()
 """
 Clean up github repository
 Finish the audio method, to a good state, or scrap it
-Get sprite sheets to be editable and working within the image method
 Fix Logic for Filters, with numbers
 Add documentation to methods
 Add documentation to the entire library
@@ -279,4 +278,5 @@ The ability to do contains in contains (groups)
 ints and floats with scale and offset when changing values types (319)
 Methods to only return the data that would be shuffled in inner methods, for preshuffles and weight
 improve error handling
+problems with incorect source length due to how files are stored (full path or part path)
 """

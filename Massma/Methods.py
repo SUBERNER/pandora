@@ -2,7 +2,6 @@ from Massma import random  # used for seeds
 import Massma
 import os
 import shutil
-import zipfile
 import gc  # cleaner file handling
 
 

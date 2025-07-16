@@ -1,61 +1,42 @@
+from pickletools import optimize
+
 from Massma import random  # used for seeds
 from Massma.Filter import *
 import Massma
 import numpy
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps  # Pillow
 
-class Sheet:
-    __images = [] # stores all the images in a sprite sheet
-    __file = None # stores the sheets location on the computer
-    __offset = (0,0) # stores the offset form where the images start
-    __padding = (0,0) # stores the gaps between each image in the sheet
-    __dimensions = (0,0) # stores the size of each image in the sheet
 
-    def __init__(self, file: str, dimensions: tuple[int, int], *, offset: tuple[int,int] = (0,0), padding: tuple[int,int] = (0,0)):
-        try:
-            self.__images = [] # resets images after each change made to it
-            self.__file = file
-            self.__offset = offset
-            self.__padding = padding
-            self.__dimensions = dimensions
-            # setting up the amount of times the loop will go though the image and crop the sheet into multiple small images
-            image = Image.open(self.__file) # gets image sheet
-            size = image.size  # gets the x and y size of the sheet, this is only used for offsets
-            new_image = image  # version of image after changes
-            new_image = new_image.crop((self.__offset[0], self.__offset[1], size[0], size[1])) # crop the image to offset blank space on the left and top of image sheets
-            size = new_image.size  # gets the x and y size of the sheet, this will be used to help get the correct images and their sizes
+def create(files: str| list[str], *, mode: str = "RGBA", size: tuple[int,int] = (1,1), color: tuple[float, ...] = (0,0,0,0), optimize: bool = False,
+           chance_files: float = 1, chance_total: float = 1, ignores: Ignore | list[Ignore] | None = None):
+    try:
+        if chance_total >= random.random():  # test if method will happen
+            # makes files always a list
+            files = [files] if isinstance(files, str) else files
+            ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
 
-            for index_vertical in range(int(size[1] / self.__dimensions[1])): # vertical length of sprite sheet
-                for index_horizontal in range(int(size[0] / self.__dimensions[0])): # horizontal length of sprite sheet
-                    # calculates the location and size of the crop, then crops and saves image
-                    # padding is the space between each image on the sheet
-                    new_image = new_image.crop((index_horizontal * self.__dimensions[0] + (index_horizontal * self.__padding[0]),
-                                            index_vertical * self.__dimensions[1] + (index_vertical * self.__padding[1]),
-                                            (index_horizontal + 1) * self.__dimensions[0] + (index_horizontal * self.__padding[0]),
-                                            (index_vertical + 1) * self.__dimensions[1] + (index_vertical * self.__padding[1])))
+            # gets size of the largest path for better result formatting
+            file_paths = [os.path.abspath(file) for file in files]  # makes sures the full file path is given
+            Massma.Display.image.set_source_length(max(file_paths, key=len))
 
-                    self.__images.append(new_image)
+            for file in files:
+                try:
+                    if chance_files >= random.random():  # test if a file will be edited
+                        # checks if the file is in any of the ignores
+                        if ignores is None or not any(ignore(file) for ignore in ignores):
+                            # creates a brand new photo to edit and alter
+                            image = Image.new(mode, size, color)
+                            image.save(file, optimize=optimize)
 
-        except Exception as e:
-            Massma.Display.image.result_error(file, "sheet", e)
+                            Massma.Display.image.result(file, "create photo", None, file)
 
-    def set_images(self, images: list[Image.Image] = None):
-        try:
-            # only changes data if not None, use None to only see data
-            if images is not None:
-                self.__images = images
-                # makes changes to the images in the sheet
-                image = Image.open(self.__file)  # gets image sheet
-                size = image.size  # gets the x and y size of the sheet, this is only used for all parts of set_images
-                new_image = image  # version of image after changes
+                except Exception as e:
+                    Massma.Display.image.result_error(file, "create", e)
 
-                # goes through each image and adds them back into the sheet in order
-                for image in self.__images:
-                    pass
-            return self.__images
-        except Exception as e:
-            Massma.Display.image.result_error(self.__file, "sheet", e)
-            return self.__images
+    except Exception as e:
+        Massma.Display.image.result_error(len(files), "create", e)
+    Massma.Display.image.set_source_length(0)  # resets source length after a method ends
+
 
 
 def saturation(files: str | list[str], factor: float, *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
@@ -388,7 +369,7 @@ def rotate(files: str | list[str], degree: int, *, optimize: bool = False, resam
     Massma.Display.image.set_source_length(0)  # resets source length after a method ends
 
 
-def layer(files: str | list[str], layers: str | list[str], *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
+def layer(files: str | list[str], layers: str | list[str], position: tuple[int,int], *, optimize: bool = False, masks: str | list[str] | None = None, resampling: int = 3, chance_files: float = 1, chance_masks: float = 1, chance_total: float = 1,
           ignores: Ignore | list[Ignore] | None = None):
     try:
         if chance_total >= random.random():  # test if method will happen
@@ -413,7 +394,6 @@ def layer(files: str | list[str], layers: str | list[str], *, optimize: bool = F
 
                             for layer in layers:  # goes through and adds layers in the order provided in the layer list
                                 layer_image = Image.open(layer).convert("RGBA")  # makes sure its transparent
-                                layer_image = layer_image.resize(image.size, resampling)  # makes make equal the size of the image
 
                                 if masks:
                                     # only effects areas of image that are in the white parts of the mask image
@@ -423,9 +403,9 @@ def layer(files: str | list[str], layers: str | list[str], *, optimize: bool = F
                                             mask = mask.resize(image.size, resampling)  # makes make equal the size of the image
                                             mask = mask.split()[3]  # get the alpha channel for better masking
 
-                                            new_image.paste(layer_image, (0, 0), mask)  # add layer onto the image in order
+                                            new_image.paste(layer_image, position, mask)  # add layer onto the image in order
                                 else:
-                                    new_image.paste(layer_image, (0, 0), layer_image.split()[3])  # add layer onto the image in order
+                                    new_image.paste(layer_image, position, layer_image.split()[3])  # add layer onto the image in order
 
                             new_image.save(file, optimize=optimize)
 

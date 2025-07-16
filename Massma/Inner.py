@@ -151,8 +151,10 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
 
             hash_contains = []  # stores the hash of each contain to indicate where data is shuffled in each group
             filtered_contains = []  # stores all the contains that will be used
-            filtered_matches = []  # stores all the matches that will be shuffled and used
+            filtered_groups = [[] for index in contains]  # stores all the matches in seperate groups and filtered before being combined
             group_matches = [[] for index in contains] # temporarily stores all matches into groups to them be filtered and given to filtered matches in a group organized format
+            filtered_matches = []  # stores groups of matches after they are combined and will be shuffled and used
+
             for contain in contains:
                 if chance_contains >= random.random():  # test if a contain will even be used
                     filtered_contains.append(contain)  # contain that was randomly filtered
@@ -197,18 +199,19 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
                             # shrink group to smallest contain
                             group_limit = len(min(group_matches, key=len)) # finds the smallest contain group
                             group_matches = [group[:group_limit] for group in group_matches] # makes all contain groups as small as the smallest group
-                            group_combined = [[] for index in contains] # stores the contain groups all together
 
-                            # the for loops are separate do to making sure that all contains in one group will all be None, insted of some
+                            # the for loops are seperate do to making sure that all contains in one group will all be None, insted of some
                             if chance_data >= random.random():
-                                # goes though each piece of match found, filteres it, and adds the hash to where it would be
+                                # goes though each peice of match found, filteres it, and adds the hash to where it would be
                                 for index, group in enumerate(group_matches): # goes though each group of contains, not each contain
-                                    group_combined[index].extend(group)
+                                    if group: # only if the list of matches in contains is not empty
+                                        filtered_groups[index].extend(group)
                             else: # this is the same as the other one, but all matches are replaced with None, this is for better preshuffling
                                 for index, group in enumerate(group_matches):  # goes though each group of contains, not each contain
-                                    group = [None] * len(group)  # converts all matches in a group into None as it failed the chance filter
-                                    group_matches[index] = group # reenters the Nones into the original group, so it can correctly hash the data
-                                    group_combined[index].extend(group)
+                                    if group:  # only if the list of matches in contains is not empty
+                                        group = [None] * len(group)  # convers all matches in a group into None as it failed the chance filter
+                                        group_matches[index] = group # reenters the Nones into the orignal group, so it can correctly hash the data
+                                        filtered_groups[index].extend(group)
 
                             # goes through adding the filtered matches hashes back into the data so they can be shuffled and reentered later
                             for group in zip(*group_matches): # converts matches into proper groups within a list to then be added
@@ -224,21 +227,40 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
                                         return match.group(0)  # does not replace data with hash
                                     data = re.sub(matches, replace, data, 1, flags=flags) # replaces the data with the hash if there are no Nones
 
-
-                                # combines the group of matches into there own list allowing for easier shuffling and managing
-                                for combine in zip(*group_combined): # seperates the groups and combines them into groups contains 1 of each contain
-                                    filtered_matches.append(list(combine)) # puts them pack together and appends to the list to be shuffled
-                            print(filtered_matches)
-
-                        with open(file, 'w') as f:  # saves changes to file temporarily
-                            f.write(data)
+                        #with open(file, 'w') as f:  # saves changes to file temporarily
+                            #f.write(data)
 
                 except Exception as e:
                     Massma.Display.inner.result_error(file, "group", e)
 
+            # combines the group of matches into their own list allowing for easier shuffling and managing
+            for group in zip(*filtered_groups):  # separates the groups and combines them into groups contains 1 of each contain
+                filtered_matches.append(list(group))  # puts them pack together and appends to the list to be shuffled
+
+
+            # all of this below shuffles data inside files
+            if preshuffle:  # preshuffle format on how the files will be shuffled and does not work with any duplicate based features
+                # goes through each number in the preshuffle list to determine where an item should go
+                # the numbers in the preshuffle set determine the new indexes of elements in a list
+                if preset:
+                    random_matches = [None] * len(preset)  # sets preshuffle length
+                    for index, match in zip(preshuffle, preset):
+                        random_matches[index] = match
+                else:
+                    random_matches = [None] * len(filtered_matches)  # sets preshuffle length
+                    for index, match in zip(preshuffle, filtered_matches):
+                        random_matches[index] = match
+
+            else:  # creates a list of the filtered matches for shuffling in the next steps, like the others above without anything fancy to it
+                if preset:  # ignores all data found in files and injects data from contains, THIS SHOULD BE DONE WITH DUPLICATE
+                    random_matches = preset.copy()
+                else:
+                    random_matches = filtered_matches.copy()
+
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "group", e)
     Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
+
 
 def scale(files: str | list[str],contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, mode: float | int | None = None, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, matching: bool = False,
           clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
