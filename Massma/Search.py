@@ -263,10 +263,40 @@ def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] |
         excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
         flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
 
-        filtered_contains = []  # stores all the contains that will be used
-        filtered_matches = []  # stores all the matches that will be shuffled and used
+        filtered_groups = [[] for index in contains]  # stores all the matches in separate groups and filtered before being combined
+        filtered_data = []  # stores all the matches that will be shuffled and used
 
         if grouping:  # used to get data from inner group like method
+            for file in files:
+                try:
+                    group_matches = [[] for index in contains]  # temporarily stores all matches into groups to them be filtered and given to filtered matches in a group organized format
+                    skipped_file = False # indicates if a file all the matches are set to None instead of keeping matches
+                    # goes through all filters needed to make
+                    # random change to be added or removed by filters
+                    if not (any(ignore(file) for ignore in ignores)) and not (any(exclude(file) for exclude in excludes)):
+
+                        with open(file, 'r') as f:
+                            data = f.read()  # stores all the data in a variable
+
+                            # goes throw each contain for a file to find matches
+                            # indexes each contain so it can orderly organize the groups
+                            for index, contain in enumerate(contains):
+                                matches = re.findall(contain, data, flags=flags) # finds all data in one contain
+                                filtered_groups[index] = matches # adds and replaces previous matches to then be filtered and added to filtered matches
+
+                            # shrink group to smallest contain
+                            group_limit = len(min(filtered_groups, key=len)) # finds the smallest contain group
+                            filtered_groups = [group[:group_limit] for group in filtered_groups] # makes all contain groups as small as the smallest group
+
+                            # combines the group of matches into their own list allowing for easier shuffling and managing
+                            for group in zip(*filtered_groups):  # separates the groups and combines them into groups contains 1 of each contain
+                                filtered_data.append(list(group))  # puts them pack together and appends to the list to be shuffled
+
+                except Exception as e:
+                    Massma.Display.inner.result_error(file, "inner", e)
+                    return []  # returns an empty list
+
+        else:  # used to get data from inner normal like method
             # finding all the matches in file data and storing them to later be shuffled
             for file in files:
                 try:
@@ -278,22 +308,26 @@ def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] |
                             # used for replacing and chance filtering out matches
                             # group(0) only grabs first match found
                             def replace(match):
-                                filtered_matches.append(match.group(0))
+                                filtered_data.append(match.group(0))
                                 return match.group(0)  # does not replace data with hash
 
                             # goes throw each contain for a file to find matches
-                            for filtered_contain, contain in zip(filtered_contains, contains):
+                            for contain in contains:
                                 # allowing for found matches to have a chance of being filtered out, and if now they will be stored and replaced
-                                data = re.sub(filtered_contain, replace, data, flags=flags)
+                                data = re.sub(contain, replace, data, flags=flags)
 
                 except Exception as e:
                     Massma.Display.inner.result_error(file, "inner", e)
-        else:  # used to get data from inner normal like method
-            pass
+                    return []  # returns an empty list
+
+        # displays and the returns list after finding all the data
+        Massma.Display.search.result(len(files), "inner", 0, len(filtered_data))
+        return filtered_data  # returns a list of all data that was found and would have been altered
 
     except Exception as e:
         print(e)
         Massma.Display.inner.result_error(len(files), "inner", e)
+        return []  # returns an empty list
 
 
 # YES, I do understand that outer search method is absolutely useless, has no value, and are just worse version of other searches,

@@ -110,29 +110,45 @@ if not os.path.exists("ENTITIES - Copy"):
 if not os.path.exists("FEATURES - Copy"):
     Massma.copy("FEATURES", "FEATURES - Copy")
 # OUTER NORMAL
-"""
+
 normal = Massma.Search.full("OUTER_NORMAL - Copy")
-preshuffle = list(range(len(normal)))
-print(preshuffle)
-preshuffle.reverse()
-print(preshuffle)
-Massma.Outer.normal(normal, preshuffle=preshuffle)
-"""
+#preshuffle = list(range(len(normal)))
+#print(preshuffle)
+#preshuffle.reverse()
+#print(preshuffle)
+#Massma.Outer.normal(normal, preshuffle=preshuffle)
+finds_normal = Massma.Search.outer(normal, False)
+print(len(finds_normal))
+print(finds_normal)
+
 
 # OUTER GROUP
-"""
-group = Massma.Search.full("OUTER_GROUP - Copy")
-preshuffle = [3,2,1,0]
-print(preshuffle)
-Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuffle, chance_contains=0.5)
-"""
+#group = Massma.Search.full("OUTER_GROUP - Copy")
+#preshuffle = [3,2,1,0]
+#print(preshuffle)
+#Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuffle, chance_contains=0.5)
+#finds_group = Massma.Search.outer(group, True, contains=['double','rose','tulip', "lilly"])
+#print(len(finds_group))
+#print(finds_group)
 
 # INNER NORMAL
-Massma.Display.inner.set_source_compression(False)
+Massma.Display.inner.set_source_compression(True)
+Massma.Display.inner.set_raw_error(True)
 entites_normal = Massma.Search.full(os.path.abspath("ENTITIES - Copy"))
 """Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], )"""
 #Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (0.01, 100), zeros=True, clamps_outer=(1,100), matching=True)
-Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (-5, 5))
+#Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (-5, 5))
 # ERRORS 266, INTS ON FLOAT VALUES
-#features_normal = Massma.Search.full(os.path.abspath("FEATURES - Copy"))
+features_normal = Massma.Search.full(os.path.abspath("FEATURES - Copy"))
 #Massma.Inner.scale(features_normal,[r'"numerator": -?\d+\.?\d*,.*"denominator": -?\d+\.?\d*'], (1, 1, minmaxing=True, zeros=False,flags=[re.M, re.S])
+#Massma.Inner.group(features_normal,[r'"numerator": -?\d+\.?\d*','"denominator": -?\d+\.?\d*'], duplicate=False)
+group_data = Massma.Search.inner(features_normal, True, contains=[r'"numerator": -?\d+\.?\d*','"denominator": -?\d+\.?\d*'])
+print(group_data)
+normal_data = Massma.Search.inner(features_normal, False, contains=[r'"numerator": -?\d+\.?\d*','"denominator": -?\d+\.?\d*'])
+print(normal_data)
+
+#Massma.Display.image.set_raw_error(True)
+#Massma.Display.image.set_flatten_output(False)
+#Massma.Image.create("SHEET_TEST\\SHEET_test.png", size=(100,100))
+#Massma.Image.crop("SHEET_TEST\\SHEET - Copy.png", (0,0,16,16))
+#Massma.Image.layer("SHEET_TEST\\SHEET_test.png","SHEET_TEST\\SHEET - Copy.png",(0,16))
