@@ -254,13 +254,14 @@ def content(source: str, contains: str | list[str], *, deep_search: bool = False
 
 
 def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] | None = None,
-          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, flags: list[re.RegexFlag] = None) -> list[str]:
+          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None) -> list[str]:
     try:
         # makes data always a list
         files = [files] if isinstance(files, str) else files
         contains = [contains] if isinstance(contains, str) else contains
         ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
         excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
+        alters = alters if isinstance(alters, list) else ([alters] if alters else [])
         flags = 0 if flags is None else sum(flags)  # Combine selected flags or default to 0 (no flags)
 
         filtered_groups = [[] for index in contains]  # stores all the matches in separate groups and filtered before being combined
@@ -269,11 +270,13 @@ def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] |
         if grouping:  # used to get data from inner group like method
             for file in files:
                 try:
-                    group_matches = [[] for index in contains]  # temporarily stores all matches into groups to them be filtered and given to filtered matches in a group organized format
-                    skipped_file = False # indicates if a file all the matches are set to None instead of keeping matches
                     # goes through all filters needed to make
                     # random change to be added or removed by filters
                     if not (any(ignore(file) for ignore in ignores)) and not (any(exclude(file) for exclude in excludes)):
+
+                        # changed files as needed
+                        for alter in alters:
+                            alter(file)
 
                         with open(file, 'r') as f:
                             data = f.read()  # stores all the data in a variable
@@ -302,6 +305,11 @@ def inner(files: str | list[str], grouping: bool, *, contains: str | list[str] |
                 try:
                     # goes through all filters needed to make
                     if not (any(ignore(file) for ignore in ignores)) and not (any(exclude(file) for exclude in excludes)): # could filter out files
+
+                        # changed files as needed
+                        for alter in alters:
+                            alter(file)
+
                         with open(file, 'r') as f:
                             data = f.read()  # stores all the data in a variable
 

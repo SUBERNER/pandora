@@ -121,21 +121,23 @@ finds_normal = Massma.Search.outer(normal, False)
 print(len(finds_normal))
 print(finds_normal)
 
-
+Massma.seed(123456789)
 # OUTER GROUP
-#group = Massma.Search.full("OUTER_GROUP - Copy")
-#preshuffle = [3,2,1,0]
-#print(preshuffle)
-#Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuffle, chance_contains=0.5)
-#finds_group = Massma.Search.outer(group, True, contains=['double','rose','tulip', "lilly"])
-#print(len(finds_group))
-#print(finds_group)
+group = Massma.Search.full("OUTER_GROUP - Copy")
+preshuffle = [0,1,2,3]
+preset = ["BROWN","RED","WHITE","BLUE"]
+print(preshuffle)
+Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuffle, preset=preset, chance_contains=0.5)
+finds_group = Massma.Search.outer(group, True, contains=['double','rose','tulip', "lilly"])
+print(len(finds_group))
+print(finds_group)
 
+"""
 # INNER NORMAL
 Massma.Display.inner.set_source_compression(True)
 Massma.Display.inner.set_raw_error(True)
 entites_normal = Massma.Search.full(os.path.abspath("ENTITIES - Copy"))
-"""Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], )"""
+Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], )
 #Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (0.01, 100), zeros=True, clamps_outer=(1,100), matching=True)
 #Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (-5, 5))
 # ERRORS 266, INTS ON FLOAT VALUES
@@ -146,6 +148,8 @@ group_data = Massma.Search.inner(features_normal, True, contains=[r'"numerator":
 print(group_data)
 normal_data = Massma.Search.inner(features_normal, False, contains=[r'"numerator": -?\d+\.?\d*','"denominator": -?\d+\.?\d*'])
 print(normal_data)
+"""
+#Massma.Audio.volume("MUSIC\\TESTING - Copy.mp3", 3)
 
 #Massma.Display.image.set_raw_error(True)
 #Massma.Display.image.set_flatten_output(False)

@@ -88,7 +88,7 @@ def normal(files: str | list[str], *, preshuffle: list[int] | None = None, chanc
     Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 
-def group(files: str | list[str], contains: str | list[str], *, preshuffle: list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1,
+def group(files: str | list[str], contains: str | list[str], *, preshuffle: list[int] | None = None, preset: str | list[str] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1,
           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None):
     """
     Shuffles and alters the names all selected files by groups based on substring patterns
@@ -109,6 +109,7 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
             # makes data always a list
             files = [files] if isinstance(files, str) else files
             contains = [contains] if isinstance(contains, str) else contains
+            preset = preset if isinstance(preset, list) else ([preset] if preset else [])
             preshuffle = preshuffle if isinstance(preshuffle, list) else ([preshuffle] if preshuffle else [])
             ignores = ignores if isinstance(ignores, list) else ([ignores] if ignores else [])
             excludes = excludes if isinstance(excludes, list) else ([excludes] if excludes else [])
@@ -165,12 +166,21 @@ def group(files: str | list[str], contains: str | list[str], *, preshuffle: list
             if preshuffle:  # preshuffle format on how the files will be shuffled
                 # goes through each number in the preshuffle list to determine where an item should go
                 # the numbers in the preshuffle set determine the new indexes of elements in a list
-                random_contains = [0] * len(filtered_contains)  # sets preshuffle length
-                for index, file in zip(preshuffle, filtered_contains):
-                    random_contains[index] = file
+                if preset:
+                    random_contains = [None] * len(preset)  # sets preshuffle length
+                    for index, contain, file in zip(preshuffle, filtered_contains, preset):
+                        if contain: # test if contain is not None, which will allow for correct skipping of contains and presets,
+                            random_contains[index] = file
+                else:
+                    random_contains = [None] * len(filtered_contains)  # sets preshuffle length
+                    for index, file in zip(preshuffle, filtered_contains):
+                        random_contains[index] = file
 
             else:  # normal randomizing of files
-                random_contains = filtered_contains.copy()
+                if preset:  # ignores all data found in file names and injects names from contains, THIS SHOULD BE DONE WITH DUPLICATE
+                    random_contains = preset.copy()
+                else:
+                    random_contains = filtered_contains.copy()
                 random.shuffle(random_contains)
 
             # removes all None values caused by failing the chance contains
