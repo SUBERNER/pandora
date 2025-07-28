@@ -533,7 +533,7 @@ def blur(files: str | list[str], factor: float, *, optimize: bool = False, masks
                                         mask = Image.open(mask).convert("L")  # the mask can only be black or white pixels
                                         mask = mask.resize(image.size, resampling)  # makes make equal the size of the image
 
-                                        mask_image = image.filter(ImageFilter.GaussianBlur(radius=factor))  # alters image  # alters image
+                                        mask_image = image.filter(ImageFilter.GaussianBlur(radius=factor))  # alters image
                                         new_image = Image.composite(mask_image, new_image, mask)
 
                             else:  # no mask is being used

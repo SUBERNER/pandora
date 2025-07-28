@@ -2,14 +2,33 @@ import Massma
 import os
 import re
 
+
 # setup methods
 base = os.getcwd()
 original_base = base + "\\FILES_ORIGINAL"
 altered_base = base + "\\FILES_ALTERED"
+log_base = "Massma_logs.txt"
 system = Massma.Display.Result()
 
+# clears data out of log file
+with open(log_base, 'w') as f:  # opens file
+    pass # removes all data in file, making a fresh log file
+# enables and sets the log files for each display
+Massma.Display.inner.set_log_output(True)
+Massma.Display.outer.set_log_output(True)
+Massma.Display.methods.set_log_output(True)
+Massma.Display.filter.set_log_output(True)
+Massma.Display.search.set_log_output(True)
+Massma.Display.audio.set_log_output(True)
+Massma.Display.inner.set_log_name(log_base)
+Massma.Display.outer.set_log_name(log_base)
+Massma.Display.methods.set_log_name(log_base)
+Massma.Display.filter.set_log_name(log_base)
+Massma.Display.search.set_log_name(log_base)
+Massma.Display.audio.set_log_name(log_base)
+
 #EDIT THIS TO CHANGE WHAT AND HOW DATA IS SHUFFLED
-#Massma.Methods.seed(439853598)
+Massma.Methods.seed(439853598)
 
 # editing displays to make outputs cleaner
 Massma.Display.inner.set_source_compression(True)
@@ -264,18 +283,13 @@ Massma.Display.outer.result_stats()
 Massma.Display.image.result_stats()
 Massma.Display.audio.result_stats()
 
-Massma.Search.content()
-
 """
 Clean up github repository
-Finish the audio method, to a good state, or scrap it
 Fix Logic for Filters, with numbers
 Add documentation to methods
 Add documentation to the entire library
-Get output listing/listing to a satisfiable state
 Get weight to work properly
 The ability to do contains in contains (groups)
-ints and floats with scale and offset when changing values types (319)
 improve error handling
 problems with incorrect source length due to how files are stored (full path or part path)
 NOT REQUIRED, but most likely best to clean up inner group, its messy

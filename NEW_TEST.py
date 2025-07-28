@@ -109,8 +109,11 @@ if not os.path.exists("ENTITIES - Copy"):
     Massma.copy("ENTITIES", "ENTITIES - Copy")
 if not os.path.exists("FEATURES - Copy"):
     Massma.copy("FEATURES", "FEATURES - Copy")
-# OUTER NORMAL
+if not os.path.exists("CONTAINS - Copy"):
+    Massma.copy("CONTAINS", "CONTAINS - Copy")
 
+"""
+# OUTER NORMAL
 normal = Massma.Search.full("OUTER_NORMAL - Copy")
 #preshuffle = list(range(len(normal)))
 #print(preshuffle)
@@ -131,13 +134,17 @@ Massma.Outer.group(group, ['double','rose','tulip', "lilly"], preshuffle=preshuf
 finds_group = Massma.Search.outer(group, True, contains=['double','rose','tulip', "lilly"])
 print(len(finds_group))
 print(finds_group)
-
 """
+
 # INNER NORMAL
 Massma.Display.inner.set_source_compression(True)
 Massma.Display.inner.set_raw_error(True)
 entites_normal = Massma.Search.full(os.path.abspath("ENTITIES - Copy"))
-Massma.Inner.normal(entites_normal,[r'"identifier": ".*"', '"format_version": ".*"'], preshuffle=[9,8,7,6,5,4,3,2,1,0], )
+contains_normal = Massma.Search.full(os.path.abspath("CONTAINS - Copy"))
+print(Massma.Search.inner(entites_normal, False, contains='"identifier": ".*"'))
+#Massma.Inner.normal(entites_normal,r'"identifier": ".*"')
+#Massma.Inner.normal(entites_normal,r'"identifier": ".*"', preshuffle=[0,1,2,3,4,5,6,7,8,9], weights=[1,100,1,1,1,1,1,1,1,1], duplicate=True, chance_data=0.5)
+"""
 #Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (0.01, 100), zeros=True, clamps_outer=(1,100), matching=True)
 #Massma.Inner.offset(entites_normal,[r'"damage": -?\d+\.?\d*'], (-5, 5))
 # ERRORS 266, INTS ON FLOAT VALUES
@@ -148,11 +155,19 @@ group_data = Massma.Search.inner(features_normal, True, contains=[r'"numerator":
 print(group_data)
 normal_data = Massma.Search.inner(features_normal, False, contains=[r'"numerator": -?\d+\.?\d*','"denominator": -?\d+\.?\d*'])
 print(normal_data)
-"""
-#Massma.Audio.volume("MUSIC\\TESTING - Copy.mp3", 3)
 
+# sprite sheets
 #Massma.Display.image.set_raw_error(True)
 #Massma.Display.image.set_flatten_output(False)
 #Massma.Image.create("SHEET_TEST\\SHEET_test.png", size=(100,100))
 #Massma.Image.crop("SHEET_TEST\\SHEET - Copy.png", (0,0,16,16))
 #Massma.Image.layer("SHEET_TEST\\SHEET_test.png","SHEET_TEST\\SHEET - Copy.png",(0,16))
+"""
+
+Massma.Display.audio.set_raw_error(True)
+Massma.Display.audio.set_flatten_output(False)
+#Massma.Audio.volume("MUSIC\\TESTING - Copy.mp3", 10, mask=(7,14))
+#Massma.Audio.tempo("MUSIC\\TESTING - Copy.mp3", 1.5, mask=(7,14))
+#Massma.Audio.pitch("MUSIC\\TESTING - Copy.mp3", 1.5, mask=(7,14))
+#Massma.Audio.normalize("MUSIC\\TESTING - Copy.mp3", mask=(7,14))
+#Massma.Audio.reverse("MUSIC\\TESTING - Copy.mp3", mask=(7,14))

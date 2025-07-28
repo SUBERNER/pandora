@@ -102,10 +102,10 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
             filtered_matches = [match for match in filtered_matches if match is not None]  # souly to display changes correctly
 
             # flatting and duplication for the shuffled lists
-            # additionally weight can be used to calibrate the duplication to your needs
             if duplicate: # allows for the same data to be given to multiple different files instead of just one
                 if flatten: # removes all redundant and duplicate data before
                     flatten_matches = list(set(random_matches))  # Remove duplicates and allowing for highly more even distribution of data
+                    # Remove duplicates and allowing for highly more even distribution of data
                     random_matches = random.choices(flatten_matches, k=len(filtered_matches))  # Fills list back up
                 else:
                     random_matches = random.choices(random_matches, k=len(filtered_matches))  # Fills list back up
@@ -126,7 +126,6 @@ def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool
                         f.write(data)
 
     except Exception as e:
-        print(e)
         Massma.Display.inner.result_error(len(files), "normal", e)
     Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
@@ -261,7 +260,6 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
             filtered_matches = [group for group in filtered_matches if all(match is not None for match in group)]  # souly to display changes correctly
 
             # flatting and duplication for the shuffled lists
-            # additionally weight can be used to calibrate the duplication to your needs
             if duplicate:  # allows for the same data to be given to multiple different files instead of just one
                 if flatten:  # removes all redundant and duplicate data before
                     flatten_matches = []  # Remove duplicates and allowing for highly more evenly distribution of data
@@ -269,7 +267,6 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
                         if match not in flatten_matches:
                             flatten_matches.append(match)
 
-                    print(len(flatten_matches))
                     random_matches = random.choices(flatten_matches, k=len(filtered_matches))  # Fills list back up
                 else:
                     random_matches = random.choices(random_matches, k=len(filtered_matches))  # Fills list back up
