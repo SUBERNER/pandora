@@ -375,19 +375,27 @@ def scale(files: str | list[str],contains: str | list[str], range: tuple[float, 
                                     # everything below scales the value and then adds attributes and criteria to the value to make sure its the correct value
                                     if isinstance(range, tuple) and all(isinstance(datatype, int) for datatype in range):  # makes the value generated a integer
                                         value = int(value)
-                                        altered_value = value * int(random.triangular(range[0], range[1], mode))  # Random between range in integer values
+                                        if mode: # if user wants to use mode, random.triangular will be used
+                                            altered_value = value * int(random.triangular(range[0], range[1], mode))  # Random between range in integer values
+                                        else:
+                                            altered_value = value * int(random.uniform(range[0], range[1]))  # Random between range in integer values
                                     elif isinstance(range, tuple) and all(isinstance(datatype, float) for datatype in range):  # makes the value generated a integer
                                         value = float(value)
-                                        altered_value = value * random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                        if mode: # if user wants to use mode, random.triangular will be used
+                                            altered_value = value * random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                        else:
+                                            altered_value = value * random.uniform(range[0], range[1])  # Random between range in float values
                                     else: # if user inputs a float and int in tuple, defaults to float
                                         value = float(value)
-                                        altered_value = value * random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
-
+                                        if mode: # if user wants to use mode, random.triangular will be used
+                                            altered_value = value * random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                        else:
+                                            altered_value = value * random.uniform(range[0], range[1])  # Random between range in float values
                                     # if decimals is true, it will stay as a decimal and float form, round value
                                     if decimals:
                                         altered_value = round(altered_value, rounding)
-                                    else:  # if value will not be in decimal form, then it will be converted to an integer format
-                                        altered_value = int(altered_value)
+                                    else:  # if value will not be in decimal form, it will round to the nearing whoe number
+                                        altered_value = round(altered_value)
 
                                     # clamps the value to make sure the value is within the desired range
                                     # clamps_outer makes sure that the value is not over the desired bounds
@@ -532,19 +540,35 @@ def offset(files: str | list[str],contains: str | list[str], range: tuple[float,
                                     # everything below offsets the value and then adds attributes and criteria to the value to make sure its the correct value
                                     if isinstance(range, tuple) and all(isinstance(datatype, int) for datatype in range):  # makes the value generated a integer
                                         value = int(value)
-                                        altered_value = value + int(random.triangular(range[0], range[1], mode))  # Random between range in integer values
+                                        if mode:  # if user wants to use mode, random.triangular will be used
+                                            altered_value = value + int(random.triangular(range[0], range[1], mode))  # Random between range in integer values
+                                        else:
+                                            altered_value = value + int(random.uniform(range[0], range[1]))  # Random between range in integer values
                                     elif isinstance(range, tuple) and all(isinstance(datatype, float) for datatype in range):  # makes the value generated a integer
                                         value = float(value)
-                                        altered_value = value + random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
-                                    else: # if user inputs a float and int in tuple, defaults to float
+                                        if mode:  # if user wants to use mode, random.triangular will be used
+                                            altered_value = value + random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                        else:
+                                            altered_value = value + random.uniform(range[0], range[1])  # Random between range in float values
+                                    else:  # if user inputs a float and int in tuple, defaults to float
                                         value = float(value)
-                                        altered_value = value + random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                        if mode:  # if user wants to use mode, random.triangular will be used
+                                            altered_value = value + random.triangular(range[0], range[1],mode=mode)  # Random between range in float values
+                                        else:
+                                            altered_value = value + random.uniform(range[0], range[1])  # Random between range in float values
+
+                                        # if decimals is true, it will stay as a decimal and float form, round value
+                                        if decimals:
+                                            altered_value = round(altered_value, rounding)
+                                        else:  # if value will not be in decimal form, it will round to the nearing whoe number
+                                            altered_value = round(altered_value)
 
                                     # if decimals is true, it will stay as a decimal and float form, round value
                                     if decimals:
                                         altered_value = round(altered_value, rounding)
                                     else:  # if value will not be in decimal form, then it will be converted to an integer format
-                                        altered_value = int(altered_value)
+                                        altered_value = round(altered_value)
+
 
                                     # clamps the value to make sure the value is within the desired range
                                     # clamps_outer makes sure that the value is not over the desired bounds

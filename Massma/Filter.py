@@ -222,7 +222,7 @@ class Alter:
             matches_text = []  # stores all matches found in text to be logic tested later
             replaces_text = []  # stores all the texts that will be replaced
             for files in self.__files:
-                if file == files:
+                if os.path.abspath(file)  == os.path.abspath(files):
                     if self.__test_files is not None:
                         for test_file in self.__test_files:
                             with open(test_file, "r") as f:

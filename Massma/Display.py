@@ -427,8 +427,12 @@ class Result:
 
             # Get the traceback information
             # gets much more detail about the error
+
             if self.__raw_error:
-                formatted_error = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+                if isinstance(error, BaseException): # if unable to forma a tracback, it will use the not raw version
+                    formatted_error = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+                else:
+                    self.result_warning(source, 'display', 'unable to output raw error')
 
             if self.__flatten_output:
                 if isinstance(formatted_error, str):
@@ -457,6 +461,7 @@ class Result:
                 self.__stats.errors += 1  # tracking total "errors" made
                 quit()  # ends running code
             self.__stats.errors += 1  # tracking total "errors" made
+
 
     def result_warning(self, source: str, method: str, warning: str):
         """

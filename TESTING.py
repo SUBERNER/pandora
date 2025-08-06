@@ -182,7 +182,7 @@ for folder in recipes_list:
     Buffle.Inner.normal(folder, r'"result": {.*?}', flags=[re.M, re.S])
     Buffle.Inner.normal(folder, r'"result": {.*?}', flags=[re.M, re.S])
     for file in folder:
-        Buffle.Inner.normal(file, r'".": {')
+        Buffle.Inner.normal(file, r'".": \{')
         Buffle.move(file, os.path.dirname(os.path.dirname(file)))
 
 
