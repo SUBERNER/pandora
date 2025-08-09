@@ -1,3 +1,59 @@
+[FeatureRegistry][error]-My World | minecraft:pale_oak_tree_feature | minecraft:tree_feature | roofed_canopy | canopy_height | Value '2' outside valid range [3, 2147483647]
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:pale_oak_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | height | 'range_min' with value '3' outside valid range [4, 2147483647]
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | height | 'range_max' with value '3' outside valid range [4, 2147483647]
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | radius | 'range_min' with value '2' outside valid range [3, 2147483647]
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | radius | 'range_max' with value '2' outside valid range [3, 2147483647]
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:cherry_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:fallen_oak_tree_feature | minecraft:tree_feature | fallen_trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+
+[FeatureRegistry][error]-My World | minecraft:jungle_tree_feature | minecraft:tree_feature | trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+
+[FeatureRegistry][error]-My World | minecraft:oak_tree_with_vines_feature | minecraft:tree_feature | trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+
+[FeatureRegistry][error]-My World | minecraft:roofed_tree_with_vines_feature | minecraft:tree_feature | roofed_canopy | canopy_height | Value '1' outside valid range [3, 2147483647]
+
+
+
+
+
+[FeatureRegistry][error]-My World | minecraft:mountain_pine_tree_feature | minecraft:tree_feature | pine_canopy | base_radius | Value '0' outside valid range [1, 2147483647]
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:mountain_pine_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:amethyst_geode_feature | minecraft:geode_feature | generate_crack_chance | Value '1.300000' outside valid range [0.000000, 1.000000]
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:amethyst_geode_feature'
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | height | 'range_min' with value '3' outside valid range [4, 2147483647]
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | height | 'range_max' with value '3' outside valid range [4, 2147483647]
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | radius | 'range_min' with value '2' outside valid range [3, 2147483647]
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | radius | 'range_max' with value '2' outside valid range [3, 2147483647]
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_trunk | branches | branch_canopy | cherry_canopy | radius | 'range_min' with value '2' outside valid range [3, 2147483647]
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_trunk | branches | branch_canopy | cherry_canopy | radius | 'range_max' with value '2' outside valid range [3, 2147483647]
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:cherry_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:fallen_jungle_tree_feature | minecraft:tree_feature | fallen_trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+
+[FeatureRegistry][error]-My World | minecraft:jungle_tree_feature | minecraft:tree_feature | trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+
+[FeatureRegistry][error]-My World | minecraft:spruce_tree_with_vines_feature | minecraft:tree_feature | trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+
+
+
 
 
 

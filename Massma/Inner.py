@@ -2,6 +2,7 @@ import re
 from Massma import random  # used for seeds
 from Massma.Filter import *
 import Massma
+import math
 
 def normal(files: str | list[str], contains: str | list[str], *, duplicate: bool = False, flatten: bool = False, preset: str | list[str] | None = None, preshuffle: int | list[int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
@@ -293,7 +294,7 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
     Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 
-def scale(files: str | list[str],contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, mode: float | int | None = None, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, matching: bool = False,
+def scale(files: str | list[str], contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, fair_range: bool = False, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, minmax_matching: bool = True, clamp_matching: bool = False,
           clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     try:
@@ -371,24 +372,25 @@ def scale(files: str | list[str],contains: str | list[str], range: tuple[float, 
                                 reroll = False # store if while loop should continue, if true, the while loop will happen again
                                 # when a reroll happens, all values are redone to make sure infinite loops do not occur if the first value is always bigger than the second
 
+                                # the logs and exp make it so that even if a user enters a value like (0.5,2) it will not cause
                                 for value in values:
                                     # everything below scales the value and then adds attributes and criteria to the value to make sure its the correct value
                                     if isinstance(range, tuple) and all(isinstance(datatype, int) for datatype in range):  # makes the value generated a integer
                                         value = int(value)
-                                        if mode: # if user wants to use mode, random.triangular will be used
-                                            altered_value = value * int(random.triangular(range[0], range[1], mode))  # Random between range in integer values
+                                        if fair_range: # makes the distribution in chances more even instead of choosing numbers outside -1 and 1
+                                            altered_value = value * math.exp(random.uniform(math.log(range[0]), math.log(range[1])))  # Random between range in integer values
                                         else:
-                                            altered_value = value * int(random.uniform(range[0], range[1]))  # Random between range in integer values
+                                            altered_value = value * random.uniform(range[0], range[1])  # Random between range in integer values
                                     elif isinstance(range, tuple) and all(isinstance(datatype, float) for datatype in range):  # makes the value generated a integer
                                         value = float(value)
-                                        if mode: # if user wants to use mode, random.triangular will be used
-                                            altered_value = value * random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                        if fair_range: # makes the distribution in chances more even instead of choosing numbers outside -1 and 1
+                                            altered_value = value * math.exp(random.uniform(math.log(range[0]), math.log(range[1])))  # Random between range in float values
                                         else:
                                             altered_value = value * random.uniform(range[0], range[1])  # Random between range in float values
                                     else: # if user inputs a float and int in tuple, defaults to float
                                         value = float(value)
-                                        if mode: # if user wants to use mode, random.triangular will be used
-                                            altered_value = value * random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                        if fair_range: # makes the distribution in chances more even instead of choosing numbers outside -1 and 1
+                                            altered_value = value * math.exp(random.uniform(math.log(range[0]), math.log(range[1])))  # Random between range in float values
                                         else:
                                             altered_value = value * random.uniform(range[0], range[1])  # Random between range in float values
                                     # if decimals is true, it will stay as a decimal and float form, round value
@@ -401,10 +403,10 @@ def scale(files: str | list[str],contains: str | list[str], range: tuple[float, 
                                     # clamps_outer makes sure that the value is not over the desired bounds
                                     # clamps_inner makes sure that the value is not under the desired values
                                     # if matching is used, that means it can also equal the clamps, and cannot be equal to clamps if matching is off
-                                        if (not matching and (clamps_outer and (altered_value <= clamps_outer[0] or altered_value >= clamps_outer[1])) or
+                                        if (not clamp_matching and (clamps_outer and (altered_value <= clamps_outer[0] or altered_value >= clamps_outer[1])) or
                                            (clamps_inner and (altered_value >= clamps_inner[0] and altered_value <= clamps_inner[1])) or
-                                           (matching and (clamps_outer and (altered_value < clamps_outer[0] or altered_value > clamps_outer[1])) or
-                                           (clamps_inner and (altered_value > clamps_inner[0] and altered_value < clamps_inner[1])))):
+                                           (clamp_matching and (clamps_outer and (altered_value < clamps_outer[0] or altered_value > clamps_outer[1])) or
+                                            (clamps_inner and (altered_value > clamps_inner[0] and altered_value < clamps_inner[1])))):
 
                                             reroll = True # requires while true loop to reactive after fully altering the value
                                             break # as reroll happens, skips rest of values loop, as everything else is wrong
@@ -416,8 +418,9 @@ def scale(files: str | list[str],contains: str | list[str], range: tuple[float, 
 
                                     # tests if the vales are minmax, this mean that each value is bigger or the same as the previous one added to the altered_values list
                                     # if a values does not pass this, reroll happens, and this is skipped if no values have been given yet
+                                    # matching allows the altered value to be the same as the previous minmax value
                                     if altered_values and minmaxing: # runs if something is in the list to start a minmax test
-                                        if altered_values[-1] > altered_value: # test the last added value into the list with the newly added value
+                                        if (altered_values[-1] > altered_value and minmax_matching) or (altered_values[-1] >= altered_value and not minmax_matching): # test the last added value into the list with the newly added value
                                             reroll = True # requires while true loop to reactive after fully altering the value
                                             break # as reroll happens, skips rest of values loop, as everything else is wrong
 
@@ -458,9 +461,9 @@ def scale(files: str | list[str],contains: str | list[str], range: tuple[float, 
         Massma.Display.inner.result_error(len(files), "scale", e)
     Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
-def offset(files: str | list[str],contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, mode: float | int | None = None, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, matching: bool = False,
-          clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
-          ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
+def offset(files: str | list[str], contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, fair_range: bool = False, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, minmax_matching: bool = True, clamp_matching: bool = False,
+           clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
+           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     try:
         if chance_total >= random.random():  # test if method will happen
             # makes data always a list
@@ -540,20 +543,20 @@ def offset(files: str | list[str],contains: str | list[str], range: tuple[float,
                                     # everything below offsets the value and then adds attributes and criteria to the value to make sure its the correct value
                                     if isinstance(range, tuple) and all(isinstance(datatype, int) for datatype in range):  # makes the value generated a integer
                                         value = int(value)
-                                        if mode:  # if user wants to use mode, random.triangular will be used
-                                            altered_value = value + int(random.triangular(range[0], range[1], mode))  # Random between range in integer values
+                                        if fair_range:  # makes the distribution in chances more even instead of choosing numbers outside -1 and 1
+                                            altered_value = value + math.exp(random.uniform(math.log(range[0]), math.log(range[1])))  # Random between range in integer values
                                         else:
-                                            altered_value = value + int(random.uniform(range[0], range[1]))  # Random between range in integer values
+                                            altered_value = value + random.uniform(range[0], range[1])  # Random between range in integer values
                                     elif isinstance(range, tuple) and all(isinstance(datatype, float) for datatype in range):  # makes the value generated a integer
                                         value = float(value)
-                                        if mode:  # if user wants to use mode, random.triangular will be used
-                                            altered_value = value + random.triangular(range[0], range[1], mode=mode)  # Random between range in float values
+                                        if fair_range:  # makes the distribution in chances more even instead of choosing numbers outside -1 and 1
+                                            altered_value = value + math.exp(random.uniform(math.log(range[0]), math.log(range[1])))  # Random between range in float values
                                         else:
                                             altered_value = value + random.uniform(range[0], range[1])  # Random between range in float values
                                     else:  # if user inputs a float and int in tuple, defaults to float
                                         value = float(value)
-                                        if mode:  # if user wants to use mode, random.triangular will be used
-                                            altered_value = value + random.triangular(range[0], range[1],mode=mode)  # Random between range in float values
+                                        if fair_range:  # makes the distribution in chances more even instead of choosing numbers outside -1 and 1
+                                            altered_value = value + math.exp(random.uniform(math.log(range[0]), math.log(range[1])))  # Random between range in float values
                                         else:
                                             altered_value = value + random.uniform(range[0], range[1])  # Random between range in float values
 
@@ -574,10 +577,10 @@ def offset(files: str | list[str],contains: str | list[str], range: tuple[float,
                                     # clamps_outer makes sure that the value is not over the desired bounds
                                     # clamps_inner makes sure that the value is not under the desired values
                                     # if matching is used, that means it can also equal the clamps, and cannot be equal to clamps if matching is off
-                                        if (not matching and (clamps_outer and (altered_value <= clamps_outer[0] or altered_value >= clamps_outer[1])) or
+                                        if (not clamp_matching and (clamps_outer and (altered_value <= clamps_outer[0] or altered_value >= clamps_outer[1])) or
                                            (clamps_inner and (altered_value >= clamps_inner[0] and altered_value <= clamps_inner[1])) or
-                                           (matching and (clamps_outer and (altered_value < clamps_outer[0] or altered_value > clamps_outer[1])) or
-                                           (clamps_inner and (altered_value > clamps_inner[0] and altered_value < clamps_inner[1])))):
+                                           (clamp_matching and (clamps_outer and (altered_value < clamps_outer[0] or altered_value > clamps_outer[1])) or
+                                            (clamps_inner and (altered_value > clamps_inner[0] and altered_value < clamps_inner[1])))):
 
                                             reroll = True # requires while true loop to reactive after fully altering the value
                                             break # as reroll happens, skips rest of values loop, as everything else is wrong
@@ -589,8 +592,9 @@ def offset(files: str | list[str],contains: str | list[str], range: tuple[float,
 
                                     # tests if the vales are minmax, this mean that each value is bigger or the same as the previous one added to the altered_values list
                                     # if a values does not pass this, reroll happens, and this is skipped if no values have been given yet
+                                    # matching allows the altered value to be the same as the previous minmax value
                                     if altered_values and minmaxing: # runs if something is in the list to start a minmax test
-                                        if altered_values[-1] > altered_value: # test the last added value into the list with the newly added value
+                                        if (altered_values[-1] > altered_value and minmax_matching) or (altered_values[-1] >= altered_value and not minmax_matching): # test the last added value into the list with the newly added value
                                             reroll = True # requires while true loop to reactive after fully altering the value
                                             break # as reroll happens, skips rest of values loop, as everything else is wrong
 
