@@ -446,7 +446,12 @@ Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED FEATU
 
 # items
 items_path = altered_base + "\\behavior_pack\\items"
-items_list = []
+items_list = Massma.Search.full(items_path)
+items_filters = [] # used for filtering items into sections
+items_filters.append(Massma.Filter.Exclude(items_list,r'"minecraft:food":', logic_strings=Massma.Logic.NAND)) # only shuffles foods
+items_filters.append(Massma.Filter.Exclude(items_list,r'"identifier": ".*?bundle"', logic_strings=Massma.Logic.NAND)) # only shuffles bundles
+items_filters.append(Massma.Filter.Exclude(items_list,r'"minecraft:seed":', logic_strings=Massma.Logic.NAND)) # only shuffles seeds
+
 
 Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED ITEMS")
 
