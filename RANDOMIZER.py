@@ -4,18 +4,20 @@ import os
 import math
 import re
 
+from Massma.Filter import Ignore
+
 #EDIT THIS TO CHANGE WHAT AND HOW DATA IS SHUFFLED
-Massma.Methods.seed(654365)
+Massma.Methods.seed(5348945732)
 shuffle_entities = False
-shuffle_spawn_rules = False
+shuffle_spawn_rules = True
 shuffle_spawn_groups = False  # WORK ON
 shuffle_trading = True
-shuffle_loot = False  # WORK ON
+shuffle_loot = True  # WORK ON
 shuffle_biomes = True
 shuffle_recipies = False
 shuffle_feature_rules = True
 shuffle_features = True
-shuffle_items = False
+shuffle_items = True
 shuffle_item_catalogs = False  # WORK ON
 shuffle_aim_assists = False  # WORK ON
 shuffle_behavior_trees = False  # WORK ON
@@ -182,8 +184,13 @@ if shuffle_trading:
         Massma.Inner.scale(list, r'"price_multiplier": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True)  # multiplies or divides how much a price is multiplied by based on in game scenarios
         Massma.Inner.normal(list, r'"max_uses": -?\d*\.?\d+') # shuffles the amount of times you can trade for an item
         Massma.Inner.scale(list, r'"max_uses": -?\d*\.?\d+', (0.33,3), decimals=False, zeros=False, fair_range=True) # multiplies or divides the amount of times you can trade for an item
+        Massma.Inner.scale(list, r'"base_cost": -?\d*\.?\d+', (0.33, 3), decimals=False, minmaxing=True, zeros=False, fair_range=True)  # multiplies or divides librarian villager's base cost for books
+        Massma.Inner.scale(list, r'"base_random_cost": -?\d*\.?\d+', (0.33, 3), decimals=False, zeros=False, fair_range=True)  # multiplies or divides librarian villager's base cost for books randomly added or subtracted
+        Massma.Inner.scale(list, r'"per_level_random_cost": -?\d*\.?\d+', (0.33, 3), decimals=False, zeros=False, fair_range=True)  # multiplies or divides librarian villager's cost based on per level added, randomly adding or subtracting
+        Massma.Inner.scale(list, r'"per_level_cost": -?\d*\.?\d+', (0.33, 3), decimals=False, zeros=False, fair_range=True)  # multiplies or divides librarian villager's cost based on per level added
+        Massma.Inner.scale(list, r'"trader_exp":  -?\d*\.?\d+',(0.33, 3), decimals=False, zeros=False, fair_range=True) # shuffles how much xp a user gets for trading
         #Massma.Inner.normal(list, r'"gives": \[.*?\],.*?"', flags=[re.M, re.S]) # shuffles what a village gives for each trade
-        Massma.Inner.normal(list, r'"wants": \[.*?\],.*?"',flags=[re.M, re.S])  # shuffles what a village wants for each trade
+        Massma.Inner.normal(list, r'"wants": \[.*?\],.*?"', flags=[re.M, re.S])  # shuffles what a village wants for each trade
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED TRADING")
 
@@ -192,33 +199,26 @@ if shuffle_loot:
     loot_list = [] # the list of each section of loot_tables
     loot_path = altered_base + "\\behavior_pack\\loot_tables"
     # sets up the groups for each section of loot tables to be shuffled
-    loot_list.append([Massma.Search.full(loot_path + "\\chests", deep_search=True)]) # chests
+    loot_list.append(Massma.Search.full(loot_path + "\\chests", deep_search=True, ignores=Massma.Filter.Ignore(Massma.Search.name(loot_path + "\\chests",["reward.json","dispenser", "village_blacksmith", "village_two_room_house"], deep_search=True, logic=Massma.Logic.OR)))) # chests, except dispenser, old village houses, and rewards
+    loot_list[-1] + Massma.Search.full(loot_path + "\\pots", deep_search=True)  # gets pots for chests
+    loot_list.append(Massma.Search.full(loot_path + "\\dispensers", deep_search=True))  # dispensers
+    loot_list[-1] + Massma.Search.name(loot_path + "\\chests", contains="dispenser", deep_search=True)  # gets dispensers from chests
+    loot_list[-1] + Massma.Search.name(loot_path + "\\spawners", contains="items_to_drop", deep_search=True)  # gets item_drops from spawners
 
-    loot_list.append([Massma.Search.full(loot_path + "\\dispensers", deep_search=True)]) # dispensers
-    loot_list[-1].append(Massma.Search.name(loot_path + "\\chests", contains="dispenser" ,deep_search=True))  # dispensers
-    dispenser_filter = Massma.Filter.Ignore(loot_path + "\\chests\\dispenser_trap.json") # used to ignore changes within chests
-
-    loot_list.append([Massma.Search.full(loot_path + "\\entities")]) # entities
-
-    loot_list.append([Massma.Search.name(loot_path + "\\entities", "gear")]) # raiding
-
-    loot_list.append([Massma.Search.name(loot_path + "\\entities", "gear")]) # gear
-
-    loot_list.append([Massma.Search.name(loot_path + "\\entities", "brushing")]) # brushing
-
-    loot_list.append([Massma.Search.full(loot_path + "\\equipment", deep_search=False)]) # equipment and armor
-    loot_list[-1].append(Massma.Search.name(loot_path + "\\gameplay\\entities", "armor_set")) # equipment and armor
-    loot_list[-1].append(Massma.Search.name(loot_path + "\\entities", "armor_set")) # equipment and armor
-    armor_filter = Massma.Filter.Ignore(Massma.Search.name(loot_path + "\\gameplay\\entities", "armor_set")) # used to ignore changes within entities
-
-    loot_list.append([Massma.Search.full(loot_path + "\\gameplay")]) # fishing
-    loot_list[-1].append(Massma.Search.full(loot_path + "\\gameplay\\fishing")) # fishing
-
-    loot_list.append([Massma.Search.full(loot_path + "\\gameplay\\entities")]) # gameplay
-
-    loot_list.append([Massma.Search.full(loot_path + "\\pots", deep_search=True)]) # pots
-
-    loot_list.append([Massma.Search.full(loot_path + "\\spawners", deep_search=True)])
+    loot_list.append(Massma.Search.full(loot_path + "\\equipment", ignores=Massma.Filter.Ignore(Massma.Search.name(loot_path + "\\equipment","low_tier_items.json"))))  # equipment equipment
+    loot_list[-1] + Massma.Search.name(loot_path + "\\entities", "set")  # gets armor sets from entites
+    loot_list.append(Massma.Search.name(loot_path + "\\entities", ["equipment", "gear"], logic=Massma.Logic.OR))  # entity equipment
+    loot_list.append(Massma.Search.name(loot_path + "\\entities", "brush"))  # brushing
+    loot_list.append(Massma.Search.name(loot_path, ["cat_gift.json","piglin_barter.json","sniffer_seeds.json","panda_sneeze.json"], deep_search=True, logic=Massma.Logic.OR))  # interactions
+    loot_list.append(Massma.Search.full(loot_path + "\\entities", ignores=Massma.Filter.Ignore(loot_list[-1] + loot_list[-2] + loot_list[-3] + loot_list[-4]))) # everything not used yet in entities' loot list
+    loot_list.append(Massma.Search.full(loot_path + "\\gameplay")) # fish
+    loot_list[-1] + Massma.Search.full(loot_path + "\\gameplay\\fishing") # fishing
+    loot_list.append(Massma.Search.name(loot_path + "\\gameplay\\entities", "mooshroom_milking")) # mushroom
+    loot_list.append(Massma.Search.full(loot_path + "\\spawners", deep_search=True, ignores=Massma.Filter.Ignore(Massma.Search.name(loot_path + "\\spawners", contains="items_to_drop", deep_search=True)))) # spawners
+    # goes through each list and shuffles within
+    print(loot_list)
+    for list in loot_list:
+        Massma.Inner.normal(list, r'.+', flags=[re.S]) # shuffles ALL the data inside a loot_table between groups of loot_tables
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED LOOT")
 
@@ -236,29 +236,28 @@ if shuffle_biomes:
     # shuffling based on filters
     for filter in biome_filters:
         #Massma.Inner.normal(biomes_list, r'"identifier": ".*"', excludes=filter) # shuffles how biomes are identified in the system
-        Massma.Inner.normal(biomes_list, r'"sea_floor_material": ".*"', excludes=filter) # shuffles the block used for the sea floor of a biome
-        Massma.Inner.normal(biomes_list, r'"minecraft:multinoise_generation_rules": \{.*?\}', flags=[re.M, re.S], excludes=filter) # shuffles how and where nether biomes are created
+        Massma.Inner.normal(biomes_list, r'"sea_floor_material": ".*"', excludes=filter, duplicate=True, flatten=True) # shuffles the block used for the sea floor of a biome
+        Massma.Inner.normal(biomes_list, r'"minecraft:multinoise_generation_rules": \{.*?\}', flags=[re.M, re.S], excludes=filter, duplicate=True, flatten=True) # shuffles how and where nether biomes are created
         #Massma.Inner.normal(biomes_list, r'"weight": -?\d*\.?\d+', excludes=filter) # shuffles the likelihood a biome is created
     # no section exclusive shuffling and altering
-    Massma.Inner.normal(biomes_list, r'"sea_material": ".*"', duplicate=True) # changes the liquids to either water or lava
-    Massma.Inner.normal(biomes_list, [r'"blue_spores": .*', r'"ash": .*', r'"red_spores": .*', r'"white_ash": .*']) # shuffles the particles from nether biomes
+    Massma.Inner.normal(biomes_list, r'"sea_material": ".*"', duplicate=True, preset=['"sea_material": "minecraft:water"','"sea_material": "minecraft:water"','"sea_material": "minecraft:water"','"sea_material": "minecraft:water"','"sea_material": "minecraft:water"','"sea_material": "minecraft:water"','"sea_material": "minecraft:water"','"sea_material": "minecraft:water"','"sea_material": "minecraft:water"','"sea_material": "minecraft:lava"']) # changes the liquids to either water or lava
+    Massma.Inner.normal(biomes_list, [r'"blue_spores": .*', r'"ash": .*', r'"red_spores": .*', r'"white_ash": .*'], duplicate=True, flatten=True) # shuffles the particles from nether biomes
     Massma.Inner.scale(biomes_list, [r'"blue_spores": .*', r'"ash": .*', r'"red_spores": .*', r'"white_ash": .*'], (0.5,2.0), zeros=False, rounding=2, decimals=True, fair_range=True) # multiplies and divides the particles from nether biomes
-    Massma.Inner.group(biomes_list, [r'"downfall": -?\d*\.?\d+',r'',r'"snow_accumulation": \[.*?\]','"temperature": -?\d*\.?\d+'], flags=[re.M, re.S]) # shuffles the climate of all biomes
-    Massma.Inner.normal(biomes_list, r'"minecraft:overworld_height": \{.*?\}', flags=[re.M, re.S]) # shuffles the terrain type of each biome
-    Massma.Inner.normal(biomes_list, r'"minecraft:overworld_generation_rules": \{.*?\}', flags=[re.M, re.S]) # shuffles the terrain type of each biome
-    Massma.Inner.normal(biomes_list, r'"sea_floor_depth": -?\d*\.?\d+', duplicate=True) # shuffles how far biome seas reach in oceans and rivers
+    Massma.Inner.group(biomes_list, [r'"downfall": -?\d*\.?\d+',r'',r'"snow_accumulation": \[.*?\]','"temperature": -?\d*\.?\d+'], flags=[re.M, re.S], duplicate=True, flatten=True) # shuffles the climate of all biomes
+    Massma.Inner.normal(biomes_list, r'"minecraft:overworld_height": \{.*?\}', flags=[re.M, re.S], duplicate=True, flatten=True) # shuffles the terrain type of each biome
+    Massma.Inner.normal(biomes_list, r'"minecraft:overworld_generation_rules": \{.*?\}', flags=[re.M, re.S], duplicate=True, flatten=True) # shuffles the terrain type of each biome
     Massma.Inner.scale(biomes_list, r'"sea_floor_depth": -?\d*\.?\d+', (0.33,3), fair_range=True) # multiplies and devices how far biome seas reach in oceans and rivers
-    Massma.Inner.normal(biomes_list, r'"minecraft:mesa_surface": \{.*?\}', flags=[re.M, re.S]) # shuffles how each mesa biome generates
-    Massma.Inner.normal(biomes_list, [r'"bryce_pillars": true',r'"bryce_pillars": false'], duplicate=True) # shuffles if mesa biomes generate with giant pillars
-    Massma.Inner.normal(biomes_list, [r'"has_forest": true',r'"has_forest": false'], duplicate=True) # shuffles if mesa biomes generate with forests
-    Massma.Inner.group(biomes_list, [r'"noise_frequency_scale": -?\d*\.?\d+', r'"noise_range": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]'])
+    Massma.Inner.normal(biomes_list, r'"sea_floor_depth": -?\d*\.?\d+', duplicate=True, flatten=True) # shuffles how far biome seas reach in oceans and rivers
+    Massma.Inner.normal(biomes_list, r'"minecraft:mesa_surface": \{.*?\}', flags=[re.M, re.S], duplicate=True, flatten=True) # shuffles how each mesa biome generates
+    Massma.Inner.normal(biomes_list, [r'"bryce_pillars": true',r'"bryce_pillars": false'], duplicate=True, flatten=True) # shuffles if mesa biomes generate with giant pillars
+    Massma.Inner.normal(biomes_list, [r'"has_forest": true',r'"has_forest": false'], duplicate=True, flatten=True) # shuffles if mesa biomes generate with forests
     Massma.Inner.scale(biomes_list, r'"noise_frequency_scale": -?\d*\.?\d+', (0.33, 3), zeros=False, decimals=True, rounding=1)
-    Massma.Inner.scale(biomes_list, r'"noise_range": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]', (0.33, 3), zeros=False, decimals=True, minmaxing=True, rounding=1)
-    #Massma.Inner.normal(biomes_list, r'"noise_params": \[ .*? \]') # shuffles how biomes scale the terrain
-    #Massma.Inner.scale(biomes_list, r'"noise_params": \[ .*? \]', decimals=True, zeros=True, rounding=3) # multiplies or divides how biomes scale the terrain
-    Massma.Inner.normal(biomes_list, [r'"has_forest": true',r'"has_forest": false'], duplicate=True) # shuffles if mesa biomes generate with forests
-    Massma.Inner.normal(biomes_list, [r'"north_slopes": true', r'"north_slopes": false', r'"east_slopes": true', r'"east_slopes": false', r'"south_slopes": true', r'"south_slopes": false', r'"west_slopes": true', r'"west_slopes": false'], duplicate=True) # shuffles which way slopes face
-    Massma.Inner.normal(biomes_list, [r'"top_slide": \{.*?\}'], flags=[re.M, re.S]) # shuffles if mountains have peaks
+    Massma.Inner.scale(biomes_list, r'"noise_range": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]', (0.33, 3), zeros=False, decimals=True, minmaxing=True, rounding=1, minmax_matching=False)
+    Massma.Inner.group(biomes_list, [r'"noise_frequency_scale": -?\d*\.?\d+', r'"noise_range": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]'], duplicate=True, flatten=True)
+    Massma.Inner.scale(biomes_list, r'"noise_params": \[ .*? \]', (0.33,3), decimals=True, zeros=True, rounding=3, fair_range=True) # multiplies or divides how biomes scale the terrain
+    Massma.Inner.normal(biomes_list, r'"noise_params": \[ .*? \]', duplicate=True, flatten=True) # shuffles how biomes scale the terrain
+    Massma.Inner.normal(biomes_list, [r'"north_slopes": true', r'"north_slopes": false', r'"east_slopes": true', r'"east_slopes": false', r'"south_slopes": true', r'"south_slopes": false', r'"west_slopes": true', r'"west_slopes": false'], duplicate=True, preset=[r'"north_slopes": true', r'"north_slopes": false', r'"east_slopes": true', r'"east_slopes": false', r'"south_slopes": true', r'"south_slopes": false', r'"west_slopes": true', r'"west_slopes": false']) # shuffles which way slopes face
+    Massma.Inner.normal(biomes_list, [r'"top_slide": \{.*?\}'], flags=[re.M, re.S], duplicate=True, preset=[r'"top_slide": {"enabled": false}',r'"top_slide": {"enabled": true}']) # shuffles if mountains have peaks
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED BIOMES")
 
@@ -347,21 +346,21 @@ if shuffle_features:
     Massma.Inner.scale(features_list, r'"min": -?\d*\.?\d+, "max": -?\d*\.?\d+', (0.33,3), zeros=False, decimals=False, minmaxing=True, fair_range=True,flags=[re.M, re.S])
     Massma.Inner.normal(features_list, r'"min": -?\d*\.?\d+, "max": -?\d*\.?\d+',  flags=[re.M, re.S])
     Massma.Inner.normal(features_list, r'"search_range": -?\d*\.?\d+')
-    Massma.Inner.scale(features_list, r'"search_range": -?\d*\.?\d+', (0.33,3), zeros=True, decimals=False, fair_range=True)
+    Massma.Inner.scale(features_list, r'"search_range": -?\d*\.?\d+', (0.33,3), zeros=True, decimals=False, fair_range=True, clamps_outer=(1,64))
     Massma.Inner.normal(features_list, r'[x-z][x-z][x-z]', duplicate=True) #coordinate_eval_order, or the order in which operation will happen
     Massma.Inner.normal(features_list, r'"distribution": ".*"', duplicate=True, excludes=cocoa_filters[1]) # does not affect coco
     Massma.Inner.normal(features_list, r'"distribution": ".*"', duplicate=True, excludes=cocoa_filters[0], preset=['"distribution": "fixed_grid"', '"distribution": "jittered_grid"']) # does effect coco
-    # extents used underground
+    # extents used underground #SOMETHING WRONG
     underground_ignore = Massma.Filter.Ignore(Massma.Search.name(features_path,r'underground', ignores=deprecated_ignores, logic=Massma.Logic.NAND)) # filters out underground do to all spawning to close together or not at all, first only allows underground, then does not allow
     Massma.Inner.offset(features_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore)  # allowing values of 1 to be effect by scale
     Massma.Inner.scale(features_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore)
     Massma.Inner.normal(features_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
     underground_ignore = Massma.Filter.Ignore(Massma.Search.name(features_path,r'underground', ignores=deprecated_ignores, logic=Massma.Logic.AND)) # now will filter out all underground features
-    # extents without negatives
+    # extents without negatives #SOMETHING WRONG
     Massma.Inner.offset(features_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, clamps_outer=(-1,2147483647), ignores=underground_ignore)  # allowing values of 1 to be effect by scale
     Massma.Inner.scale(features_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, clamps_outer=(-1,2147483647), ignores=underground_ignore)
     Massma.Inner.normal(features_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
-    # extents with negatives
+    # extents with negatives #SOMETHING WRONG
     Massma.Inner.offset(features_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore)  # allowing values of 1 to be effect by scale
     Massma.Inner.scale(features_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore)
     Massma.Inner.normal(features_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
@@ -636,7 +635,7 @@ if shuffle_attachables:
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED ATTACHABLES")
 
 # biomes (ATTACH/SYNC TO FOG SHUFFLES)
-if shuffle_biomes:
+if shuffle_biomes_resource:
     biomes_path = altered_base + "\\resource_pack\\biomes"
     biomes_list = Massma.Search.full(biomes_path)
     # shuffles all the data together
@@ -828,4 +827,6 @@ inside inner scale and offset, allow for normal randomization, mode randomizatio
 OVERALL THE GOAL SHOULD BE TO HAVE ALMOST 0 OF THE LINES NOT BE FROM THE LIBRARY, other than a few exceptions such as creating variables and so on
 filters in filters, such as ignores inside a exclude
 rounding causing 1 in scale inner method to be able to go to 2 (MAYBE)
+an ignore filter that will ignore text found within the data being shuffled
+not flattin, but to swap the amount of each type, so if there is 2 lavas and 4 waters, it could make it 4 lavas and 2 waters
 """

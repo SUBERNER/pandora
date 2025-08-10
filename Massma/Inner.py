@@ -294,7 +294,7 @@ def group(files: str | list[str], contains: str | list[str], *, duplicate: bool 
     Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
 
-def scale(files: str | list[str], contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, fair_range: bool = False, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, minmax_matching: bool = True, clamp_matching: bool = False,
+def scale(files: str | list[str], contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, fair_range: bool = False, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, minmax_matching: bool = True, clamp_matching: bool = True,
           clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
           ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     try:
@@ -460,7 +460,7 @@ def scale(files: str | list[str], contains: str | list[str], range: tuple[float,
         Massma.Display.inner.result_error(len(files), "scale", e)
     Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
 
-def offset(files: str | list[str], contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, fair_range: bool = False, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, minmax_matching: bool = True, clamp_matching: bool = False,
+def offset(files: str | list[str], contains: str | list[str], range: tuple[float, float] | tuple[int, int], *, fair_range: bool = False, decimals: bool = False, zeros: bool = True, rounding: int = 2, minmaxing: bool = False, minmax_matching: bool = True, clamp_matching: bool = True,
            clamps_outer: tuple[float, float] | tuple[int, int] | None = None, clamps_inner: tuple[float, float] | tuple[int, int] | None = None, chance_files: float = 1, chance_contains: float = 1, chance_total: float = 1, chance_data: float = 1,
            ignores: Ignore | list[Ignore] | None = None, excludes: Exclude | list[Exclude] | None = None, alters: Alter | list[Alter] | None = None, flags: list[re.RegexFlag] = None):
     try:
