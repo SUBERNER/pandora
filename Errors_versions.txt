@@ -1,69 +1,200 @@
-[FeatureRegistry][error]-My World | minecraft:pale_oak_tree_feature | minecraft:tree_feature | roofed_canopy | canopy_height | Value '2' outside valid range [3, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:mega_pine_tree_feature | The feature name 'fallen_oak_tree_feature' did not match the expected name of 'minecraft:mega_pine_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:savanna_tree_feature | The feature name 'mountain_spruce_tree_feature' did not match the expected name of 'minecraft:savanna_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:mangrove_tree_feature | The feature name 'fallen_birch_tree_feature' did not match the expected name of 'minecraft:mangrove_tree_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:mangrove_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:tall_mangrove_tree_feature | The feature name 'oak_tree_feature' did not match the expected name of 'minecraft:tall_mangrove_tree_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:tall_mangrove_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:pale_oak_tree_feature | The feature name 'tall_mangrove_tree_feature' did not match the expected name of 'minecraft:pale_oak_tree_feature'
 
 [FeatureRegistry][error]-My World | No definition found for feature 'minecraft:pale_oak_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | height | 'range_min' with value '3' outside valid range [4, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:silverfish_feature | The feature name 'gold_ore_lower_feature' did not match the expected name of 'minecraft:silverfish_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | height | 'range_max' with value '3' outside valid range [4, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:dripstone_caves_copper_ore_feature | The feature name 'deepslate_feature' did not match the expected name of 'minecraft:dripstone_caves_copper_ore_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | radius | 'range_min' with value '2' outside valid range [3, 2147483647]
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:dripstone_caves_copper_ore_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | radius | 'range_max' with value '2' outside valid range [3, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:mountain_pine_tree_feature | The feature name 'jungle_bush_feature' did not match the expected name of 'minecraft:mountain_pine_tree_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:mountain_pine_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:fixup_vines_position_feature | minecraft:scatter_feature | Bad value for iterations - should be >= 0
+
+[FeatureRegistry][error]-My World | minecraft:clay_ore_feature | The feature name 'copper_ore_feature' did not match the expected name of 'minecraft:clay_ore_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:clay_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:gold_ore_extra_feature | The feature name 'diamond_ore_buried_feature' did not match the expected name of 'minecraft:gold_ore_extra_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:gold_ore_extra_feature'
+
+[FeatureRegistry][error]-My World | minecraft:coal_ore_feature | The feature name 'silverfish_feature' did not match the expected name of 'minecraft:coal_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:diamond_ore_feature | The feature name 'gravel_ore_feature' did not match the expected name of 'minecraft:diamond_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:diamond_ore_large_feature | The feature name 'iron_ore_feature' did not match the expected name of 'minecraft:diamond_ore_large_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:diamond_ore_large_feature'
+
+[FeatureRegistry][error]-My World | minecraft:diorite_feature | The feature name 'diamond_ore_large_feature' did not match the expected name of 'minecraft:diorite_feature'
+
+[FeatureRegistry][error]-My World | minecraft:dirt_feature | The feature name 'diamond_ore_feature' did not match the expected name of 'minecraft:dirt_feature'
+
+[FeatureRegistry][error]-My World | minecraft:emerald_ore_feature | The feature name 'diorite_feature' did not match the expected name of 'minecraft:emerald_ore_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:emerald_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:gold_ore_feature | The feature name 'coal_ore_feature' did not match the expected name of 'minecraft:gold_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:granite_feature | The feature name 'gold_ore_extra_feature' did not match the expected name of 'minecraft:granite_feature'
+
+[FeatureRegistry][error]-My World | minecraft:iron_ore_small_feature | The feature name 'emerald_ore_feature' did not match the expected name of 'minecraft:iron_ore_small_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:iron_ore_small_feature'
+
+[FeatureRegistry][error]-My World | minecraft:lapis_ore_buried_feature | The feature name 'clay_ore_feature' did not match the expected name of 'minecraft:lapis_ore_buried_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:lapis_ore_buried_feature'
+
+[FeatureRegistry][error]-My World | minecraft:redstone_ore_feature | The feature name 'iron_ore_small_feature' did not match the expected name of 'minecraft:redstone_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:tuff_feature | The feature name 'lapis_ore_buried_feature' did not match the expected name of 'minecraft:tuff_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:tuff_feature'
+
+[FeatureRegistry][error]-My World | minecraft:birch_tree_feature | The feature name 'mountain_pine_tree_feature' did not match the expected name of 'minecraft:birch_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:super_birch_tree_feature | The feature name 'fallen_super_birch_tree_feature' did not match the expected name of 'minecraft:super_birch_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_trunk | branches | branch_canopy | cherry_canopy | corner_hole_chance | 'root' must be in the range [0.0, 100]
 
 [FeatureRegistry][error]-My World | No definition found for feature 'minecraft:cherry_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:fallen_oak_tree_feature | minecraft:tree_feature | fallen_trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+[FeatureRegistry][error]-My World | minecraft:fallen_spruce_tree_feature | The feature name 'cherry_tree_feature' did not match the expected name of 'minecraft:fallen_spruce_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:jungle_tree_feature | minecraft:tree_feature | trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+[FeatureRegistry][error]-My World | minecraft:fallen_jungle_tree_feature | The feature name 'mangrove_tree_feature' did not match the expected name of 'minecraft:fallen_jungle_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:oak_tree_with_vines_feature | minecraft:tree_feature | trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+[FeatureRegistry][error]-My World | minecraft:jungle_tree_feature | The feature name 'fallen_spruce_tree_feature' did not match the expected name of 'minecraft:jungle_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:roofed_tree_with_vines_feature | minecraft:tree_feature | roofed_canopy | canopy_height | Value '1' outside valid range [3, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:roofed_tree_feature | The feature name 'mega_pine_tree_feature' did not match the expected name of 'minecraft:roofed_tree_feature'
 
+[FeatureRegistry][error]-My World | minecraft:roofed_tree_with_vines_feature | minecraft:tree_feature | acacia_trunk | branches | branch_position | 'range_min' with value '0' outside valid range [1, 2147483647]
 
+[FeatureRegistry][error]-My World | minecraft:roofed_tree_with_vines_feature | minecraft:tree_feature | acacia_trunk | branches | branch_position | 'range_max' with value '0' outside valid range [1, 2147483647]
 
+[Molang][error]-My World | jungle_after_surface_vines_feature | query.heightmap(variable.worldx, variable.worldz) |  | Error: unhandled request for unknown variable 'variable.worldx'
 
+[Molang][error]-My World | ocean_after_surface_seagrass_feature_rules | query.heightmap(variable.worldx, variable.worldz) |  | Error: unhandled request for unknown variable 'variable.worldx'
+
+[BiomeRegistry][error]-My World | biomes_server | minecraft:snowy_slopes | minecraft:surface_material_adjustments | Incorrect values for noise_range bounds - upper bound (second value) should be strictly greater than lower bound (first value)
+
+[FeatureRegistry][error]-My World | lush_caves_after_surface_moss_ceiling_feature | Bad value for iterations - should be >= 0
+
+[FeatureRegistry][error]-My World | overworld_underground_coal_ore_lower_feature | Bad value for iterations - should be >= 0
+
+[FeatureRegistry][error]-My World | overworld_underground_dirt_feature | Bad value for iterations - should be >= 0
+
+[FeatureRegistry][error]-My World | overworld_underground_redstone_ore_lower_feature | Bad value for iterations - should be >= 0
+
+[FeatureRegistry][error]-My World | minecraft:fancy_oak_tree_feature | The feature name 'super_birch_tree_feature' did not match the expected name of 'minecraft:fancy_oak_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:jungle_bush_feature | The feature name 'pine_tree_feature' did not match the expected name of 'minecraft:jungle_bush_feature'
+
+[FeatureRegistry][error]-My World | minecraft:mega_jungle_tree_feature | The feature name 'savanna_tree_feature' did not match the expected name of 'minecraft:mega_jungle_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:mega_spruce_tree_feature | The feature name 'fallen_birch_tree_feature' did not match the expected name of 'minecraft:mega_spruce_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:swamp_tree_feature | The feature name 'oak_tree_feature' did not match the expected name of 'minecraft:swamp_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:azalea_tree_feature | The feature name 'swamp_tree_feature' did not match the expected name of 'minecraft:azalea_tree_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:azalea_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:tall_mangrove_tree_feature | The feature name 'roofed_tree_feature' did not match the expected name of 'minecraft:tall_mangrove_tree_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:tall_mangrove_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:pale_oak_tree_feature | The feature name 'tall_mangrove_tree_feature' did not match the expected name of 'minecraft:pale_oak_tree_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:pale_oak_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:silverfish_feature | The feature name 'clay_ore_feature' did not match the expected name of 'minecraft:silverfish_feature'
+
+[FeatureRegistry][error]-My World | minecraft:dripstone_caves_copper_ore_feature | The feature name 'diamond_ore_feature' did not match the expected name of 'minecraft:dripstone_caves_copper_ore_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:dripstone_caves_copper_ore_feature'
 
 [FeatureRegistry][error]-My World | minecraft:mountain_pine_tree_feature | minecraft:tree_feature | pine_canopy | base_radius | Value '0' outside valid range [1, 2147483647]
 
 [FeatureRegistry][error]-My World | No definition found for feature 'minecraft:mountain_pine_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:amethyst_geode_feature | minecraft:geode_feature | generate_crack_chance | Value '1.300000' outside valid range [0.000000, 1.000000]
+[FeatureRegistry][error]-My World | minecraft:mountain_spruce_tree_feature | The feature name 'jungle_tree_feature' did not match the expected name of 'minecraft:mountain_spruce_tree_feature'
 
-[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:amethyst_geode_feature'
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:mountain_spruce_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | height | 'range_min' with value '3' outside valid range [4, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:gold_ore_extra_feature | The feature name 'deepslate_feature' did not match the expected name of 'minecraft:gold_ore_extra_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | height | 'range_max' with value '3' outside valid range [4, 2147483647]
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:gold_ore_extra_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | radius | 'range_min' with value '2' outside valid range [3, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:coal_ore_feature | The feature name 'diamond_ore_large_feature' did not match the expected name of 'minecraft:coal_ore_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_canopy | radius | 'range_max' with value '2' outside valid range [3, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:andesite_feature | The feature name 'redstone_ore_feature' did not match the expected name of 'minecraft:andesite_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_trunk | branches | branch_canopy | cherry_canopy | radius | 'range_min' with value '2' outside valid range [3, 2147483647]
+[FeatureRegistry][error]-My World | minecraft:coal_ore_upper_feature | The feature name 'tuff_feature' did not match the expected name of 'minecraft:coal_ore_upper_feature'
 
-[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | minecraft:tree_feature | cherry_trunk | branches | branch_canopy | cherry_canopy | radius | 'range_max' with value '2' outside valid range [3, 2147483647]
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:coal_ore_upper_feature'
+
+[FeatureRegistry][error]-My World | minecraft:copper_ore_feature | The feature name 'dirt_feature' did not match the expected name of 'minecraft:copper_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:diamond_ore_buried_feature | The feature name 'diorite_feature' did not match the expected name of 'minecraft:diamond_ore_buried_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:diamond_ore_buried_feature'
+
+[FeatureRegistry][error]-My World | minecraft:emerald_ore_feature | The feature name 'coal_ore_upper_feature' did not match the expected name of 'minecraft:emerald_ore_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:emerald_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:gravel_ore_feature | The feature name 'coal_ore_feature' did not match the expected name of 'minecraft:gravel_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:gold_ore_feature | The feature name 'gold_ore_extra_feature' did not match the expected name of 'minecraft:gold_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:gold_ore_lower_feature | The feature name 'iron_ore_small_feature' did not match the expected name of 'minecraft:gold_ore_lower_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:gold_ore_lower_feature'
+
+[FeatureRegistry][error]-My World | minecraft:granite_feature | The feature name 'dripstone_caves_copper_ore_feature' did not match the expected name of 'minecraft:granite_feature'
+
+[FeatureRegistry][error]-My World | minecraft:iron_ore_feature | The feature name 'diamond_ore_buried_feature' did not match the expected name of 'minecraft:iron_ore_feature'
+
+[FeatureRegistry][error]-My World | minecraft:lapis_ore_buried_feature | The feature name 'lapis_ore_feature' did not match the expected name of 'minecraft:lapis_ore_buried_feature'
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:lapis_ore_buried_feature'
+
+[FeatureRegistry][error]-My World | minecraft:sculk_vein_feature | minecraft:multiface_feature | search_range | Value '66' outside valid range [1, 64]
+
+[FeatureRegistry][error]-My World | No definition found for feature 'minecraft:sculk_vein_feature'
+
+[FeatureRegistry][error]-My World | minecraft:birch_tree_feature | The feature name 'undecorated_jungle_tree_feature' did not match the expected name of 'minecraft:birch_tree_feature'
+
+[FeatureRegistry][error]-My World | minecraft:cherry_tree_feature | The feature name 'fallen_super_birch_tree_feature' did not match the expected name of 'minecraft:cherry_tree_feature'
 
 [FeatureRegistry][error]-My World | No definition found for feature 'minecraft:cherry_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:fallen_jungle_tree_feature | minecraft:tree_feature | fallen_trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+[FeatureRegistry][error]-My World | minecraft:fallen_spruce_tree_feature | The feature name 'mountain_pine_tree_feature' did not match the expected name of 'minecraft:fallen_spruce_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:jungle_tree_feature | minecraft:tree_feature | trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+[FeatureRegistry][error]-My World | minecraft:spruce_tree_feature | The feature name 'jungle_bush_feature' did not match the expected name of 'minecraft:spruce_tree_feature'
 
-[FeatureRegistry][error]-My World | minecraft:spruce_tree_with_vines_feature | minecraft:tree_feature | trunk | trunk_decoration | decoration_chance | 'root' must be in the range [0.0, 100]
+[FeatureRegistry][error]-My World | minecraft:fallen_oak_tree_feature | The feature name 'mega_spruce_tree_feature' did not match the expected name of 'minecraft:fallen_oak_tree_feature'
 
+[FeatureRegistry][error]-My World | minecraft:fallen_jungle_tree_feature | The feature name 'birch_tree_feature' did not match the expected name of 'minecraft:fallen_jungle_tree_feature'
 
+[FeatureRegistry][error]-My World | minecraft:oak_tree_with_vines_feature | The feature name 'pale_oak_tree_feature' did not match the expected name of 'minecraft:oak_tree_with_vines_feature'
 
-
-
-
-
-
-
-
-
-
-
-
-
+[FeatureRegistry][error]-Feature rule minecraft:frozen_ocean_after_surface_ice_feature can't place internal feature type.
 

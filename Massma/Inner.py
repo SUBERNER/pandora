@@ -403,10 +403,9 @@ def scale(files: str | list[str], contains: str | list[str], range: tuple[float,
                                     # clamps_outer makes sure that the value is not over the desired bounds
                                     # clamps_inner makes sure that the value is not under the desired values
                                     # if matching is used, that means it can also equal the clamps, and cannot be equal to clamps if matching is off
-                                        if (not clamp_matching and (clamps_outer and (altered_value <= clamps_outer[0] or altered_value >= clamps_outer[1])) or
-                                           (clamps_inner and (altered_value >= clamps_inner[0] and altered_value <= clamps_inner[1])) or
-                                           (clamp_matching and (clamps_outer and (altered_value < clamps_outer[0] or altered_value > clamps_outer[1])) or
-                                            (clamps_inner and (altered_value > clamps_inner[0] and altered_value < clamps_inner[1])))):
+                                    if clamps_outer is not None or clamps_inner is not None:
+                                        if ((not clamp_matching and not (clamps_outer and clamps_outer[0] <= altered_value <= clamps_outer[1] and not (clamps_inner and clamps_inner[0] <= altered_value <= clamps_inner[1])))
+                                         or (clamp_matching and not ((not (clamps_outer and clamps_outer[0] <= altered_value <= clamps_outer[1])) and (clamps_inner and clamps_inner[0] <= altered_value <= clamps_inner[1])))):
 
                                             reroll = True # requires while true loop to reactive after fully altering the value
                                             break # as reroll happens, skips rest of values loop, as everything else is wrong
@@ -577,10 +576,9 @@ def offset(files: str | list[str], contains: str | list[str], range: tuple[float
                                     # clamps_outer makes sure that the value is not over the desired bounds
                                     # clamps_inner makes sure that the value is not under the desired values
                                     # if matching is used, that means it can also equal the clamps, and cannot be equal to clamps if matching is off
-                                        if (not clamp_matching and (clamps_outer and (altered_value <= clamps_outer[0] or altered_value >= clamps_outer[1])) or
-                                           (clamps_inner and (altered_value >= clamps_inner[0] and altered_value <= clamps_inner[1])) or
-                                           (clamp_matching and (clamps_outer and (altered_value < clamps_outer[0] or altered_value > clamps_outer[1])) or
-                                            (clamps_inner and (altered_value > clamps_inner[0] and altered_value < clamps_inner[1])))):
+                                    if clamps_outer is not None or clamps_inner is not None:
+                                        if ((not clamp_matching and not (clamps_outer and clamps_outer[0] <= altered_value <= clamps_outer[1] and not (clamps_inner and clamps_inner[0] <= altered_value <= clamps_inner[1])))
+                                         or (clamp_matching and not ((not (clamps_outer and clamps_outer[0] <= altered_value <= clamps_outer[1])) and (clamps_inner and clamps_inner[0] <= altered_value <= clamps_inner[1])))):
 
                                             reroll = True # requires while true loop to reactive after fully altering the value
                                             break # as reroll happens, skips rest of values loop, as everything else is wrong

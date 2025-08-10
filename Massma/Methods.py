@@ -205,6 +205,7 @@ def create_file(source: str) -> str | None:
             pass  # creates file
         Massma.Display.methods.result(source, "create file", None, source)
 
+        return source
     except Exception as e:
         Massma.Display.methods.result_error(source, "create file", e)
         return None

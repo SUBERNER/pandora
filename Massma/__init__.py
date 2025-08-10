@@ -9,7 +9,6 @@ from . import Audio
 from . import Outer
 from . import Inner
 
-
 from .Methods import seed
 from .Methods import move
 from .Methods import copy
