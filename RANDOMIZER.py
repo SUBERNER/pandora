@@ -5,6 +5,7 @@ import math
 import re
 
 from Massma.Filter import Ignore
+from Massma.Inner import scale
 
 #EDIT THIS TO CHANGE WHAT AND HOW DATA IS SHUFFLED
 Massma.Methods.seed(5348945732)
@@ -12,7 +13,7 @@ shuffle_entities = False
 shuffle_spawn_rules = True
 shuffle_spawn_groups = False  # WORK ON
 shuffle_trading = True
-shuffle_loot = True  # WORK ON
+shuffle_loot = True
 shuffle_biomes = True
 shuffle_recipies = False
 shuffle_feature_rules = True
@@ -219,6 +220,27 @@ if shuffle_loot:
     print(loot_list)
     for list in loot_list:
         Massma.Inner.normal(list, r'.+', flags=[re.S]) # shuffles ALL the data inside a loot_table between groups of loot_tables
+        Massma.Inner.offset(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], (-1, 1), zeros=False, flags=[re.M, re.S])  # adds and subtract the attempts to select items
+        Massma.Inner.scale(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], (0.33, 3), fair_range=True, zeros=False, flags=[re.M, re.S])  # multiples and divides the attempts to select items
+        Massma.Inner.normal(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], duplicate=True, flatten=True, flags=[re.M, re.S])  # shuffles the attempts to select items
+        Massma.Inner.offset(list, r'"weight": -?\d*\.?\d+', (-1, 1), zeros=False)  # adds and subtracts the chance of an item spawning
+        Massma.Inner.scale(list, r'"weight": -?\d*\.?\d+', (0.33, 3), fair_range=True, zeros=False)  # multiples and divides the chance of an item spawning
+        Massma.Inner.normal(list, r'"weight": -?\d*\.?\d+', duplicate=True, flatten=True)  # shuffles the chance of an item spawning
+        Massma.Inner.offset(list, r'"count": \{.*?\}', (-1, 1), zeros=False, flags=[re.M, re.S])  # adds and subtract the number of items spawn
+        Massma.Inner.scale(list, r'""count": \{.*?\}', (0.33, 3), fair_range=True, zeros=False, flags=[re.M, re.S])  # multiples and divides the number of items spawn
+        Massma.Inner.normal(list, r'"count": \{.*?\}', duplicate=True, flatten=True, flags=[re.M, re.S])  # shuffles the number of items spawn
+        Massma.Inner.scale(list, r'chance": -?\d*\.?\d+', (0.33, 3), fair_range=True, zeros=False, clamps_outer=(0,1))  # multiples and divides the chance of item spawning
+        Massma.Inner.normal(list, r'chance": -?\d*\.?\d+', duplicate=True, flatten=True)  # shuffles the chance of item spawning
+        Massma.Inner.normal(list, r'"type": "loot_table",.*?"name": ".*"', flags=[re.M, re.S])  # shuffles loot tables tied to other loot tables
+        Massma.Inner.normal(list, r'"tiers": \{.*?\}', flags=[re.M, re.S])  # shuffles
+        Massma.Inner.offset(list, r'"initial_range": -?\d*\.?\d+', (-1, 1), zeros=False)  # adds and subtracts
+        Massma.Inner.scale(list, r'"initial_range": -?\d*\.?\d+', (0.33, 3), fair_range=True, zeros=False)  # multiples and divides
+        Massma.Inner.normal(list, r'"initial_range": -?\d*\.?\d+', duplicate=True, flatten=True)  # shuffles
+        Massma.Inner.offset(list, r'"bonus_rolls": -?\d*\.?\d+', (-1, 1), zeros=False)  # adds and subtracts
+        Massma.Inner.scale(list, r'"bonus_rolls": -?\d*\.?\d+', (0.33, 3), fair_range=True, zeros=False)  # multiples and divides
+        Massma.Inner.normal(list, r'"bonus_rolls": -?\d*\.?\d+', duplicate=True, flatten=True)  # shuffles
+        Massma.Inner.scale(list, r'"bonus_chance": -?\d*\.?\d+', (0.33, 3), fair_range=True, zeros=False, clamps_outer=(0,1))  # multiples and divides
+        Massma.Inner.normal(list, r'"bonus_chance": -?\d*\.?\d+', duplicate=True, flatten=True)  # shuffles
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED LOOT")
 
