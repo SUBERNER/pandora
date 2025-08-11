@@ -8,16 +8,16 @@ from Massma.Filter import Ignore
 from Massma.Inner import scale
 
 #EDIT THIS TO CHANGE WHAT AND HOW DATA IS SHUFFLED
-Massma.Methods.seed(5348945732)
+Massma.Methods.seed(473895237)
 shuffle_entities = False
-shuffle_spawn_rules = True
+shuffle_spawn_rules = False
 shuffle_spawn_groups = False  # WORK ON
 shuffle_trading = False
-shuffle_loot = True
-shuffle_biomes = True
+shuffle_loot = False
+shuffle_biomes = False
 shuffle_recipies = False
-shuffle_feature_rules = True
-shuffle_features = True
+shuffle_feature_rules = False
+shuffle_features = False
 shuffle_items = False
 shuffle_item_catalogs = False  # WORK ON
 shuffle_aim_assists = False  # WORK ON
@@ -29,11 +29,11 @@ shuffle_animation_controllers = False  # WORK ON
 shuffle_animations = False  # WORK ON
 shuffle_atmospherics = False  # WORK ON
 shuffle_attachables = False  # WORK ON
-shuffle_biomes_resource = False  # WORK ON
+shuffle_biomes_resource = True  # WORK ON
 shuffle_cameras = False  # WORK ON
 shuffle_color_gradings = False  # WORK ON
 shuffle_entities_resource = False  # WORK ON
-shuffle_fogs = False  # WORK ON
+shuffle_fogs = True  # WORK ON
 shuffle_fonts = False  # WORK ON
 shuffle_lightings = False  # WORK ON
 shuffle_materials = False  # WORK ON
@@ -183,8 +183,8 @@ if shuffle_trading:
         Massma.Inner.scale(list, r'"quantity: -?\d*\.?\d+', (0.33,3), decimals=False, zeros=False, clamps_outer=(0,1), fair_range=True)  # multiplies or divides the quality of given item during trade
         Massma.Inner.normal(list, r'"price_multiplier": -?\d*\.?\d+')  # shuffles how much a price is multiplied by based on in game scenarios
         Massma.Inner.scale(list, r'"price_multiplier": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True)  # multiplies or divides how much a price is multiplied by based on in game scenarios
-        Massma.Inner.normal(list, r'"max_uses": -?\d*\.?\d+') # shuffles the amount of times you can trade for an item
         Massma.Inner.scale(list, r'"max_uses": -?\d*\.?\d+', (0.33,3), decimals=False, zeros=False, fair_range=True) # multiplies or divides the amount of times you can trade for an item
+        Massma.Inner.normal(list, r'"max_uses": -?\d*\.?\d+') # shuffles the amount of times you can trade for an item
         Massma.Inner.scale(list, r'"base_cost": -?\d*\.?\d+', (0.33, 3), decimals=False, minmaxing=True, zeros=False, fair_range=True)  # multiplies or divides librarian villager's base cost for books
         Massma.Inner.scale(list, r'"base_random_cost": -?\d*\.?\d+', (0.33, 3), decimals=False, zeros=False, fair_range=True)  # multiplies or divides librarian villager's base cost for books randomly added or subtracted
         Massma.Inner.scale(list, r'"per_level_random_cost": -?\d*\.?\d+', (0.33, 3), decimals=False, zeros=False, fair_range=True)  # multiplies or divides librarian villager's cost based on per level added, randomly adding or subtracting
@@ -218,8 +218,8 @@ if shuffle_loot:
     # goes through each list and shuffles within
     for list in loot_list:
         Massma.Inner.normal(list, r'.+', flags=[re.S]) # shuffles ALL the data inside a loot_table between groups of loot_tables
-        Massma.Inner.offset(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], (-1, 1), zeros=False, flags=[re.M, re.S])  # adds and subtract the attempts to select items
-        Massma.Inner.scale(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], (0.33, 3), fair_range=True, zeros=False, flags=[re.M, re.S])  # multiples and divides the attempts to select items
+        Massma.Inner.offset(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], (-1, 1), zeros=False, flags=[re.M, re.S], decimals=False)  # adds and subtract the attempts to select items
+        Massma.Inner.scale(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], (0.33, 3), fair_range=True, zeros=False, flags=[re.M, re.S], decimals=False)  # multiples and divides the attempts to select items
         Massma.Inner.normal(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], duplicate=True, flatten=True, flags=[re.M, re.S])  # shuffles the attempts to select items
         Massma.Inner.offset(list, r'"weight": -?\d*\.?\d+', (-1, 1), zeros=False)  # adds and subtracts the chance of an item spawning
         Massma.Inner.scale(list, r'"weight": -?\d*\.?\d+', (0.33, 3), fair_range=True, zeros=False)  # multiples and divides the chance of an item spawning
@@ -260,7 +260,7 @@ if shuffle_biomes:
     # shuffling based on filters
     for filter in biome_filters:
         #Massma.Inner.normal(biomes_list, r'"identifier": ".*"', excludes=filter) # shuffles how biomes are identified in the system
-        Massma.Inner.normal(biomes_list, r'"sea_floor_material": ".*"', excludes=filter, duplicate=True, flatten=True) # shuffles the block used for the sea floor of a biome
+        Massma.Inner.normal(biomes_list, r'"sea_floor_material": ".*"', excludes=filter, duplicate=True) # shuffles the block used for the sea floor of a biome
         Massma.Inner.normal(biomes_list, r'"minecraft:multinoise_generation_rules": \{.*?\}', flags=[re.M, re.S], excludes=filter, duplicate=True, flatten=True) # shuffles how and where nether biomes are created
         #Massma.Inner.normal(biomes_list, r'"weight": -?\d*\.?\d+', excludes=filter) # shuffles the likelihood a biome is created
     # no section exclusive shuffling and altering
@@ -323,18 +323,24 @@ if shuffle_feature_rules:
     Massma.Inner.normal(feature_rules_list, r'"iterations": -?\d*\.?\d+')
     # extents used underground
     underground_ignore = Massma.Filter.Ignore(Massma.Search.name(feature_rules_path,r'underground', ignores=deprecated_ignores, logic=Massma.Logic.NAND)) # filters out underground do to all spawning to close together or not at all, first only allows underground, then does not allow
-    Massma.Inner.offset(feature_rules_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore)  # allowing values of 1 to be effect by scale
-    Massma.Inner.scale(feature_rules_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore)
-    Massma.Inner.normal(feature_rules_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
+    Massma.Inner.offset(feature_rules_list, r'"x": \{.*?\}',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore, flags=[re.M, re.S])  # allowing values of 1 to be effect by scale
+    Massma.Inner.scale(feature_rules_list, r'"x": \{.*?\}', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore, flags=[re.M, re.S])
+    Massma.Inner.normal(feature_rules_list, r'"x": \{.*?\}', ignores=underground_ignore, flags=[re.M, re.S], duplicate=True)
+    Massma.Inner.offset(feature_rules_list, r'"y": \{.*?\}',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore, flags=[re.M, re.S])  # allowing values of 1 to be effect by scale
+    Massma.Inner.scale(feature_rules_list, r'"y": \{.*?\}', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore, flags=[re.M, re.S])
+    Massma.Inner.normal(feature_rules_list, r'"y": \{.*?\}', ignores=underground_ignore, flags=[re.M, re.S], duplicate=True)
+    Massma.Inner.offset(feature_rules_list, r'"z": \{.*?\}',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore, flags=[re.M, re.S])  # allowing values of 1 to be effect by scale
+    Massma.Inner.scale(feature_rules_list, r'"z": \{.*?\}', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore, flags=[re.M, re.S])
+    Massma.Inner.normal(feature_rules_list, r'"z": \{.*?\}', ignores=underground_ignore, flags=[re.M, re.S], duplicate=True)
     underground_ignore = Massma.Filter.Ignore(Massma.Search.name(feature_rules_path,r'underground', ignores=deprecated_ignores, logic=Massma.Logic.AND)) # now will filter out all underground features
     # extents without negatives
     Massma.Inner.offset(feature_rules_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, clamps_outer=(-1,2147483647), ignores=underground_ignore)  # allowing values of 1 to be effect by scale
     Massma.Inner.scale(feature_rules_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, clamps_outer=(-1,2147483647), ignores=underground_ignore)
-    Massma.Inner.normal(feature_rules_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
+    Massma.Inner.normal(feature_rules_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore, duplicate=True)
     # extents with negatives
     Massma.Inner.offset(feature_rules_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore)  # allowing values of 1 to be effect by scale
     Massma.Inner.scale(feature_rules_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore)
-    Massma.Inner.normal(feature_rules_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
+    Massma.Inner.normal(feature_rules_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore, duplicate=True)
     # FEATURE PASS
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED FEATURE RULES")
@@ -355,185 +361,191 @@ if shuffle_features:
         Massma.Inner.normal(features_list, r'"identifier": ".*"', excludes=filter) # shuffles the identifiers of features, changing where they are placed
     # no section exclusive shuffling and altering
     Massma.Inner.offset(features_list, r'"iterations": -?\d*\.?\d+',(-1, 1), decimals=False, zeros=False)  # allowing values of 1 to be effect by scale
-    Massma.Inner.scale(features_list, r'"iterations": -?\d*\.?\d+', (0.33,3), zeros=False, decimals=False, fair_range=True, clamps_outer=(0,2147483647))
-    Massma.Inner.normal(features_list, r'"iterations": -?\d*\.?\d+')
+    Massma.Inner.scale(features_list, r'"iterations": -?\d*\.?\d+', (0.33,3), zeros=False, decimals=False, fair_range=True, clamps_outer=(1,2147483647))
+    Massma.Inner.normal(features_list, r'"iterations": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"count": -?\d*\.?\d+', (0.33,3), zeros=False, decimals=False)
-    Massma.Inner.normal(features_list, r'"count": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"count": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.offset(features_list, [r'"numerator": -?\d*\.?\d+,.*? "denominator": -?\d*\.?\d+'], (-1, 1), flags=[re.M, re.S], zeros=False, decimals=False, minmaxing=True, minmax_matching=False)
     Massma.Inner.scale(features_list, [r'"numerator": -?\d*\.?\d+,.*? "denominator": -?\d*\.?\d+'], (0.33,3), flags=[re.M, re.S], zeros=False, decimals=False, minmaxing=True, fair_range=True, minmax_matching=False)
-    Massma.Inner.normal(features_list, [r'"numerator": -?\d*\.?\d+,.*? "denominator": -?\d*\.?\d+'], flags=[re.M, re.S]) # FIX THIS FOR SOME REASON
+    Massma.Inner.normal(features_list, [r'"numerator": -?\d*\.?\d+,.*? "denominator": -?\d*\.?\d+'], flags=[re.M, re.S], duplicate=True, flatten=True) # FIX THIS FOR SOME REASON
     Massma.Inner.offset(features_list, r'"range_min": -?\d*\.?\d+, "range_max": -?\d*\.?\d+', (-1, 1), flags=[re.M, re.S], decimals=False, minmaxing=True)
     Massma.Inner.scale(features_list, r'"range_min": -?\d*\.?\d+, "range_max": -?\d*\.?\d+', (0.33,3), flags=[re.M, re.S], decimals=False, minmaxing=True, fair_range=True, clamps_outer=(3, 2147483647))
-    Massma.Inner.normal(features_list, r'"range_min": -?\d*\.?\d+, "range_max": -?\d*\.?\d+', flags=[re.M, re.S])
-    Massma.Inner.normal(features_list, r'"min": \[ -?\d*\.?\d+, -?\d*\.?\d+, -?\d*\.?\d+\], "max": \[ -?\d*\.?\d+, -?\d*\.?\d+, -?\d*\.?\d+\]', flags=[re.M, re.S])
+    Massma.Inner.normal(features_list, r'"range_min": -?\d*\.?\d+, "range_max": -?\d*\.?\d+', flags=[re.M, re.S], duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"min": \[ -?\d*\.?\d+, -?\d*\.?\d+, -?\d*\.?\d+\], "max": \[ -?\d*\.?\d+, -?\d*\.?\d+, -?\d*\.?\d+\]', (0.33,3), flags=[re.M, re.S], zeros=True, decimals=False, minmaxing=True, fair_range=True)
+    Massma.Inner.normal(features_list, r'"min": \[ -?\d*\.?\d+, -?\d*\.?\d+, -?\d*\.?\d+\], "max": \[ -?\d*\.?\d+, -?\d*\.?\d+, -?\d*\.?\d+\]', flags=[re.M, re.S], duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"min": -?\d*\.?\d+, "max": -?\d*\.?\d+', (0.33,3), zeros=False, decimals=False, minmaxing=True, fair_range=True,flags=[re.M, re.S])
-    Massma.Inner.normal(features_list, r'"min": -?\d*\.?\d+, "max": -?\d*\.?\d+',  flags=[re.M, re.S])
-    Massma.Inner.normal(features_list, r'"search_range": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"min": -?\d*\.?\d+, "max": -?\d*\.?\d+',  flags=[re.M, re.S], duplicate=True, flatten=True)
+    Massma.Inner.normal(features_list, r'"search_range": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"search_range": -?\d*\.?\d+', (0.33,3), zeros=True, decimals=False, fair_range=True, clamps_outer=(1,64))
-    Massma.Inner.normal(features_list, r'[x-z][x-z][x-z]', duplicate=True) #coordinate_eval_order, or the order in which operation will happen
-    Massma.Inner.normal(features_list, r'"distribution": ".*"', duplicate=True, excludes=cocoa_filters[1]) # does not affect coco
-    Massma.Inner.normal(features_list, r'"distribution": ".*"', duplicate=True, excludes=cocoa_filters[0], preset=['"distribution": "fixed_grid"', '"distribution": "jittered_grid"']) # does effect coco
-    # extents used underground #SOMETHING WRONG
-    underground_ignore = Massma.Filter.Ignore(Massma.Search.name(features_path,r'underground', ignores=deprecated_ignores, logic=Massma.Logic.NAND)) # filters out underground do to all spawning to close together or not at all, first only allows underground, then does not allow
-    Massma.Inner.offset(features_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore)  # allowing values of 1 to be effect by scale
-    Massma.Inner.scale(features_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore)
-    Massma.Inner.normal(features_list, r'"extent": \[ -?\d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
-    underground_ignore = Massma.Filter.Ignore(Massma.Search.name(features_path,r'underground', ignores=deprecated_ignores, logic=Massma.Logic.AND)) # now will filter out all underground features
-    # extents without negatives #SOMETHING WRONG
+    Massma.Inner.normal(features_list, r'[x-z][x-z][x-z]', duplicate=True, flatten=True)  # coordinate_eval_order, or the order in which operation will happen
+    Massma.Inner.normal(features_list, r'"distribution": ".*"', duplicate=True, excludes=cocoa_filters[1], flatten=True) # does not affect coco
+    Massma.Inner.normal(features_list, r'"distribution": ".*"', duplicate=True, excludes=cocoa_filters[0], preset=['"distribution": "fixed_grid"', '"distribution": "jittered_grid"'], flatten=True) # does effect coco
+    # extents used underground
+    underground_ignore = Massma.Filter.Ignore(Massma.Search.name(features_path, r'underground', ignores=deprecated_ignores,logic=Massma.Logic.NAND))  # filters out underground do to all spawning to close together or not at all, first only allows underground, then does not allow
+    Massma.Inner.offset(features_list, r'"x": \{.*?\}', (-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore, flags=[re.M, re.S])  # allowing values of 1 to be effect by scale
+    Massma.Inner.scale(features_list, r'"x": \{.*?\}', (0.33, 3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore, flags=[re.M, re.S])
+    Massma.Inner.normal(features_list, r'"x": \{.*?\}', ignores=underground_ignore, flags=[re.M, re.S], duplicate=True, flatten=True)
+    Massma.Inner.offset(features_list, r'"y": \{.*?\}', (-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore, flags=[re.M, re.S])  # allowing values of 1 to be effect by scale
+    Massma.Inner.scale(features_list, r'"y": \{.*?\}', (0.33, 3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore, flags=[re.M, re.S])
+    Massma.Inner.normal(features_list, r'"y": \{.*?\}', ignores=underground_ignore, flags=[re.M, re.S], duplicate=True, flatten=True)
+    Massma.Inner.offset(features_list, r'"z": \{.*?\}', (-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore, flags=[re.M, re.S])  # allowing values of 1 to be effect by scale
+    Massma.Inner.scale(features_list, r'"z": \{.*?\}', (0.33, 3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore, flags=[re.M, re.S])
+    Massma.Inner.normal(features_list, r'"z": \{.*?\}', ignores=underground_ignore, flags=[re.M, re.S], duplicate=True, flatten=True)
+    underground_ignore = Massma.Filter.Ignore(Massma.Search.name(features_path, r'underground', ignores=deprecated_ignores, logic=Massma.Logic.AND))  # now will filter out all underground features
+    # extents without negatives
     Massma.Inner.offset(features_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, clamps_outer=(-1,2147483647), ignores=underground_ignore)  # allowing values of 1 to be effect by scale
     Massma.Inner.scale(features_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, clamps_outer=(-1,2147483647), ignores=underground_ignore)
-    Massma.Inner.normal(features_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
-    # extents with negatives #SOMETHING WRONG
+    Massma.Inner.normal(features_list, r'"extent": \[ \d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore, duplicate=True, flatten=True)
+    # extents with negatives
     Massma.Inner.offset(features_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]',(-1, 1), zeros=True, decimals=False, minmaxing=True, ignores=underground_ignore)  # allowing values of 1 to be effect by scale
     Massma.Inner.scale(features_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]', (0.33,3), zeros=True, decimals=False, minmaxing=True, fair_range=True, ignores=underground_ignore)
-    Massma.Inner.normal(features_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore)
-    Massma.Inner.normal(features_list, r'"trunk_width": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"extent": \[ -\d*\.?\d+, -?\d*\.?\d+ \]', ignores=underground_ignore, duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"trunk_width" -?\d*\.?\d+', (-1, 1), zeros=False) # trees
     Massma.Inner.scale(features_list, r'"trunk_width" -?\d*\.?\d+', (0.33,3), fair_range=True, zeros=False) # trees
-    Massma.Inner.normal(features_list, r'"canopy_height": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"trunk_width": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"canopy_height": -?\d*\.?\d+', (0.33,3), fair_range=True, clamps_outer=(3,2147483647)) # trees
-    Massma.Inner.normal(features_list, r'"canopy_radius": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"canopy_radius": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
+    Massma.Inner.normal(features_list, r'"canopy_height": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"canopy_radius": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"leaf_placement_attempts": -?\d*\.?\d+') # trees
     Massma.Inner.scale(features_list, r'"leaf_placement_attempts": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"one_branch": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"leaf_placement_attempts": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"one_branch": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"two_branches": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"one_branch": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"two_branches": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"two_branches_and_trunk": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"two_branches": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"two_branches_and_trunk": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"height": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"two_branches_and_trunk": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"height": -?\d*\.?\d+', (0.33,3), fair_range=True, clamps_outer=(4, 2147483647)) # trees
-    Massma.Inner.normal(features_list, r'"radius": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"height": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"radius": -?\d*\.?\d+', (0.33,3), fair_range=True, clamps_outer=(3, 2147483647)) # trees
-    Massma.Inner.normal(features_list, r'"wide_bottom_layer_hole_chance": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"radius": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"wide_bottom_layer_hole_chance": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"corner_hole_chance": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"wide_bottom_layer_hole_chance": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"corner_hole_chance": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"hanging_leaves_chance": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"corner_hole_chance": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"hanging_leaves_chance": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True, rounding=4) # trees
-    Massma.Inner.normal(features_list, r'"hanging_leaves_extension_chance": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"hanging_leaves_chance": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"hanging_leaves_extension_chance": -?\d*\.?\d+', (0.33,3), fair_range=True, decimals=True) # trees
-    Massma.Inner.normal(features_list, r'"variance": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"hanging_leaves_extension_chance": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"variance": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"scale": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"variance": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"scale": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True,rounding=3) # trees
-    Massma.Inner.normal(features_list, r'"density": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"scale": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"density": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"min_altitude_factor": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"density": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"min_altitude_factor": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True, rounding=1) # trees
-    Massma.Inner.normal(features_list, r'"width_scale": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"min_altitude_factor": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"width_scale": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True,rounding=1) # trees
-    Massma.Inner.normal(features_list, r'"foliage_altitude_factor": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"width_scale": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"foliage_altitude_factor": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True,rounding=1) # trees
-    Massma.Inner.normal(features_list, r'"min_width": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"foliage_altitude_factor": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"min_width": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"rise": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"min_width": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"rise": -?\d*\.?\d+', (0.33,3), fair_range=True, zeros=False) # trees
-    Massma.Inner.normal(features_list, r'"run": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"rise": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"run": -?\d*\.?\d+', (0.33,3), fair_range=True, zeros=False) # trees
-    Massma.Inner.normal(features_list, r'"decoration_chance": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"run": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"decoration_chance": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True, clamps_outer=(0,100)) # trees
-    Massma.Inner.normal(features_list, r'"core_width": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"decoration_chance": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"core_width": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"base_radius": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"core_width": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"base_radius": -?\d*\.?\d+', (0.33,3), fair_range=True, zeros=False, clamps_outer=(1,2147483647)) # trees
-    Massma.Inner.normal(features_list, r'"base": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"base_radius": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"base": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"radius_step_modifier": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"base": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"radius_step_modifier": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True, rounding=1) # trees
-    Massma.Inner.normal(features_list, r'"num_clusters": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"radius_step_modifier": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"num_clusters": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"cluster_radius": -?\d*\.?\d+') # trees
+    Massma.Inner.normal(features_list, r'"num_clusters": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"cluster_radius": -?\d*\.?\d+', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, r'"intervals": \[ -?\d*\.?\d+ \]') # trees
+    Massma.Inner.normal(features_list, r'"cluster_radius": -?\d*\.?\d+', duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"intervals": \[ -?\d*\.?\d+ \]', (0.33,3), fair_range=True) # trees
-    Massma.Inner.normal(features_list, [r'"leaf_block": \{.*?\}', r'"leaf_block": ".*?"'], flags=[re.M, re.S]) # trees
-    Massma.Inner.normal(features_list, [r'"trunk_block": \{.*?\}', r'"trunk_block": ".*?"'], flags=[re.M, re.S]) # trees
-    Massma.Inner.normal(features_list, r'"min_outer_wall_distance": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"intervals": \[ -?\d*\.?\d+ \]', duplicate=True, flatten=True) # trees
+    Massma.Inner.normal(features_list, [r'"leaf_block": \{.*?\}', r'"leaf_block": ".*?"'], flags=[re.M, re.S], duplicate=True, flatten=True) # trees
+    Massma.Inner.normal(features_list, [r'"trunk_block": \{.*?\}', r'"trunk_block": ".*?"'], flags=[re.M, re.S], duplicate=True, flatten=True) # trees
     Massma.Inner.scale(features_list, r'"min_outer_wall_distance": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,10), fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"max_outer_wall_distance": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"min_outer_wall_distance": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"max_outer_wall_distance": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,20), fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"min_distribution_points": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"max_outer_wall_distance": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"min_distribution_points": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,10), fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"max_distribution_points": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"min_distribution_points": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"max_distribution_points": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,20), fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"min_point_offset": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"max_distribution_points": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"min_point_offset": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,10), fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"max_point_offset": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"min_point_offset": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"max_point_offset": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,20), fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"max_radius": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"max_point_offset": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"max_radius": -?\d*\.?\d+', (0.33,3), fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"crack_point_offset": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"max_radius": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"crack_point_offset": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,10), decimals=True, fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"generate_crack_chance": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"crack_point_offset": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"generate_crack_chance": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,1), decimals=True, fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"base_crack_size": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"generate_crack_chance": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"base_crack_size": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,5), decimals=True, fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"noise_multiplier": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"base_crack_size": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"noise_multiplier": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True) # amethysts
-    Massma.Inner.normal(features_list, r'"use_potential_placements_chance": -?\d*\.?\d+') # amethysts
+    Massma.Inner.normal(features_list, r'"noise_multiplier": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'"use_potential_placements_chance": -?\d*\.?\d+', (0.33,3), clamps_outer=(0,1), decimals=True, fair_range=True) # amethysts
-    Massma.Inner.offset(features_list, r'\[ ".*_feature", -?\d*\.?\d+ \]', (-1, 1), decimals=False, zeros=False) # generation weight
+    Massma.Inner.normal(features_list, r'"use_potential_placements_chance": -?\d*\.?\d+', duplicate=True, flatten=True) # amethysts
     Massma.Inner.scale(features_list, r'\[ ".*_feature", -?\d*\.?\d+ \]', (0.25,4), zeros=False, fair_range=True) # generation weight
-    Massma.Inner.normal(features_list, r'"vertical_search_range": -?\d*\.?\d+') # snapping
+    Massma.Inner.offset(features_list, r'\[ ".*_feature", -?\d*\.?\d+ \]', (-1, 1), decimals=False, zeros=False) # generation weight
     Massma.Inner.scale(features_list, r'"vertical_search_range": -?\d*\.?\d+', (0.33,3), zeros=False, fair_range=True) #snapping
-    Massma.Inner.normal(features_list, r'direction": -?\d*\.?\d+')
-    Massma.Inner.normal(features_list, r'"vegetation_chance": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"vertical_search_range": -?\d*\.?\d+', duplicate=True, flatten=True) # snapping
+    Massma.Inner.normal(features_list, r'direction": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"vegetation_chance": -?\d*\.?\d+', (0.33,3), fair_range=True, decimals=True, rounding=2)
-    Massma.Inner.normal(features_list, r'"depth": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"vegetation_chance": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"depth": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"vertical_range": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"depth": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"vertical_range": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"extra_deep_block_chance": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"vertical_range": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"extra_deep_block_chance": -?\d*\.?\d+', (0.33,3), fair_range=True, rounding=2, decimals=True)
-    Massma.Inner.normal(features_list, r'"extra_edge_column_chance": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"extra_deep_block_chance": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"extra_edge_column_chance": -?\d*\.?\d+', (0.33,3), fair_range=True, rounding=2, decimals=True)
-    Massma.Inner.normal(features_list, r'"age": -?\d*\.?\d+') # cocoa
-    Massma.Inner.normal(features_list, r'"max_empty_corners": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"extra_edge_column_chance": -?\d*\.?\d+', duplicate=True, flatten=True)
+    Massma.Inner.normal(features_list, r'"age": -?\d*\.?\d+', duplicate=True, flatten=True) # cocoa
     Massma.Inner.scale(features_list, r'"max_empty_corners": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"discard_chance_on_air_exposure": -?\d*\.?\d+') # ores
+    Massma.Inner.normal(features_list, r'"max_empty_corners": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"discard_chance_on_air_exposure": -?\d*\.?\d+', (0.33,3), decimals=True, rounding=1, fair_range=True, clamps_outer=(0,1)) # ores
-    Massma.Inner.normal(features_list, r'"chance_of_spreading": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"discard_chance_on_air_exposure": -?\d*\.?\d+', duplicate=True, flatten=True) # ores
     Massma.Inner.scale(features_list, r'"chance_of_spreading": -?\d*\.?\d+', (0.33,3), decimals=True, rounding=1, fair_range=True, clamps_outer=(0,1))
-    Massma.Inner.normal(features_list, r'"search_range": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"chance_of_spreading": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"search_range": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"height_rand_a": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"search_range": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"height_rand_a": -?\d*\.?\d+', (0.33,3), fair_range=True, clamps_outer=(1, 214783647))
-    Massma.Inner.normal(features_list, r'"height_rand_b": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"height_rand_a": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"height_rand_b": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, [r'"hanging": true',r'"hanging": false'])
-    Massma.Inner.normal(features_list, r'"branch_length": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"height_rand_b": -?\d*\.?\d+', duplicate=True, flatten=True)
+    Massma.Inner.normal(features_list, [r'"hanging": true',r'"hanging": false'], duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"branch_length": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"branch_slope": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"branch_length": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"branch_slope": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, [r'"simplify_canopy": true', r'"simplify_canopy": false'])
-    Massma.Inner.normal(features_list, r'"fill_with": ".*"') # caves
-    Massma.Inner.normal(features_list, r'"width_modifier": -?\d*\.?\d+') # caves
+    Massma.Inner.normal(features_list, r'"branch_slope": -?\d*\.?\d+', duplicate=True, flatten=True)
+    Massma.Inner.normal(features_list, [r'"simplify_canopy": true', r'"simplify_canopy": false'], duplicate=True, flatten=True)
+    Massma.Inner.normal(features_list, r'"fill_with": ".*"', duplicate=True) # caves
     Massma.Inner.scale(features_list, r'"width_modifier": -?\d*\.?\d+', (0.33,3), zeros=True, decimals=True, rounding=1, fair_range=True) # caves
-    Massma.Inner.normal(features_list, r'"skip_carve_chance": -?\d*\.?\d+') # caves
+    Massma.Inner.normal(features_list, r'"width_modifier": -?\d*\.?\d+', duplicate=True, flatten=True) # caves
     Massma.Inner.scale(features_list, r'"skip_carve_chance": -?\d*\.?\d+', (0.33,3), fair_range=True) # caves
-    Massma.Inner.normal(features_list, r'"y_scale": \[ .*? \]') # caves
+    Massma.Inner.normal(features_list, r'"skip_carve_chance": -?\d*\.?\d+', duplicate=True, flatten=True) # caves
     Massma.Inner.scale(features_list, r'"y_scale": \[ .*? \]', (0.33,3), decimals=True, rounding=1, fair_range=True) # caves
-    Massma.Inner.normal(features_list, r'"height_limit": -?\d*\.?\d+') # caves
+    Massma.Inner.normal(features_list, r'"y_scale": \[ .*? \]', duplicate=True, flatten=True) # caves
     Massma.Inner.scale(features_list, r'"height_limit": -?\d*\.?\d+', (0.33,3), fair_range=True) # caves
-    Massma.Inner.normal(features_list, r'"horizontal_radius_multiplier": \[ .*? \]') # caves
+    Massma.Inner.normal(features_list, r'"height_limit": -?\d*\.?\d+', duplicate=True, flatten=True) # caves
     Massma.Inner.scale(features_list, r'"horizontal_radius_multiplier": \[ .*? \]', (0.33,3), decimals=True, rounding=1, fair_range=True) # caves
-    Massma.Inner.normal(features_list, r'"vertical_radius_multiplier": \[ .*? \]') # caves
+    Massma.Inner.normal(features_list, r'"horizontal_radius_multiplier": \[ .*? \]', duplicate=True, flatten=True) # caves
     Massma.Inner.scale(features_list, r'"vertical_radius_multiplier": \[ .*? \]', (0.33,3), decimals=True, rounding=1, fair_range=True) # caves
-    Massma.Inner.normal(features_list, r'"floor_level": \[ .*? \]') # caves
+    Massma.Inner.normal(features_list, r'"vertical_radius_multiplier": \[ .*? \]', duplicate=True, flatten=True) # caves
     Massma.Inner.scale(features_list, r'"floor_level": \[ .*? \]', (0.33,3), decimals=True, rounding=1, fair_range=True) # caves
-    Massma.Inner.normal(features_list, r'"branch_position": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"floor_level": \[ .*? \]', duplicate=True, flatten=True) # caves
     Massma.Inner.scale(features_list, r'"branch_position": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"outer_radius": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"branch_position": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"outer_radius": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"inner_radius": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"outer_radius": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"inner_radius": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"moisturized_amount": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"inner_radius": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"moisturized_amount": -?\d*\.?\d+', (0.33,3), fair_range=True)
-    Massma.Inner.normal(features_list, r'"minimum_distance_below_surface": -?\d*\.?\d+')
+    Massma.Inner.normal(features_list, r'"moisturized_amount": -?\d*\.?\d+', duplicate=True, flatten=True)
     Massma.Inner.scale(features_list, r'"minimum_distance_below_surface": -?\d*\.?\d+', (0.33,3), fair_range=True)
+    Massma.Inner.normal(features_list, r'"minimum_distance_below_surface": -?\d*\.?\d+', duplicate=True, flatten=True)
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED FEATURES")
 
@@ -611,51 +623,49 @@ if shuffle_structures:
     structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\buildings", "one_room_")) # trial ruins buildings
     structures_list.append(Massma.Search.full(structures_path + "\\trail_ruins\\decor")) # trial ruins decor
     structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\roads", "road_section_")) # trial ruins roads
-    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "^hall_")) # trial ruins tower
-    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "^large_hall_")) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", r'^hall_')) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", r'^large_hall_')) # trial ruins tower
     structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "one_room_")) # trial ruins tower
     structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "platform_")) # trial ruins tower
     structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "stable_")) # trial ruins tower
-    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "tower_\d")) # trial ruins tower
-    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "tower_top_\d")) # trial ruins tower
-    structures_list.append(Massma.Search.full(structures_path + "\\common\\animals")) #village common
-    structures_list.append(Massma.Search.full(structures_path + "\\desert\\houses",)) #village desert
-    structures_list.append(Massma.Search.full(structures_path + "\\desert\\town_centers",)) #village desert
-    structures_list.append(Massma.Search.full(structures_path + "\\plains\\houses",)) #village plains
-    structures_list.append(Massma.Search.full(structures_path + "\\plains\\town_centers",)) #village plains
-    structures_list.append(Massma.Search.full(structures_path + "\\plains\\villagers",)) #village plains
-    structures_list.append(Massma.Search.full(structures_path + "\\savanna\\houses",)) #village savanna
-    structures_list.append(Massma.Search.full(structures_path + "\\savanna\\town_centers",)) #village savanna
-    structures_list.append(Massma.Search.full(structures_path + "\\snowy\\houses",)) #village snowy
-    structures_list.append(Massma.Search.full(structures_path + "\\snowy\\town_centers",)) #village snowy
-    structures_list.append(Massma.Search.full(structures_path + "\\taiga\\houses",)) #village taiga
-    structures_list.append(Massma.Search.full(structures_path + "\\taiga\\town_centers",)) #village taiga
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", r'tower_\d')) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", r'tower_top_\d')) # trial ruins tower
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\common\\animals")) #village common
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\desert\\houses",)) #village desert
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\desert\\town_centers",)) #village desert
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\plains\\houses",)) #village plains
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\plains\\town_centers",)) #village plains
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\plains\\villagers",)) #village plains
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\savanna\\houses",)) #village savanna
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\savanna\\town_centers",)) #village savanna
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\snowy\\houses",)) #village snowy
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\snowy\\town_centers",)) #village snowy
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\taiga\\houses",)) #village taiga
+    structures_list.append(Massma.Search.full(structures_path + "\\village\\taiga\\town_centers",)) #village taiga
     structures_list.append(Massma.Search.name(structures_path + "\\mansion","1x1_a")) # woodland mansion
     structures_list.append(Massma.Search.name(structures_path + "\\mansion","1x1_b")) # woodland mansion
-    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["1x2_a", "1x2_s\d"])) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion",[r'1x2_a', r'1x2_s\d'], logic=Massma.Logic.OR)) # woodland mansion
     structures_list.append(Massma.Search.name(structures_path + "\\mansion","1x2_b")) # woodland mansion
-    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["^(?!.*stairs).*1x2_c", "^(?!.*stairs).*1x2_d"])) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion",['1x2_c', '1x2_d'], logic=Massma.Logic.OR, ignores=Massma.Filter.Ignore(Massma.Search.name(structures_path + "\\mansion", "stairs")))) # woodland mansion
     structures_list.append(Massma.Search.name(structures_path + "\\mansion","2x2_a")) # woodland mansion
-    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["2x2_b", "2x2_s"])) # woodland mansion
-    structures_list.append(Massma.Search.name(structures_path + "\\mansion","")) # woodland mansion
-    structures_list.append(Massma.Search.name(structures_path + "\\mansion","")) # woodland mansion
-    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["wall_flat","wall_window"])) # woodland mansion
-    structures_list.append(Massma.Search.name(structures_path + "\\endcity", ["bridge_.*?_stairs","bridge_piece"])) # end city
-    structures_list.append(Massma.Search.name(structures_path + "\\endcity", "second_floor_")) # end city
-    structures_list.append(Massma.Search.name(structures_path + "\\endcity", "third_floor_")) # end city
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["2x2_b", "2x2_s"], logic=Massma.Logic.OR)) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["wall_flat","wall_window"], logic=Massma.Logic.OR)) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\endcity", [r'bridge_.*?_stairs',r'bridge_piece'], logic=Massma.Logic.OR)) # end city
+    structures_list.append(Massma.Search.name(structures_path + "\\endcity", "second_floor")) # end city
+    structures_list.append(Massma.Search.name(structures_path + "\\endcity", "third_floor")) # end city
 
-    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\bridge", "")) # bastion
+    #structures_list.append(Massma.Search.name(structures_path + "\\bastion\\bridge", "")) # bastion
 
-    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\hoglin_stable", ""))  # bastion
+    #structures_list.append(Massma.Search.name(structures_path + "\\bastion\\hoglin_stable", ""))  # bastion
 
-    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\mobs", ""))  # bastion
+    #structures_list.append(Massma.Search.name(structures_path + "\\bastion\\mobs", ""))  # bastion
     
-    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\treasure", ""))  # bastion
+    #structures_list.append(Massma.Search.name(structures_path + "\\bastion\\treasure", ""))  # bastion
 
-    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\units", ""))  # bastion
+    #structures_list.append(Massma.Search.name(structures_path + "\\bastion\\units", ""))  # bastion
 
-    structures_list.append(Massma.Search.full(structures_path + "\\"))
-    structures_list.append(Massma.Search.full(structures_path + "\\"))
+    #structures_list.append(Massma.Search.full(structures_path + "\\"))
+    #structures_list.append(Massma.Search.full(structures_path + "\\"))
     # shuffles each section separately
     for list in structures_list:
         Massma.Outer.normal(list) # shuffles the names of files, changing what will be spawned and how it spawns
@@ -776,13 +786,16 @@ if shuffle_fogs:
     fogs_list = Massma.Search.full(fogs_path)
     # shuffles all the data together
     Massma.Inner.normal(fogs_list, '"identifier": ".*"') # shuffles how fogs are identified for each biome
-    Massma.Inner.group(fogs_list, [r'"fog_start": -?\d*\.?\d+',r'"fog_end": -?\d*\.?\d+']) # shuffles how close the fog is
+    Massma.Inner.scale(fogs_list, [r'"fog_start": -?\d*\.?\d+',r'"fog_end": -?\d*\.?\d+'], (0.33, 3), fair_range=True, decimals=True, zeros=True, rounding=2)  # shuffles how close the fog is
+    Massma.Inner.group(fogs_list, [r'"fog_start": -?\d*\.?\d+',r'"fog_end": -?\d*\.?\d+'])  # shuffles how close the fog is
     Massma.Inner.normal(fogs_list, '"fog_color": ".*"') # shuffles the color of the fog
     Massma.Inner.normal(fogs_list, '"render_distance_type": ".*"') # shuffles how the fog's distance is measured
     Massma.Inner.group(fogs_list, [r'"min_percent": -?\d*\.?\d+', r'"mid_seconds": -?\d*\.?\d+', r'"mid_percent": -?\d*\.?\d+', r'"max_seconds": -?\d*\.?\d+']) #shuffles how the fog transitions between fogs
-    Massma.Inner.group(fogs_list,[r'"scattering": \[.*\]',r'"absorption": [.*]']) # shuffles how light is effected by blocks
+    Massma.Inner.group(fogs_list,[r'"scattering": \[.*\]',r'"absorption": \[.*\]']) # shuffles how light is effected by blocks
     Massma.Inner.group(fogs_list, [r'"max_density": -?\d*\.?\d+',r'"zero_density_height": -?\d*\.?\d+',r'"max_density_height": -?\d*\.?\d+']) # shuffles the opaqueness and dencity of the fog
+    Massma.Inner.scale(fogs_list, r'"henyey_greenstein_g": -?\d*\.?\d+', (0.33, 3), fair_range=True, clamps_outer=(0,1), decimals=True, zeros=True)
     Massma.Inner.normal(fogs_list, r'"henyey_greenstein_g": -?\d*\.?\d+')
+
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED FOGS")
 
@@ -922,4 +935,5 @@ filters in filters, such as ignores inside a exclude
 rounding causing 1 in scale inner method to be able to go to 2 (MAYBE)
 an ignore filter that will ignore text found within the data being shuffled
 not flattin, but to swap the amount of each type, so if there is 2 lavas and 4 waters, it could make it 4 lavas and 2 waters
+allow users to select how many times the program reties data that dose not fit within the parameters
 """

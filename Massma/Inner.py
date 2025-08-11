@@ -376,7 +376,7 @@ def scale(files: str | list[str], contains: str | list[str], range: tuple[float,
                                 for value in values:
                                     # everything below scales the value and then adds attributes and criteria to the value to make sure its the correct value
                                     if isinstance(range, tuple) and all(isinstance(datatype, int) for datatype in range):  # makes the value generated a integer
-                                        value = int(value)
+                                        value = int(float(value))  # converts string to float, then int
                                         if fair_range: # makes the distribution in chances more even instead of choosing numbers outside -1 and 1
                                             altered_value = value * math.exp(random.uniform(math.log(range[0]), math.log(range[1])))  # Random between range in integer values
                                         else:
@@ -540,7 +540,7 @@ def offset(files: str | list[str], contains: str | list[str], range: tuple[float
                                 for value in values:
                                     # everything below offsets the value and then adds attributes and criteria to the value to make sure its the correct value
                                     if isinstance(range, tuple) and all(isinstance(datatype, int) for datatype in range):  # makes the value generated a integer
-                                        value = int(value)
+                                        value = int(float(value))  # converts string to float, then int
                                         if fair_range:  # makes the distribution in chances more even instead of choosing numbers outside -1 and 1
                                             altered_value = value + math.exp(random.uniform(math.log(range[0]), math.log(range[1])))  # Random between range in integer values
                                         else:
