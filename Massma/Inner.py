@@ -400,15 +400,14 @@ def scale(files: str | list[str], contains: str | list[str], range: tuple[float,
                                         altered_value = round(altered_value)
 
                                     # clamps the value to make sure the value is within the desired range
-                                    # clamps_outer makes sure that the value is not over the desired bounds
-                                    # clamps_inner makes sure that the value is not under the desired values
+                                    # clamps_outer makes sure that the value is not outside the desired bounds
+                                    # clamps_inner makes sure that the value is not inside the desired bounds
                                     # if matching is used, that means it can also equal the clamps, and cannot be equal to clamps if matching is off
-                                    if clamps_outer is not None or clamps_inner is not None:
-                                        if ((not clamp_matching and not (clamps_outer and clamps_outer[0] <= altered_value <= clamps_outer[1] and not (clamps_inner and clamps_inner[0] <= altered_value <= clamps_inner[1])))
-                                         or (clamp_matching and not ((not (clamps_outer and clamps_outer[0] <= altered_value <= clamps_outer[1])) and (clamps_inner and clamps_inner[0] <= altered_value <= clamps_inner[1])))):
-
-                                            reroll = True # requires while true loop to reactive after fully altering the value
-                                            break # as reroll happens, skips rest of values loop, as everything else is wrong
+                                    test_inner = ((not clamp_matching and (clamps_inner[0] <= altered_value <= clamps_inner[1])) or (clamp_matching and (clamps_inner[0] < altered_value < clamps_inner[1]))) if clamps_inner is not None else False  # tests the inner clamps
+                                    test_outer = ((not clamp_matching and (altered_value <= clamps_outer[0] or clamps_outer[1] <= altered_value)) or (clamp_matching and (altered_value < clamps_outer[0] or clamps_outer[1] < altered_value))) if clamps_outer is not None else False  # tests the outer clamps
+                                    if test_inner or test_outer:  # if a value is not within the clamps desired range, the tests will be true
+                                        reroll = True  # requires while true loop to reactive after fully altering the value
+                                        break  # as reroll happens, skips rest of values loop, as everything else is wrong
 
                                     # test if altered value is a zero and if zeros are a sufficient value option
                                     if not zeros and altered_value == 0:
@@ -571,17 +570,15 @@ def offset(files: str | list[str], contains: str | list[str], range: tuple[float
                                     else:  # if value will not be in decimal form, then it will be converted to an integer format
                                         altered_value = round(altered_value)
 
-
                                     # clamps the value to make sure the value is within the desired range
-                                    # clamps_outer makes sure that the value is not over the desired bounds
-                                    # clamps_inner makes sure that the value is not under the desired values
+                                    # clamps_outer makes sure that the value is not outside the desired bounds
+                                    # clamps_inner makes sure that the value is not inside the desired bounds
                                     # if matching is used, that means it can also equal the clamps, and cannot be equal to clamps if matching is off
-                                    if clamps_outer is not None or clamps_inner is not None:
-                                        if ((not clamp_matching and not (clamps_outer and clamps_outer[0] <= altered_value <= clamps_outer[1] and not (clamps_inner and clamps_inner[0] <= altered_value <= clamps_inner[1])))
-                                         or (clamp_matching and not ((not (clamps_outer and clamps_outer[0] <= altered_value <= clamps_outer[1])) and (clamps_inner and clamps_inner[0] <= altered_value <= clamps_inner[1])))):
-
-                                            reroll = True # requires while true loop to reactive after fully altering the value
-                                            break # as reroll happens, skips rest of values loop, as everything else is wrong
+                                    test_inner = ((not clamp_matching and (clamps_inner[0] <= altered_value <= clamps_inner[1])) or (clamp_matching and (clamps_inner[0] < altered_value < clamps_inner[1]))) if clamps_inner is not None else False # tests the inner clamps
+                                    test_outer = ((not clamp_matching and (altered_value <= clamps_outer[0] or clamps_outer[1] <= altered_value)) or (clamp_matching and (altered_value < clamps_outer[0] or clamps_outer[1] < altered_value))) if clamps_outer is not None else False # tests the outer clamps
+                                    if test_inner or test_outer: # if a value is not within the clamps desired range, the tests will be true
+                                        reroll = True  # requires while true loop to reactive after fully altering the value
+                                        break  # as reroll happens, skips rest of values loop, as everything else is wrong
 
                                     # test if altered value is a zero and if zeros are a sufficient value option
                                     if not zeros and altered_value == 0:
@@ -632,3 +629,4 @@ def offset(files: str | list[str], contains: str | list[str], range: tuple[float
     except Exception as e:
         Massma.Display.inner.result_error(len(files), "offset", e)
     Massma.Display.inner.set_source_length(0)  # resets source length after a method ends
+

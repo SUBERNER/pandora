@@ -12,13 +12,13 @@ Massma.Methods.seed(5348945732)
 shuffle_entities = False
 shuffle_spawn_rules = True
 shuffle_spawn_groups = False  # WORK ON
-shuffle_trading = True
+shuffle_trading = False
 shuffle_loot = True
 shuffle_biomes = True
 shuffle_recipies = False
 shuffle_feature_rules = True
 shuffle_features = True
-shuffle_items = True
+shuffle_items = False
 shuffle_item_catalogs = False  # WORK ON
 shuffle_aim_assists = False  # WORK ON
 shuffle_behavior_trees = False  # WORK ON
@@ -205,7 +205,6 @@ if shuffle_loot:
     loot_list.append(Massma.Search.full(loot_path + "\\dispensers", deep_search=True))  # dispensers
     loot_list[-1] + Massma.Search.name(loot_path + "\\chests", contains="dispenser", deep_search=True)  # gets dispensers from chests
     loot_list[-1] + Massma.Search.name(loot_path + "\\spawners", contains="items_to_drop", deep_search=True)  # gets item_drops from spawners
-
     loot_list.append(Massma.Search.full(loot_path + "\\equipment", ignores=Massma.Filter.Ignore(Massma.Search.name(loot_path + "\\equipment","low_tier_items.json"))))  # equipment equipment
     loot_list[-1] + Massma.Search.name(loot_path + "\\entities", "set")  # gets armor sets from entites
     loot_list.append(Massma.Search.name(loot_path + "\\entities", ["equipment", "gear"], logic=Massma.Logic.OR))  # entity equipment
@@ -217,7 +216,6 @@ if shuffle_loot:
     loot_list.append(Massma.Search.name(loot_path + "\\gameplay\\entities", "mooshroom_milking")) # mushroom
     loot_list.append(Massma.Search.full(loot_path + "\\spawners", deep_search=True, ignores=Massma.Filter.Ignore(Massma.Search.name(loot_path + "\\spawners", contains="items_to_drop", deep_search=True)))) # spawners
     # goes through each list and shuffles within
-    print(loot_list)
     for list in loot_list:
         Massma.Inner.normal(list, r'.+', flags=[re.S]) # shuffles ALL the data inside a loot_table between groups of loot_tables
         Massma.Inner.offset(list, [r'"rolls": -?\d*\.?\d+', r'"rolls": \{.*?\}'], (-1, 1), zeros=False, flags=[re.M, re.S])  # adds and subtract the attempts to select items
@@ -241,6 +239,10 @@ if shuffle_loot:
         Massma.Inner.normal(list, r'"bonus_rolls": -?\d*\.?\d+', duplicate=True, flatten=True)  # shuffles
         Massma.Inner.scale(list, r'"bonus_chance": -?\d*\.?\d+', (0.33, 3), fair_range=True, zeros=False, clamps_outer=(0,1))  # multiples and divides
         Massma.Inner.normal(list, r'"bonus_chance": -?\d*\.?\d+', duplicate=True, flatten=True)  # shuffles
+        for file in list:
+            Massma.Inner.normal(list, r'"quality": -?\d*\.?\d+')  # shuffles
+            Massma.Inner.normal(list, r'"value": -?\d*\.?\d+')  # shuffles
+            Massma.Inner.normal(list, r'"function": "set_potion",.*?"id": ".*"', flags=[re.M, re.S])  # shuffles
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED LOOT")
 
@@ -588,7 +590,76 @@ if shuffle_behavior_trees:
 # structures
 if shuffle_structures:
     structures_path = altered_base + "\\behavior_pack\\structures"
-    structures_list = []
+    structures_list = [] # the list of each section of structures
+    # simple
+    structures_list.append(Massma.Search.full(structures_path + "\\fossils")) # fossils
+    structures_list.append(Massma.Search.full(structures_path + "\\nether_fossils"))  # nether fossils
+    structures_list.append(Massma.Search.full(structures_path + "\\ruin")) #ruins
+    structures_list.append(Massma.Search.full(structures_path + "\\ruined_portal")) # portals
+    structures_list.append(Massma.Search.full(structures_path + "\\shipwreck")) #shipwrecks
+    structures_list.append(Massma.Search.name(structures_path + "\\coralcrust", "crust")) # coral
+    structures_list.append(Massma.Search.name(structures_path + "\\coralcrust", "outcropping")) # coral
+    structures_list.append(Massma.Search.name(structures_path + "\\pillageroutpost", "feature_")) # pillager outpost
+    structures_list.append(Massma.Search.name(structures_path + "\\pillageroutpost", "watchtower")) # pillager outpost
+    # complex
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\buildings", "group_full_")) # trial ruins buildings
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\buildings", "group_hall_")) # trial ruins buildings
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\buildings", "group_lower_")) # trial ruins buildings
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\buildings", "group_room_")) # trial ruins buildings
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\buildings", "group_upper_")) # trial ruins buildings
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\buildings", "large_room_")) # trial ruins buildings
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\buildings", "one_room_")) # trial ruins buildings
+    structures_list.append(Massma.Search.full(structures_path + "\\trail_ruins\\decor")) # trial ruins decor
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\roads", "road_section_")) # trial ruins roads
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "^hall_")) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "^large_hall_")) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "one_room_")) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "platform_")) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "stable_")) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "tower_\d")) # trial ruins tower
+    structures_list.append(Massma.Search.name(structures_path + "\\trail_ruins\\tower", "tower_top_\d")) # trial ruins tower
+    structures_list.append(Massma.Search.full(structures_path + "\\common\\animals")) #village common
+    structures_list.append(Massma.Search.full(structures_path + "\\desert\\houses",)) #village desert
+    structures_list.append(Massma.Search.full(structures_path + "\\desert\\town_centers",)) #village desert
+    structures_list.append(Massma.Search.full(structures_path + "\\plains\\houses",)) #village plains
+    structures_list.append(Massma.Search.full(structures_path + "\\plains\\town_centers",)) #village plains
+    structures_list.append(Massma.Search.full(structures_path + "\\plains\\villagers",)) #village plains
+    structures_list.append(Massma.Search.full(structures_path + "\\savanna\\houses",)) #village savanna
+    structures_list.append(Massma.Search.full(structures_path + "\\savanna\\town_centers",)) #village savanna
+    structures_list.append(Massma.Search.full(structures_path + "\\snowy\\houses",)) #village snowy
+    structures_list.append(Massma.Search.full(structures_path + "\\snowy\\town_centers",)) #village snowy
+    structures_list.append(Massma.Search.full(structures_path + "\\taiga\\houses",)) #village taiga
+    structures_list.append(Massma.Search.full(structures_path + "\\taiga\\town_centers",)) #village taiga
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion","1x1_a")) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion","1x1_b")) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["1x2_a", "1x2_s\d"])) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion","1x2_b")) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["^(?!.*stairs).*1x2_c", "^(?!.*stairs).*1x2_d"])) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion","2x2_a")) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["2x2_b", "2x2_s"])) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion","")) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion","")) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\mansion",["wall_flat","wall_window"])) # woodland mansion
+    structures_list.append(Massma.Search.name(structures_path + "\\endcity", ["bridge_.*?_stairs","bridge_piece"])) # end city
+    structures_list.append(Massma.Search.name(structures_path + "\\endcity", "second_floor_")) # end city
+    structures_list.append(Massma.Search.name(structures_path + "\\endcity", "third_floor_")) # end city
+
+    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\bridge", "")) # bastion
+
+    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\hoglin_stable", ""))  # bastion
+
+    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\mobs", ""))  # bastion
+    
+    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\treasure", ""))  # bastion
+
+    structures_list.append(Massma.Search.name(structures_path + "\\bastion\\units", ""))  # bastion
+
+    structures_list.append(Massma.Search.full(structures_path + "\\"))
+    structures_list.append(Massma.Search.full(structures_path + "\\"))
+    # shuffles each section separately
+    for list in structures_list:
+        Massma.Outer.normal(list) # shuffles the names of files, changing what will be spawned and how it spawns
+
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED STRUCTURES")
 
