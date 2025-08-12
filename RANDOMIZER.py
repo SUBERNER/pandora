@@ -8,7 +8,7 @@ from Massma.Filter import Ignore
 from Massma.Inner import scale
 
 #EDIT THIS TO CHANGE WHAT AND HOW DATA IS SHUFFLED
-Massma.Methods.seed(473895237)
+Massma.Methods.seed(5473857)
 shuffle_entities = False
 shuffle_spawn_rules = False
 shuffle_spawn_groups = False  # WORK ON
@@ -29,11 +29,11 @@ shuffle_animation_controllers = False  # WORK ON
 shuffle_animations = False  # WORK ON
 shuffle_atmospherics = False  # WORK ON
 shuffle_attachables = False  # WORK ON
-shuffle_biomes_resource = True  # WORK ON
+shuffle_biomes_resource = True
 shuffle_cameras = False  # WORK ON
 shuffle_color_gradings = False  # WORK ON
 shuffle_entities_resource = False  # WORK ON
-shuffle_fogs = True  # WORK ON
+shuffle_fogs = False  # WORK ON
 shuffle_fonts = False  # WORK ON
 shuffle_lightings = False  # WORK ON
 shuffle_materials = False  # WORK ON
@@ -41,12 +41,12 @@ shuffle_models = False  # WORK ON
 shuffle_particles = False  # WORK ON
 shuffle_pdrs = False  # WORK ON
 shuffle_render_controllers = False  # WORK ON
-shuffle_shadows = False
+shuffle_shadows = True
 shuffle_sounds = False  # WORK ON
 shuffle_texts = False  # WORK ON
 shuffle_textures = False  # WORK ON
 shuffle_uis = False  # WORK ON
-shuffle_waters = False  # WORK ON
+shuffle_waters = True # WORK ON
 
 
 
@@ -61,12 +61,12 @@ system = Massma.Display.Result()
 with open(log_base, 'w') as f:  # opens file
     pass # removes all data in file, making a fresh log file
 # enables and sets the log files for each display
-Massma.Display.inner.set_log_output(False)
-Massma.Display.outer.set_log_output(False)
-Massma.Display.methods.set_log_output(False)
-Massma.Display.filter.set_log_output(False)
-Massma.Display.search.set_log_output(False)
-Massma.Display.audio.set_log_output(False)
+Massma.Display.inner.set_log_output(True)
+Massma.Display.outer.set_log_output(True)
+Massma.Display.methods.set_log_output(True)
+Massma.Display.filter.set_log_output(True)
+Massma.Display.search.set_log_output(True)
+Massma.Display.audio.set_log_output(True)
 Massma.Display.inner.set_log_name(log_base)
 Massma.Display.outer.set_log_name(log_base)
 Massma.Display.methods.set_log_name(log_base)
@@ -743,15 +743,15 @@ if shuffle_biomes_resource:
     biomes_list = Massma.Search.full(biomes_path)
     # shuffles all the data together
     Massma.Inner.normal(biomes_list ,r'"identifier": ".*"') # shuffles how biomes are identified for everthing else
-    Massma.Inner.normal(biomes_list ,r'"sky_color": ".*"') # shuffles the color of the biome
-    Massma.Inner.normal(biomes_list ,r'"fog_identifier": ".*"') # shuffles what fog the biome uses
-    Massma.Inner.normal(biomes_list ,r'"surface_color": ".*"') # shuffles how water looks when not in it in that biome
-    Massma.Inner.normal(biomes_list ,[r'"color": \{.*\}', r'"color": ".*"'], flags=[re.M, re.S]) # shuffles the color assigned to grass and greenery in the biome
-    Massma.Inner.normal(biomes_list, r'"atmosphere_identifier": ".*"') # shuffles the type of atmosphere the biome will use
-    Massma.Inner.normal(biomes_list, r'"color_grading_identifier": ".*"') # shuffles the type of color grading the biome will use
-    Massma.Inner.normal(biomes_list, r'"lighting_identifier": ".*"') # shuffles the type of lighting the biome will use
-    Massma.Inner.normal(biomes_list, r'"water_identifier": ".*"') # shuffles the type of water the biome will use
-    Massma.Inner.group(biomes_list, [r'"addition": ".*"' ,r'"loop": ".*"' ,r'"mood": ".*"']) # shuffles the ambient sounds that play when in that biome
+    Massma.Inner.normal(biomes_list ,r'"sky_color": ".*"', duplicate=True, flatten=True) # shuffles the color of the biome
+    Massma.Inner.normal(biomes_list ,r'"fog_identifier": ".*"', duplicate=True, flatten=True) # shuffles what fog the biome uses
+    Massma.Inner.normal(biomes_list ,r'"surface_color": ".*"', duplicate=True, flatten=True) # shuffles how water looks when not in it in that biome
+    Massma.Inner.normal(biomes_list ,[r'"color": \{.*\}', r'"color": ".*"'], flags=[re.M, re.S], duplicate=True, flatten=True) # shuffles the color assigned to grass and greenery in the biome
+    Massma.Inner.normal(biomes_list, r'"atmosphere_identifier": ".*"', duplicate=True, flatten=True) # shuffles the type of atmosphere the biome will use
+    Massma.Inner.normal(biomes_list, r'"color_grading_identifier": ".*"', duplicate=True, flatten=True) # shuffles the type of color grading the biome will use
+    Massma.Inner.normal(biomes_list, r'"lighting_identifier": ".*"', duplicate=True, flatten=True) # shuffles the type of lighting the biome will use
+    Massma.Inner.normal(biomes_list, r'"water_identifier": ".*"', duplicate=True, flatten=True) # shuffles the type of water the biome will use
+    Massma.Inner.group(biomes_list, [r'"addition": ".*"' ,r'"loop": ".*"' ,r'"mood": ".*"'], duplicate=True, flatten=True) # shuffles the ambient sounds that play when in that biome
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED BIOMES")
 
@@ -889,8 +889,26 @@ if shuffle_uis:
 
 # waters
 if shuffle_waters:
-    waters_list = []
     waters_path = altered_base + "\\resource_pack\\water"
+    waters_list = Massma.Search.full(waters_path)
+    Massma.Inner.scale(waters_list, r'"frame_length": -?\d*\.?\d+', (0.33, 3), decimals=True, rounding=2, fair_range=True, clamps_outer=(0.01, 5.0), zeros=False)
+    Massma.Inner.scale(waters_list, r'"scale": -?\d*\.?\d+', (0.33, 3), decimals=True, rounding=1, fair_range=True, clamps_outer=(0.1,5.0))
+    Massma.Inner.scale(waters_list, r'"power": -?\d*\.?\d+', (0.33,3), decimals=False, fair_range=True, zeros=False, clamps_outer=(1,6))
+    Massma.Inner.normal(waters_list, [r'"enabled": false',r'"enabled": true'], duplicate=True, flatten=True)
+    Massma.Inner.scale(waters_list, r'"depth": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True, zeros=True, clamps_outer=(0.0,3.0))
+    Massma.Inner.scale(waters_list, r'"direction_increment": -?\d*\.?\d+', (0.33,3), decimals=False, fair_range=True, zeros=True, clamps_outer=(0,360))
+    Massma.Inner.scale(waters_list, r'"frequency": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True, zeros=False, clamps_outer=(0.01,3.0), rounding=16)
+    Massma.Inner.scale(waters_list, r'"frequency_scaling": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True, zeros=True, clamps_outer=(0.0,2.0), rounding=16)
+    Massma.Inner.scale(waters_list, r'"mix": -?\d*\.?\d+', (0.33,3), decimals=True, fair_range=True, zeros=True, clamps_outer=(0.0,1.0))
+    Massma.Inner.scale(waters_list, r'"octaves": -?\d*\.?\d+', (0.33,3), decimals=False, fair_range=True, zeros=False, clamps_outer=(1,30))
+    Massma.Inner.scale(waters_list, r'"pull": -?\d*\.?\d+', (-3, 3), decimals=True, zeros=True, clamps_outer=(-1, 1), rounding=16)
+    Massma.Inner.scale(waters_list, r'"sampleWidth": -?\d*\.?\d+', (0.33, 3), decimals=True, fair_range=True, zeros=False, clamps_outer=(0.01, 1), rounding=16)
+    Massma.Inner.scale(waters_list, r'"shape": -?\d*\.?\d+', (0.33, 3), decimals=True, fair_range=True, zeros=False, clamps_outer=(1, 10), rounding=1)
+    Massma.Inner.scale(waters_list, r'"speed": -?\d*\.?\d+', (0.33, 3), decimals=True, fair_range=True, zeros=False, clamps_outer=(0.01, 10), rounding=16)
+    Massma.Inner.scale(waters_list, r'"speed_scaling": -?\d*\.?\d+', (0.33, 3), decimals=True, fair_range=True, zeros=True, clamps_outer=(0, 2), rounding=16)
+
+
+
 
     Massma.Display.methods.result_notify(os.getcwd(), "randomizer", "COMPLETED WATERS")
 
